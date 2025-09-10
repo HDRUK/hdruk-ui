@@ -22,7 +22,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       children,
       color = "primary",
-      variant = "outlined",
+      variant = "contained",
       ...rest
     },
     ref
