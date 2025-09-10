@@ -28,6 +28,18 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Check NPM_TOKEN present
+        run: |
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo "❌ NPM_TOKEN is not set!"
+            exit 1
+          else
+            echo "✅ NPM_TOKEN is set (length: ${#NPM_TOKEN})"
+            echo "SHA256 (masked): $(echo -n $NPM_TOKEN | sha256sum | cut -c1-8)***"
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
