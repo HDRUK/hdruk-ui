@@ -34,7 +34,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         variant={variant as MuiButtonProps["variant"]}
         disabled={isDisabled}
-        startIcon={loading ? <CircularProgress size={16} /> : rest.startIcon}
+        startIcon={loading ? <CircularProgress size={12} /> : rest.startIcon}
         {...rest}
       >
         {children}
