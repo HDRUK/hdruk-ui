@@ -126,27 +126,28 @@ export function SearchBar({
           placeholder={placeholder}
           variant="outlined"
           slotProps={{
-            htmlInput: {
-              endAdornment: {
-                position: "end",
-                children: loading ? (
-                  <CircularProgress size={size === "small" ? 16 : 18} />
-                ) : (
-                  !disableClear &&
-                  val && (
-                    <IconButton
-                      aria-label="Clear search"
-                      onClick={handleClear}
-                      edge="end"
-                      size={size === "small" ? "small" : "medium"}
-                    >
-                      <ClearIcon
-                        fontSize={size === "small" ? "small" : "medium"}
-                      />
-                    </IconButton>
-                  )
-                ),
-              },
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  {loading ? (
+                    <CircularProgress size={size === "small" ? 16 : 18} />
+                  ) : (
+                    !disableClear &&
+                    val && (
+                      <IconButton
+                        aria-label="Clear search"
+                        onClick={handleClear}
+                        edge="end"
+                        size={size === "small" ? "small" : "medium"}
+                      >
+                        <ClearIcon
+                          fontSize={size === "small" ? "small" : "medium"}
+                        />
+                      </IconButton>
+                    )
+                  )}
+                </InputAdornment>
+              ),
             },
           }}
         />
