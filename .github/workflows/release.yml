@@ -8,6 +8,11 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+  # packages: write  # uncomment if you publish to GitHub Packages too
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
