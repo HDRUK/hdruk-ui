@@ -6,11 +6,8 @@ import {
   IconButton,
   CircularProgress,
   Paper,
-  SxProps,
-  Theme,
   BoxProps,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
