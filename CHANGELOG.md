@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/HDRUK/hdruk-ui/compare/v1.0.3...v1.0.4) (2025-12-17)
+
+
+### Bug Fixes
+
+* move around orgder ([f988932](https://github.com/HDRUK/hdruk-ui/commit/f9889329e053416b086ffe48ee318e085cfd1840))
+
 ## [1.0.3](https://github.com/HDRUK/hdruk-ui/compare/v1.0.2...v1.0.3) (2025-12-17)
 
 
