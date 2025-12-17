@@ -60,6 +60,10 @@ export function SearchBar({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const debounced = useDebounce(val, debounceMs);
 
+  const stop = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+  };
+
   React.useEffect(() => {
     if (onSearch) onSearch(debounced);
   }, [debounced, onSearch]);
@@ -98,7 +102,7 @@ export function SearchBar({
   };
 
   return (
-    <Box sx={sx}>
+    <Box sx={sx} onClick={stop}>
       <Paper
         elevation={elevation}
         sx={(theme) => ({
