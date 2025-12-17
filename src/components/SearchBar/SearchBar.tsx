@@ -8,6 +8,7 @@ import {
   Paper,
   SxProps,
   Theme,
+  BoxProps,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -28,7 +29,7 @@ export interface SearchBarProps {
   actions?: React.ReactNode;
   filters?: React.ReactNode;
   elevation?: number;
-  sx?: SxProps<Theme>;
+  boxSx?: BoxProps;
   shortcut?: boolean;
   id?: string;
   name?: string;
@@ -48,7 +49,7 @@ export function SearchBar({
   actions,
   filters,
   elevation = 0,
-  sx,
+  boxSx,
   shortcut = true,
   id,
   name,
@@ -102,7 +103,7 @@ export function SearchBar({
   };
 
   return (
-    <Box sx={sx} onClick={stop}>
+    <Box {...boxSx} sx={boxSx?.sx} onClick={stop}>
       <Paper
         elevation={elevation}
         sx={(theme) => ({
