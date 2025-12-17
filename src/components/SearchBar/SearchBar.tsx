@@ -99,6 +99,7 @@ export function SearchBar({
 
   return (
     <Box sx={sx}>
+      heyaaaa
       <Paper
         elevation={elevation}
         sx={(theme) => ({
