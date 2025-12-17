@@ -123,9 +123,9 @@ export function SearchBar({
           autoFocus={autoFocus}
           size={size}
           value={val}
+          placeholder={placeholder}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
           variant="outlined"
           slotProps={{
             input: {
