@@ -14,16 +14,20 @@ export default function Footer({
   copyrightText,
   linkGroups,
   footerBackgroundColor,
+  sx = {},
 }: FooterProps) {
   return (
     <Box
       component="footer"
-      sx={(theme) => ({
-        fontSize: theme.typography.body2.fontSize,
-        lineHeight: theme.typography.body2.lineHeight,
-        background: footerBackgroundColor ?? theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
-      })}
+      sx={[
+        (theme) => ({
+          fontSize: theme.typography.body2.fontSize,
+          lineHeight: theme.typography.body2.lineHeight,
+          background: footerBackgroundColor ?? theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          sx,
+        }),
+      ]}
     >
       <Container
         sx={(theme) => ({

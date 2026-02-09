@@ -1,3 +1,4 @@
+import { SxProps, Theme } from "@mui/material";
 import { MenuLinkItem } from "../../types/navigation";
 
 export interface SocialLinkItem extends MenuLinkItem {
@@ -53,4 +54,10 @@ export interface FooterProps {
    * Example: NextLink, RouterLink.
    */
   linkComponent?: React.ElementType;
+
+  /**
+   * Optional style overrides for the footer root element.
+   * Applied on top of the default styles.
+   */
+  sx?: SxProps<Theme>;
 }
