@@ -4,10 +4,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuDropdown from "./MenuDropdown";
 import { getLinkComponent, headerFocusRingSx } from "../Header.utils";
 import { MenuLinkItem } from "../../../types/navigation";
+import { HeaderMenuLinkItem } from "../Header.types";
 
 type DesktopNavProps = {
   linkComponent?: React.ElementType;
-  navItems: MenuLinkItem[];
+  navItems: HeaderMenuLinkItem[];
   ariaLabel?: string;
 };
 

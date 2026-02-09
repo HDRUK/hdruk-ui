@@ -13,6 +13,20 @@ export interface AccountName {
   last: string;
 }
 
+export interface HeaderMenuLinkItem extends MenuLinkItem {
+  /**
+   * Nested items rendered in a dropdown menu.
+   * Presence of this property indicates a submenu trigger.
+   */
+  subItems?: { label: string; href: string }[];
+
+  /**
+   * Click handler for action-based items (e.g. logout).
+   * Ignored if `href` is provided.
+   */
+  action?: React.MouseEventHandler<HTMLElement>;
+}
+
 export interface AccountNavigation {
   /**
    * Profile link shown when the user is signed in.
@@ -24,7 +38,7 @@ export interface AccountNavigation {
    * Additional account-related items shown in the account menu.
    * For example: Settings, Billing.
    */
-  items?: MenuLinkItem[];
+  items?: HeaderMenuLinkItem[];
 
   /**
    * Logout action or link.
@@ -88,7 +102,7 @@ export interface HeaderProps {
    *   { label: "Resources", subItems: [...] }
    * ]}
    */
-  navItems?: MenuLinkItem[];
+  navItems?: HeaderMenuLinkItem[];
 
   /**
    * Whether account-related data is currently loading.
