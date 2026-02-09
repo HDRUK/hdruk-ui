@@ -41,7 +41,7 @@ export default function AccountMenu({
           sx={(theme) => ({
             ...headerFocusRingSx,
             marginLeft: "5px",
-            color: theme.palette.common.white,
+            color: theme.palette.primary.contrastText,
           })}
           variant="text"
           onClick={handleOpen}

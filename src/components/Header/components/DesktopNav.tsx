@@ -59,7 +59,9 @@ export default function DesktopNav({
               variant="text"
               endIcon={
                 <ExpandMoreIcon
-                  sx={(theme) => ({ color: theme.palette.common.white })}
+                  sx={(theme) => ({
+                    color: theme.palette.primary.contrastText,
+                  })}
                 />
               }
               onClick={(event) =>
@@ -73,7 +75,7 @@ export default function DesktopNav({
               aria-controls={open ? menuId : undefined}
               aria-expanded={open ? "true" : "false"}
               sx={(theme) => ({
-                color: theme.palette.common.white,
+                color: theme.palette.primary.contrastText,
                 ...headerFocusRingSx,
               })}
             >

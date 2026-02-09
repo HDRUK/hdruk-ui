@@ -21,7 +21,7 @@ export default function AccountButton({
       size="small"
       variant="outlined"
       sx={(theme) => ({
-        color: theme.palette.common.white,
+        color: theme.palette.primary.contrastText,
       })}
       component={getLinkComponent(linkComponent)}
       href={signIn.href}
@@ -34,7 +34,7 @@ export default function AccountButton({
       variant="outlined"
       color="secondary"
       sx={(theme) => ({
-        color: theme.palette.common.white,
+        color: theme.palette.primary.contrastText,
       })}
       onClick={signIn.action}
     >
