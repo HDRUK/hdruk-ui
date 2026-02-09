@@ -1,4 +1,5 @@
 import type { AppBarProps } from "@mui/material/AppBar";
+import { MenuLinkItem } from "../../types/navigation";
 
 export interface AccountName {
   /**
@@ -12,29 +13,18 @@ export interface AccountName {
   last: string;
 }
 
-export interface MenuLinkItem {
+export interface HeaderMenuLinkItem extends MenuLinkItem {
   /**
-   * Visible label for the menu item.
+   * Nested items rendered in a dropdown menu.
+   * Presence of this property indicates a submenu trigger.
    */
-  label: string;
-
-  /**
-   * Destination URL.
-   * If provided, the item renders as a link.
-   */
-  href?: string;
+  subItems?: { label: string; href: string }[];
 
   /**
    * Click handler for action-based items (e.g. logout).
    * Ignored if `href` is provided.
    */
   action?: React.MouseEventHandler<HTMLElement>;
-
-  /**
-   * Nested items rendered in a dropdown menu.
-   * Presence of this property indicates a submenu trigger.
-   */
-  subItems?: { label: string; href: string }[];
 }
 
 export interface AccountNavigation {
@@ -48,7 +38,7 @@ export interface AccountNavigation {
    * Additional account-related items shown in the account menu.
    * For example: Settings, Billing.
    */
-  items?: MenuLinkItem[];
+  items?: HeaderMenuLinkItem[];
 
   /**
    * Logout action or link.
@@ -112,7 +102,7 @@ export interface HeaderProps {
    *   { label: "Resources", subItems: [...] }
    * ]}
    */
-  navItems?: MenuLinkItem[];
+  navItems?: HeaderMenuLinkItem[];
 
   /**
    * Whether account-related data is currently loading.

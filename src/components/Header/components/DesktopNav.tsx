@@ -1,13 +1,14 @@
 import React from "react";
-import { MenuLinkItem } from "../Header.types";
 import { Box, Button, Divider } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuDropdown from "./MenuDropdown";
 import { getLinkComponent, headerFocusRingSx } from "../Header.utils";
+import { MenuLinkItem } from "../../../types/navigation";
+import { HeaderMenuLinkItem } from "../Header.types";
 
 type DesktopNavProps = {
   linkComponent?: React.ElementType;
-  navItems: MenuLinkItem[];
+  navItems: HeaderMenuLinkItem[];
   ariaLabel?: string;
 };
 

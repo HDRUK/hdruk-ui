@@ -2,8 +2,9 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/system/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuDropdown from "./MenuDropdown";
-import { AccountNavigation, MenuLinkItem } from "../Header.types";
+import { AccountNavigation } from "../Header.types";
 import { buildMobileMenuItems, headerFocusRingSx } from "../Header.utils";
+import { MenuLinkItem } from "../../../types/navigation";
 
 interface MobileMenuProps {
   accountNavigation?: AccountNavigation;

@@ -1,12 +1,12 @@
 import { Menu, MenuItem, Typography } from "@mui/material";
-import { MenuLinkItem } from "../Header.types";
 import { getLinkComponent } from "../Header.utils";
+import { HeaderMenuLinkItem } from "../Header.types";
 
 interface MenuDropdownProps {
   id: string;
   title?: string;
   anchorElement: null | HTMLElement;
-  menuItems: MenuLinkItem[];
+  menuItems: HeaderMenuLinkItem[];
   handleClose: () => void;
   stopPropagation?: boolean;
   linkComponent?: React.ElementType;

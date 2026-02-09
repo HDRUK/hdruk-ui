@@ -1,5 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
-import { AccountNavigation, MenuLinkItem } from "./Header.types";
+import { AccountNavigation } from "./Header.types";
+import { MenuLinkItem } from "../../types/navigation";
 
 export const buildMobileMenuItems = ({
   isLoggedIn,
