@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Typography } from "@mui/material";
-import { MenuLinkItem } from "../Header.types";
 import { getLinkComponent } from "../Header.utils";
+import { MenuLinkItem } from "../../../types/navigation";
 
 interface MenuDropdownProps {
   id: string;
