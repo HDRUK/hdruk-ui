@@ -42,6 +42,7 @@ export default function Footer({
       >
         <Box sx={{ p: 0 }}>
           {logoImage}
+
           {socialLinks?.length && (
             <Box
               component="ul"
