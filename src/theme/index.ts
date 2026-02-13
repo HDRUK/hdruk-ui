@@ -286,15 +286,6 @@ export const themeOptions: ThemeOptions = {
         }),
       },
     },
-    MuiAppBar: {
-      defaultProps: { elevation: 0, color: "inherit" },
-      styleOverrides: {
-        root: ({ theme }) => ({
-          borderBottom: `1px solid ${theme.palette.divider}`,
-          backgroundColor: theme.palette.background.paper,
-        }),
-      },
-    },
     MuiToolbar: {
       styleOverrides: {
         root: ({ theme }) => ({
