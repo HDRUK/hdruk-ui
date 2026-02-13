@@ -1,3 +1,12 @@
+## [1.0.7](https://github.com/HDRUK/hdruk-ui/compare/v1.0.6...v1.0.7) (2026-02-13)
+
+
+### Bug Fixes
+
+* remove app bar style ([c5752de](https://github.com/HDRUK/hdruk-ui/commit/c5752ded3bb26da9dc49d3174816b02ed1237fc7))
+* sack off app bar theme ([474a1fd](https://github.com/HDRUK/hdruk-ui/commit/474a1fd400066b1bc5481dac7bbd7a8117f29975))
+* trigger ([68552ef](https://github.com/HDRUK/hdruk-ui/commit/68552ef32065d8212e947e6b207cda8f39d5722b))
+
 ## [1.0.6](https://github.com/HDRUK/hdruk-ui/compare/v1.0.5...v1.0.6) (2026-02-13)
 
 
