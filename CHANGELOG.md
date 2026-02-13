@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/HDRUK/hdruk-ui/compare/v1.0.5...v1.0.6) (2026-02-13)
+
+
+### Bug Fixes
+
+* remove change ([01404ae](https://github.com/HDRUK/hdruk-ui/commit/01404ae08749181bd1972dfea9e061dbbefdf385))
+
 ## [1.0.4](https://github.com/HDRUK/hdruk-ui/compare/v1.0.3...v1.0.4) (2025-12-17)
 
 
