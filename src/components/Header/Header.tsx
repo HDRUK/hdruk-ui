@@ -5,8 +5,22 @@ import MobileMenu from "./components/MobileMenu";
 import { getLinkComponent, headerFocusRingSx } from "./Header.utils";
 import { HeaderProps } from "./Header.types";
 
+import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
+
+const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
+
+const defaultLogoImage = (
+  <img
+    src={hdrukLogo}
+    alt="cohort discovery logo"
+    height={50}
+    width={110}
+    style={{ display: "block", width: "auto" }}
+  />
+);
+
 export default function Header({
-  logoImage,
+  logoImage = defaultLogoImage,
   logoHref = "/",
   brandingLogoImage,
   brandingLogoHref,
@@ -29,6 +43,8 @@ export default function Header({
     setAnchorElement(event.currentTarget);
   };
 
+  const hasNavItems = (navItems?.length ?? 0) > 0;
+
   return (
     <AppBar
       position={"static"}
@@ -46,9 +62,7 @@ export default function Header({
           sx={{
             pt: 1,
             pb: 1,
-            justifyContent: {
-              md: "initial",
-            },
+            justifyContent: hasNavItems ? { md: "initial" } : "space-between",
           }}
         >
           <Box
@@ -58,25 +72,19 @@ export default function Header({
               mr: 2,
               flexShrink: 0,
               display: { xs: "none", lg: "flex" },
+              "& img": { display: "block" },
             }}
           >
             <Link
               component={getLinkComponent(linkComponent)}
               href={logoHref}
-              sx={{
-                ...headerFocusRingSx,
-              }}
+              sx={{ ...headerFocusRingSx }}
             >
               {logoImage}
             </Link>
 
             {brandingLogoImage && (
-              <Box
-                sx={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                }}
-              >
+              <Box sx={{ display: "inline-flex", alignItems: "center" }}>
                 {brandingLogoHref ? (
                   <Link
                     component={getLinkComponent(linkComponent)}
@@ -126,32 +134,22 @@ export default function Header({
               {logoImage}
             </Link>
 
-            {brandingLogoImage && (
-              <>
-                {brandingLogoHref ? (
-                  <Link
-                    component={getLinkComponent(linkComponent)}
-                    href={brandingLogoHref}
-                    sx={{
-                      ...headerFocusRingSx,
-                    }}
-                  >
-                    {brandingLogoImage}
-                  </Link>
-                ) : (
-                  brandingLogoImage
-                )}
-              </>
-            )}
+            {brandingLogoImage &&
+              (brandingLogoHref ? (
+                <Link
+                  component={getLinkComponent(linkComponent)}
+                  href={brandingLogoHref}
+                  sx={{ ...headerFocusRingSx }}
+                >
+                  {brandingLogoImage}
+                </Link>
+              ) : (
+                brandingLogoImage
+              ))}
           </Box>
 
-          {navItems?.length && (
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: "none", lg: "flex" },
-              }}
-            >
+          {hasNavItems && (
+            <Box sx={{ flexGrow: 1, display: { xs: "none", lg: "flex" } }}>
               <DesktopNav
                 navItems={navItems}
                 linkComponent={linkComponent}
@@ -163,7 +161,7 @@ export default function Header({
           <Box
             sx={{
               justifySelf: "end",
-              flexGrow: 0,
+              flexGrow: hasNavItems ? 0 : 0, // fine either way; kept explicit
               display: { xs: "none", sm: "flex" },
             }}
           >

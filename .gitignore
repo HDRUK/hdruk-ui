@@ -37,3 +37,6 @@ next-env.d.ts
 
 /dist
 *.tgz
+
+.yalc
+yalc.lock

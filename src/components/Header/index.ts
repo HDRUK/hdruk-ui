@@ -1,3 +1,7 @@
 export { default as Header } from "./Header";
 
-export type { HeaderProps, AccountNavigation } from "./Header.types";
+export type {
+  HeaderProps,
+  AccountNavigation,
+  HeaderMenuLinkItem,
+} from "./Header.types";

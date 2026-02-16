@@ -21,4 +21,10 @@ export default defineConfig({
     "@emotion/styled",
   ],
   tsconfig: "tsconfig.build.json",
+  loader: {
+    ".svg": "file",
+  },
+  esbuildOptions(options) {
+    options.assetNames = "assets/[name]-[hash]";
+  },
 });

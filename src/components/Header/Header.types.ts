@@ -57,7 +57,7 @@ export interface HeaderProps {
    * Primary logo element rendered on the left of the header.
    * Usually an <img />, SVG, or branded React component.
    */
-  logoImage: React.ReactNode;
+  logoImage?: React.ReactNode;
 
   /**
    * URL the primary logo links to.

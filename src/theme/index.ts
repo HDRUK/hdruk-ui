@@ -47,7 +47,13 @@ export const themeOptions: ThemeOptions = {
   shape: { borderRadius: 8 },
 
   breakpoints: {
-    values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 },
+    values: {
+      xs: 0, // mobile
+      sm: 640, // tablet
+      md: 1024, // laptop
+      lg: 1280, // desktop
+      xl: 1536, // large desktop
+    },
   },
 
   typography: {
