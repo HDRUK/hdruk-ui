@@ -4,7 +4,6 @@ import { AccountNav, DesktopNav } from "./components";
 import MobileMenu from "./components/MobileMenu";
 import { getLinkComponent, headerFocusRingSx } from "./Header.utils";
 import { HeaderProps } from "./Header.types";
-
 import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
 
 const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
