@@ -54,7 +54,6 @@
     "./dist/*": "./dist/*"
   },
   "dependencies": {
-    "@hdruk/ui": "file:.yalc/@hdruk/ui",
     "@mui/icons-material": "^7.3.2"
   }
 }
