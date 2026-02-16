@@ -4,6 +4,19 @@ import FooterLink from "./components/FooterLink";
 import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
+import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
+const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
+
+const defaultLogoImage = (
+  <img
+    src={hdrukLogo}
+    alt="cohort discovery logo"
+    height={50}
+    width={110}
+    style={{ display: "block", width: "auto" }}
+  />
+);
+
 const RESET_LIST_SX = {
   pl: 0,
   listStyle: "none",
@@ -30,7 +43,7 @@ const getCopyrightText = () => {
 };
 
 export default function Footer({
-  logoImage,
+  logoImage = defaultLogoImage,
   linkComponent,
   socialLinks = linksSocial,
   copyrightText = getCopyrightText(),
