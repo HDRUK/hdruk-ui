@@ -11,7 +11,7 @@ const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
 const defaultLogoImage = (
   <img
     src={hdrukLogo}
-    alt="cohort discovery logo"
+    alt="HDRUK logo"
     height={50}
     width={110}
     style={{ display: "block", width: "auto" }}
