@@ -45,7 +45,7 @@ export interface FooterProps {
    * Primary logo element rendered on the left of the header.
    * Usually an <img />, SVG, or branded React component.
    */
-  logoImage: React.ReactNode;
+  logoImage?: React.ReactNode;
 
   /**
    * Optional link component override.
