@@ -1,3 +1,12 @@
+## [1.0.8](https://github.com/HDRUK/hdruk-ui/compare/v1.0.7...v1.0.8) (2026-02-16)
+
+
+### Bug Fixes
+
+* HDRUK/feat/update-header ([0654c32](https://github.com/HDRUK/hdruk-ui/commit/0654c3223d89902c5a7028c50848d7dc9b501ccf))
+* remove yalc ([b6c577e](https://github.com/HDRUK/hdruk-ui/commit/b6c577ebd1dc2ac572085db26ceb1723bea44734))
+* whitespace for logo import ([c9c91b2](https://github.com/HDRUK/hdruk-ui/commit/c9c91b2235bcdd57ce2fbf15d49bbce1f7b55b1a))
+
 ## [1.0.7](https://github.com/HDRUK/hdruk-ui/compare/v1.0.6...v1.0.7) (2026-02-13)
 
 
