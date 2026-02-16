@@ -1,17 +1,52 @@
 import { Box, Container, Typography } from "@mui/material";
-import { FooterProps } from "./Footer.types";
+import { FooterProps, SocialLinkItem } from "./Footer.types";
 import FooterLink from "./components/FooterLink";
+import XIcon from "@mui/icons-material/X";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
+import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
+const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
+
+const defaultLogoImage = (
+  <img
+    src={hdrukLogo}
+    alt="HDRUK logo"
+    height={50}
+    width={110}
+    style={{ display: "block", width: "auto" }}
+  />
+);
 
 const RESET_LIST_SX = {
   pl: 0,
   listStyle: "none",
 };
 
+const linksSocial: SocialLinkItem[] = [
+  {
+    href: "https://x.com/HDR_UK",
+    label: "X",
+    icon: <XIcon fontSize="small" />,
+  },
+  {
+    href: "https://www.linkedin.com/company/hdruk/mycompany/",
+    label: "LinkedIn",
+    icon: <LinkedInIcon fontSize="small" />,
+  },
+];
+
+const getCopyrightText = () => {
+  const copyright = String.fromCodePoint(0x00a9);
+  const currentYear = new Date().getFullYear();
+
+  return `${copyright}HDR UK ${currentYear}. All rights reserved.`;
+};
+
 export default function Footer({
-  logoImage,
+  logoImage = defaultLogoImage,
   linkComponent,
-  socialLinks,
-  copyrightText,
+  socialLinks = linksSocial,
+  copyrightText = getCopyrightText(),
   linkGroups,
   footerBackgroundColor,
   sx = {},
@@ -23,7 +58,9 @@ export default function Footer({
         (theme) => ({
           fontSize: theme.typography.body2.fontSize,
           lineHeight: theme.typography.body2.lineHeight,
-          background: footerBackgroundColor ?? theme.palette.primary.main,
+          background:
+            footerBackgroundColor ??
+            `linear-gradient(97deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
           color: theme.palette.primary.contrastText,
           sx,
         }),
@@ -42,7 +79,7 @@ export default function Footer({
       >
         <Box sx={{ p: 0 }}>
           {logoImage}
-          {socialLinks?.length && (
+          {(socialLinks?.length ?? 0) > 0 && (
             <Box
               component="ul"
               sx={(theme) => ({
@@ -56,7 +93,7 @@ export default function Footer({
                 ...RESET_LIST_SX,
               })}
             >
-              {socialLinks.map((item) => (
+              {socialLinks?.map((item) => (
                 <li key={`${item.label}-${item.href}`}>
                   <FooterLink href={item.href} component={linkComponent}>
                     <Box
@@ -81,8 +118,7 @@ export default function Footer({
             ) : null}
           </Box>
         </Box>
-
-        {linkGroups?.length && (
+        {(linkGroups?.length ?? 0) > 0 && (
           <Box
             component="ul"
             sx={(theme) => ({
@@ -95,7 +131,7 @@ export default function Footer({
               ...RESET_LIST_SX,
             })}
           >
-            {linkGroups.map((group) => (
+            {linkGroups?.map((group) => (
               <li key={group.title}>
                 <Box
                   component="ul"
