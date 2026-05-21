@@ -6,13 +6,26 @@ import {
   IconButton,
   CircularProgress,
   Paper,
-  BoxProps,
 } from "@mui/material";
+import type { BoxProps, TextFieldProps } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
 
-export interface SearchBarProps {
+type SearchBarTextFieldProps = Omit<
+  TextFieldProps,
+  | "autoFocus"
+  | "defaultValue"
+  | "id"
+  | "name"
+  | "onChange"
+  | "onKeyDown"
+  | "placeholder"
+  | "size"
+  | "value"
+>;
+
+export type SearchBarProps = SearchBarTextFieldProps & {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
@@ -30,7 +43,7 @@ export interface SearchBarProps {
   shortcut?: boolean;
   id?: string;
   name?: string;
-}
+};
 
 export function SearchBar({
   value,
@@ -50,6 +63,7 @@ export function SearchBar({
   shortcut = true,
   id,
   name,
+  ...textFieldProps
 }: SearchBarProps) {
   const [internal, setInternal] = React.useState(defaultValue ?? "");
   const isControlled = value !== undefined;
@@ -152,6 +166,7 @@ export function SearchBar({
               ),
             },
           }}
+          {...textFieldProps}
         />
         {actions}
       </Paper>
