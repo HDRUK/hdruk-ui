@@ -17,6 +17,7 @@ type SearchBarTextFieldProps = Omit<
   | "autoFocus"
   | "defaultValue"
   | "id"
+  | "inputRef"
   | "name"
   | "onChange"
   | "onKeyDown"
@@ -24,6 +25,12 @@ type SearchBarTextFieldProps = Omit<
   | "size"
   | "value"
 >;
+
+type TextFieldSlotProps = NonNullable<TextFieldProps["slotProps"]>;
+type TextFieldInputSlotProps = NonNullable<TextFieldSlotProps["input"]>;
+type TextFieldInputSlotOwnerState = Parameters<
+  Extract<TextFieldInputSlotProps, (...args: never[]) => unknown>
+>[0];
 
 export type SearchBarProps = SearchBarTextFieldProps & {
   value?: string;
@@ -65,6 +72,7 @@ export function SearchBar({
   name,
   ...textFieldProps
 }: SearchBarProps) {
+  const { slotProps, ...restTextFieldProps } = textFieldProps;
   const [internal, setInternal] = React.useState(defaultValue ?? "");
   const isControlled = value !== undefined;
   const val = isControlled ? value! : internal;
@@ -113,6 +121,43 @@ export function SearchBar({
     if (e.key === "Escape" && !disableClear && val) handleClear();
   };
 
+  const searchAdornment = (
+    <InputAdornment position="end">
+      {loading ? (
+        <CircularProgress size={size === "small" ? 16 : 18} />
+      ) : (
+        !disableClear &&
+        val && (
+          <IconButton
+            aria-label="Clear search"
+            onClick={handleClear}
+            edge="end"
+            size={size === "small" ? "small" : "medium"}
+          >
+            <ClearIcon fontSize={size === "small" ? "small" : "medium"} />
+          </IconButton>
+        )
+      )}
+    </InputAdornment>
+  );
+
+  const inputSlotProps = (ownerState: TextFieldInputSlotOwnerState) => {
+    const resolvedInputSlotProps =
+      typeof slotProps?.input === "function"
+        ? slotProps.input(ownerState)
+        : slotProps?.input;
+
+    return {
+      ...resolvedInputSlotProps,
+      endAdornment: (
+        <>
+          {resolvedInputSlotProps?.endAdornment}
+          {searchAdornment}
+        </>
+      ),
+    };
+  };
+
   return (
     <Box {...boxSx} sx={boxSx?.sx} onClick={stop}>
       <Paper
@@ -130,6 +175,7 @@ export function SearchBar({
         })}
       >
         <TextField
+          {...restTextFieldProps}
           id={id}
           name={name}
           fullWidth
@@ -142,31 +188,9 @@ export function SearchBar({
           onKeyDown={handleKeyDown}
           variant="outlined"
           slotProps={{
-            input: {
-              endAdornment: (
-                <InputAdornment position="end">
-                  {loading ? (
-                    <CircularProgress size={size === "small" ? 16 : 18} />
-                  ) : (
-                    !disableClear &&
-                    val && (
-                      <IconButton
-                        aria-label="Clear search"
-                        onClick={handleClear}
-                        edge="end"
-                        size={size === "small" ? "small" : "medium"}
-                      >
-                        <ClearIcon
-                          fontSize={size === "small" ? "small" : "medium"}
-                        />
-                      </IconButton>
-                    )
-                  )}
-                </InputAdornment>
-              ),
-            },
+            ...slotProps,
+            input: inputSlotProps,
           }}
-          {...textFieldProps}
         />
         {actions}
       </Paper>
