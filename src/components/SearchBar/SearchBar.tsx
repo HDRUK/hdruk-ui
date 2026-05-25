@@ -17,7 +17,6 @@ type SearchBarTextFieldProps = Omit<
   | "autoFocus"
   | "defaultValue"
   | "id"
-  | "inputRef"
   | "name"
   | "onChange"
   | "onKeyDown"
@@ -69,6 +68,7 @@ export function SearchBar({
   boxSx,
   shortcut = true,
   id,
+  inputRef,
   name,
   ...textFieldProps
 }: SearchBarProps) {
@@ -77,8 +77,23 @@ export function SearchBar({
   const isControlled = value !== undefined;
   const val = isControlled ? value! : internal;
 
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const internalInputRef = React.useRef<HTMLInputElement>(null);
   const debounced = useDebounce(val, debounceMs);
+
+  const setInputRef = React.useCallback(
+    (node: HTMLInputElement | null) => {
+      // Update the internal ref (used for focusing and other internal logic)
+      internalInputRef.current = node;
+
+      // Update the external ref passed in props, supporting both callback refs and mutable ref objects
+      if (typeof inputRef === "function") {
+        inputRef(node);
+      } else if (inputRef) {
+        inputRef.current = node;
+      }
+    },
+    [inputRef],
+  );
 
   const stop = (e: React.SyntheticEvent) => {
     e.stopPropagation();
@@ -96,7 +111,7 @@ export function SearchBar({
         (!isMacPlatform() && e.ctrlKey && e.key.toLowerCase() === "k")
       ) {
         e.preventDefault();
-        inputRef.current?.focus();
+        internalInputRef.current?.focus();
       }
     };
     window.addEventListener("keydown", handler);
@@ -113,7 +128,7 @@ export function SearchBar({
     if (!isControlled) setInternal("");
     onChange?.("");
     onSearch?.("");
-    inputRef.current?.focus();
+    internalInputRef.current?.focus();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -179,7 +194,7 @@ export function SearchBar({
           id={id}
           name={name}
           fullWidth
-          inputRef={inputRef}
+          inputRef={setInputRef}
           autoFocus={autoFocus}
           size={size}
           value={val}
