@@ -6,32 +6,13 @@ import {
   IconButton,
   CircularProgress,
   Paper,
+  BoxProps,
 } from "@mui/material";
-import type { BoxProps, TextFieldProps } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
 
-type SearchBarTextFieldProps = Omit<
-  TextFieldProps,
-  | "autoFocus"
-  | "defaultValue"
-  | "id"
-  | "name"
-  | "onChange"
-  | "onKeyDown"
-  | "placeholder"
-  | "size"
-  | "value"
->;
-
-type TextFieldSlotProps = NonNullable<TextFieldProps["slotProps"]>;
-type TextFieldInputSlotProps = NonNullable<TextFieldSlotProps["input"]>;
-type TextFieldInputSlotOwnerState = Parameters<
-  Extract<TextFieldInputSlotProps, (...args: never[]) => unknown>
->[0];
-
-export type SearchBarProps = SearchBarTextFieldProps & {
+export interface SearchBarProps {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
@@ -49,7 +30,7 @@ export type SearchBarProps = SearchBarTextFieldProps & {
   shortcut?: boolean;
   id?: string;
   name?: string;
-};
+}
 
 export function SearchBar({
   value,
@@ -68,32 +49,14 @@ export function SearchBar({
   boxSx,
   shortcut = true,
   id,
-  inputRef,
   name,
-  ...textFieldProps
 }: SearchBarProps) {
-  const { slotProps, ...restTextFieldProps } = textFieldProps;
   const [internal, setInternal] = React.useState(defaultValue ?? "");
   const isControlled = value !== undefined;
   const val = isControlled ? value! : internal;
 
-  const internalInputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const debounced = useDebounce(val, debounceMs);
-
-  const setInputRef = React.useCallback(
-    (node: HTMLInputElement | null) => {
-      // Update the internal ref (used for focusing and other internal logic)
-      internalInputRef.current = node;
-
-      // Update the external ref passed in props, supporting both callback refs and mutable ref objects
-      if (typeof inputRef === "function") {
-        inputRef(node);
-      } else if (inputRef) {
-        inputRef.current = node;
-      }
-    },
-    [inputRef],
-  );
 
   const stop = (e: React.SyntheticEvent) => {
     e.stopPropagation();
@@ -111,7 +74,7 @@ export function SearchBar({
         (!isMacPlatform() && e.ctrlKey && e.key.toLowerCase() === "k")
       ) {
         e.preventDefault();
-        internalInputRef.current?.focus();
+        inputRef.current?.focus();
       }
     };
     window.addEventListener("keydown", handler);
@@ -128,49 +91,12 @@ export function SearchBar({
     if (!isControlled) setInternal("");
     onChange?.("");
     onSearch?.("");
-    internalInputRef.current?.focus();
+    inputRef.current?.focus();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") onSearch?.(val);
     if (e.key === "Escape" && !disableClear && val) handleClear();
-  };
-
-  const searchAdornment = (
-    <InputAdornment position="end">
-      {loading ? (
-        <CircularProgress size={size === "small" ? 16 : 18} />
-      ) : (
-        !disableClear &&
-        val && (
-          <IconButton
-            aria-label="Clear search"
-            onClick={handleClear}
-            edge="end"
-            size={size === "small" ? "small" : "medium"}
-          >
-            <ClearIcon fontSize={size === "small" ? "small" : "medium"} />
-          </IconButton>
-        )
-      )}
-    </InputAdornment>
-  );
-
-  const inputSlotProps = (ownerState: TextFieldInputSlotOwnerState) => {
-    const resolvedInputSlotProps =
-      typeof slotProps?.input === "function"
-        ? slotProps.input(ownerState)
-        : slotProps?.input;
-
-    return {
-      ...resolvedInputSlotProps,
-      endAdornment: (
-        <>
-          {resolvedInputSlotProps?.endAdornment}
-          {searchAdornment}
-        </>
-      ),
-    };
   };
 
   return (
@@ -190,11 +116,10 @@ export function SearchBar({
         })}
       >
         <TextField
-          {...restTextFieldProps}
           id={id}
           name={name}
           fullWidth
-          inputRef={setInputRef}
+          inputRef={inputRef}
           autoFocus={autoFocus}
           size={size}
           value={val}
@@ -203,8 +128,29 @@ export function SearchBar({
           onKeyDown={handleKeyDown}
           variant="outlined"
           slotProps={{
-            ...slotProps,
-            input: inputSlotProps,
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  {loading ? (
+                    <CircularProgress size={size === "small" ? 16 : 18} />
+                  ) : (
+                    !disableClear &&
+                    val && (
+                      <IconButton
+                        aria-label="Clear search"
+                        onClick={handleClear}
+                        edge="end"
+                        size={size === "small" ? "small" : "medium"}
+                      >
+                        <ClearIcon
+                          fontSize={size === "small" ? "small" : "medium"}
+                        />
+                      </IconButton>
+                    )
+                  )}
+                </InputAdornment>
+              ),
+            },
           }}
         />
         {actions}
