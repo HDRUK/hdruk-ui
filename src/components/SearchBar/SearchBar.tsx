@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import type { BoxProps, TextFieldProps } from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
 
@@ -149,7 +149,7 @@ export function SearchBar({
             edge="end"
             size={size === "small" ? "small" : "medium"}
           >
-            <ClearIcon fontSize={size === "small" ? "small" : "medium"} />
+            <CancelIcon fontSize={size === "small" ? "small" : "medium"} />
           </IconButton>
         )
       )}
