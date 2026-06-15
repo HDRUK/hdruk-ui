@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/HDRUK/hdruk-ui/compare/v1.0.8...v1.1.0) (2026-06-15)
+
+
+### Bug Fixes
+
+* **search-bar:** preserve internal adornment when merging slot props ([bda5e56](https://github.com/HDRUK/hdruk-ui/commit/bda5e56e2eafef6c773d355a6c8f2cb860072aa4))
+
+
+### Features
+
+* **search-bar:** allow TextField prop overrides ([dbb6b0b](https://github.com/HDRUK/hdruk-ui/commit/dbb6b0b667f754614a56acda3dce672325d5bc15))
+
 ## [1.0.8](https://github.com/HDRUK/hdruk-ui/compare/v1.0.7...v1.0.8) (2026-02-16)
 
 
