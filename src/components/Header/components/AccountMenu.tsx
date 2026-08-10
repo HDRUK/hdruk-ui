@@ -1,10 +1,10 @@
-import Box from "@mui/system/Box";
-import Button from "@mui/material/Button";
-import MenuDropdown from "./MenuDropdown";
 import React from "react";
+import Button from "@mui/material/Button";
+import Box from "@mui/system/Box";
 import { AccountName, AccountNavigation } from "../Header.types";
-import InitialsBadge from "./InitialsBadge";
 import { headerFocusRingSx } from "../Header.utils";
+import InitialsBadge from "./InitialsBadge";
+import MenuDropdown from "./MenuDropdown";
 
 type AccountMenuProps = {
   accountNavigation?: AccountNavigation;
@@ -18,7 +18,7 @@ export default function AccountMenu({
   accountName,
 }: AccountMenuProps) {
   const [anchorElement, setAnchorElement] = React.useState<null | HTMLElement>(
-    null,
+    null
   );
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -38,7 +38,7 @@ export default function AccountMenu({
 
         <Button
           disableRipple
-          sx={(theme) => ({
+          sx={theme => ({
             ...headerFocusRingSx,
             marginLeft: "5px",
             color: theme.palette.primary.contrastText,
@@ -47,8 +47,7 @@ export default function AccountMenu({
           onClick={handleOpen}
           aria-haspopup="menu"
           aria-controls={anchorElement ? menuId : undefined}
-          aria-expanded={anchorElement ? "true" : "false"}
-        >
+          aria-expanded={anchorElement ? "true" : "false"}>
           {accountName?.first ?? "Account"}
         </Button>
       </Box>

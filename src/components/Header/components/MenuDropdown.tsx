@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Typography } from "@mui/material";
-import { getLinkComponent } from "../Header.utils";
 import { HeaderMenuLinkItem } from "../Header.types";
+import { getLinkComponent } from "../Header.utils";
 
 interface MenuDropdownProps {
   id: string;
@@ -35,13 +35,12 @@ export default function MenuDropdown({
         }
         handleClose();
       }}
-      open={Boolean(anchorElement)}
-    >
-      {menuItems?.map((menuItem) => {
+      open={Boolean(anchorElement)}>
+      {menuItems?.map(menuItem => {
         if (menuItem.subItems) {
-          return menuItem?.subItems.map((subItem) => (
+          return menuItem?.subItems.map(subItem => (
             <MenuItem
-              sx={(theme) => ({
+              sx={theme => ({
                 maxWidth: 250,
                 color: theme.palette.primary.main,
                 textWrap: "initial",
@@ -50,8 +49,7 @@ export default function MenuDropdown({
               key={subItem.label}
               onClick={handleClose}
               component={getLinkComponent(linkComponent)}
-              href={subItem.href}
-            >
+              href={subItem.href}>
               <Typography component={"span"}>{subItem.label}</Typography>
             </MenuItem>
           ));
@@ -63,7 +61,7 @@ export default function MenuDropdown({
         if (menuItem.href) {
           onClick = () => handleClose();
         } else if (menuItem.action) {
-          onClick = (e) => {
+          onClick = e => {
             handleClose();
             menuItem.action?.(e);
           };
@@ -74,7 +72,7 @@ export default function MenuDropdown({
         return (
           <MenuItem
             key={menuItem.label}
-            sx={(theme) => ({
+            sx={theme => ({
               maxWidth: 250,
               color: theme.palette.primary.main,
               textWrap: "initial",
@@ -85,8 +83,7 @@ export default function MenuDropdown({
             {...(menuItem.href && {
               component: getLinkComponent(linkComponent),
               href: menuItem.href,
-            })}
-          >
+            })}>
             <Typography component={"span"}>{menuItem.label}</Typography>
           </MenuItem>
         );
