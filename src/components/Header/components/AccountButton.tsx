@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
-import { getLinkComponent } from "../Header.utils";
 import { AccountNavigation } from "../Header.types";
+import { getLinkComponent } from "../Header.utils";
 
 interface AccountButtonProps {
   accountNavigation: AccountNavigation;
@@ -20,12 +20,11 @@ export default function AccountButton({
     <Button
       size="small"
       variant="outlined"
-      sx={(theme) => ({
+      sx={theme => ({
         color: theme.palette.primary.contrastText,
       })}
       component={getLinkComponent(linkComponent)}
-      href={signIn.href}
-    >
+      href={signIn.href}>
       {signIn.label}
     </Button>
   ) : (
@@ -33,11 +32,10 @@ export default function AccountButton({
       size="small"
       variant="outlined"
       color="secondary"
-      sx={(theme) => ({
+      sx={theme => ({
         color: theme.palette.primary.contrastText,
       })}
-      onClick={signIn.action}
-    >
+      onClick={signIn.action}>
       {signIn.label}
     </Button>
   );

@@ -1,7 +1,7 @@
-import { Box } from "@mui/material";
 import { useMemo } from "react";
-import { getInitials } from "../Header.utils";
+import { Box } from "@mui/material";
 import theme from "../../../theme";
+import { getInitials } from "../Header.utils";
 
 interface InitialsBadgeProps {
   fullName?: string;
@@ -30,8 +30,7 @@ const InitialsBadge = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-      }}
-    >
+      }}>
       {initials || generatedInitials}
     </Box>
   );
