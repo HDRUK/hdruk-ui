@@ -14,15 +14,14 @@ const FooterLink = ({ href, children, component = Link }: FooterLinkProps) => {
       component={component}
       href={href}
       underline="none"
-      sx={(theme) => ({
+      sx={theme => ({
         color: theme.palette.primary.contrastText,
         textDecoration: "none",
         "&:hover": {
           textDecoration: "underline",
         },
       })}
-      {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
-    >
+      {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}>
       {children}
     </Link>
   );

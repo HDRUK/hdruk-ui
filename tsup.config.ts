@@ -17,6 +17,7 @@ export default defineConfig({
     "react-dom",
     "@mui/material",
     "@mui/system",
+    "@mui/utils",
     "@emotion/react",
     "@emotion/styled",
   ],

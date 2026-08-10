@@ -1,10 +1,10 @@
 import * as React from "react";
 import { AppBar, Container, Toolbar, Link, Box } from "@mui/material";
+import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
 import { AccountNav, DesktopNav } from "./components";
 import MobileMenu from "./components/MobileMenu";
-import { getLinkComponent, headerFocusRingSx } from "./Header.utils";
 import { HeaderProps } from "./Header.types";
-import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
+import { getLinkComponent, headerFocusRingSx } from "./Header.utils";
 
 const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
 
@@ -35,7 +35,7 @@ export default function Header({
   appBarColour = "primary",
 }: HeaderProps) {
   const [anchorElement, setAnchorElement] = React.useState<null | HTMLElement>(
-    null,
+    null
   );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -48,13 +48,12 @@ export default function Header({
     <AppBar
       position={"static"}
       color={appBarColour}
-      sx={(theme) => ({
+      sx={theme => ({
         "--hdruk-header-focus":
           focusRingColour ?? theme.palette.primary.contrastText,
         "--hdruk-header-initials":
           accountInitialsColour ?? theme.palette.primary.main,
-      })}
-    >
+      })}>
       <Container maxWidth="lg">
         <Toolbar
           disableGutters
@@ -62,8 +61,7 @@ export default function Header({
             pt: 1,
             pb: 1,
             justifyContent: hasNavItems ? { md: "initial" } : "space-between",
-          }}
-        >
+          }}>
           <Box
             sx={{
               alignItems: "center",
@@ -72,13 +70,11 @@ export default function Header({
               flexShrink: 0,
               display: { xs: "none", lg: "flex" },
               "& img": { display: "block" },
-            }}
-          >
+            }}>
             <Link
               component={getLinkComponent(linkComponent)}
               href={logoHref}
-              sx={{ ...headerFocusRingSx }}
-            >
+              sx={{ ...headerFocusRingSx }}>
               {logoImage}
             </Link>
 
@@ -91,8 +87,7 @@ export default function Header({
                     sx={{
                       display: { xs: "none", lg: "flex" },
                       ...headerFocusRingSx,
-                    }}
-                  >
+                    }}>
                     {brandingLogoImage}
                   </Link>
                 ) : (
@@ -119,8 +114,7 @@ export default function Header({
               flexGrow: 1,
               display: { xs: "flex", lg: "none" },
               justifyContent: { xs: "center", sm: "flex-start" },
-            }}
-          >
+            }}>
             <Link
               component={getLinkComponent(linkComponent)}
               href={logoHref}
@@ -128,8 +122,7 @@ export default function Header({
                 ml: { sm: 2 },
                 mr: { sm: 1 },
                 ...headerFocusRingSx,
-              }}
-            >
+              }}>
               {logoImage}
             </Link>
 
@@ -138,8 +131,7 @@ export default function Header({
                 <Link
                   component={getLinkComponent(linkComponent)}
                   href={brandingLogoHref}
-                  sx={{ ...headerFocusRingSx }}
-                >
+                  sx={{ ...headerFocusRingSx }}>
                   {brandingLogoImage}
                 </Link>
               ) : (
@@ -162,8 +154,7 @@ export default function Header({
               justifySelf: "end",
               flexGrow: hasNavItems ? 0 : 0, // fine either way; kept explicit
               display: { xs: "none", sm: "flex" },
-            }}
-          >
+            }}>
             <AccountNav
               isLoggedIn={isLoggedIn}
               accountLoading={accountLoading}

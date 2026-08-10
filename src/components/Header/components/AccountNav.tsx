@@ -1,6 +1,6 @@
+import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/system/Box";
 import { AccountName, AccountNavigation } from "../Header.types";
-import Skeleton from "@mui/material/Skeleton";
 import AccountButton from "./AccountButton";
 import AccountMenu from "./AccountMenu";
 

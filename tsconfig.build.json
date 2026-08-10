@@ -17,13 +17,11 @@
 
     "noEmit": false,
 
-    "incremental": false,           // <-- important for DTS
-    "isolatedModules": false,        // tsc handles types for dts; tsup handles bundling
-    "baseUrl": ".", 
+    "incremental": false, // <-- important for DTS
+    "isolatedModules": false, // tsc handles types for dts; tsup handles bundling
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],
