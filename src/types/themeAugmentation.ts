@@ -8,22 +8,22 @@ import type {
 
 declare module "@mui/material/styles" {
   interface Palette {
-    brand: {
-      emphasis: PaletteColor;
-      accent: PaletteColor;
-      neutral: PaletteColor;
-      surface: PaletteColor;
-      highlight: PaletteColor;
+    tertiary: {
+      midnightBlue: PaletteColor;
+      duckEggBlue: PaletteColor;
+      slateGrey: PaletteColor;
+      lightGrey: PaletteColor;
+      orange: PaletteColor;
     };
     link: Palette["primary"];
   }
   interface PaletteOptions {
-    brand?: {
-      emphasis?: PaletteColorOptions;
-      accent?: PaletteColorOptions;
-      neutral?: PaletteColorOptions;
-      surface?: PaletteColorOptions;
-      highlight?: PaletteColorOptions;
+    tertiary?: {
+      midnightBlue?: PaletteColorOptions;
+      duckEggBlue?: PaletteColorOptions;
+      slateGrey?: PaletteColorOptions;
+      lightGrey?: PaletteColorOptions;
+      orange?: PaletteColorOptions;
     };
     link?: PaletteColorOptions;
   }

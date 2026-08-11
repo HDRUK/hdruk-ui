@@ -29,12 +29,12 @@ export const themeOptions: ThemeOptions = {
   palette: {
     primary: brandColors.seaGreen,
     secondary: brandColors.cornflowerBlue,
-    brand: {
-      emphasis: brandColors.midnightBlue,
-      accent: brandColors.duckEggBlue,
-      neutral: brandColors.slateGrey,
-      surface: brandColors.lightGrey,
-      highlight: brandColors.orange,
+    tertiary: {
+      midnightBlue: brandColors.midnightBlue,
+      duckEggBlue: brandColors.duckEggBlue,
+      slateGrey: brandColors.slateGrey,
+      lightGrey: brandColors.lightGrey,
+      orange: brandColors.orange,
     },
     link: { main: brandColors.cornflowerBlue.main },
     background: {
@@ -125,7 +125,7 @@ export const themeOptions: ThemeOptions = {
         {
           props: { variant: "text", color: "inherit" },
           style: ({ theme }) => ({
-            color: theme.palette.brand.neutral.main,
+            color: theme.palette.tertiary.slateGrey.main,
             "&:hover": {
               backgroundColor: theme.palette.action.hover,
             },

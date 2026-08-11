@@ -89,7 +89,7 @@ const BrandingLogo = () => (
       py: 0.5,
       borderRadius: 1,
       bgcolor: "common.white",
-      color: "brand.emphasis.main",
+      color: "tertiary.midnightBlue.main",
       fontWeight: 700,
       fontSize: "0.875rem",
       whiteSpace: "nowrap",

@@ -206,9 +206,9 @@ Tokens the components rely on (your overrides must keep these keys populated):
 
 - The standard MUI palette slots (`primary`, `secondary`, `background`,
   `divider`, `action`, `text`) — override freely.
-- `palette.brand.{emphasis,accent,neutral,surface,highlight}` — semantic brand
-  slots (HDRUK defaults: midnight blue, duck-egg blue, slate grey, light grey,
-  orange). `brand.neutral` is used by the `text`/`inherit` Button variant.
+- `palette.tertiary.{midnightBlue,duckEggBlue,slateGrey,lightGrey,orange}` —
+  the HDRUK brand slots. `tertiary.slateGrey` is used by the `text`/`inherit`
+  Button variant.
 - `palette.link` — used by the `color="link"` variant on Button, Chip,
   IconButton, Checkbox and Switch.
 
@@ -227,7 +227,7 @@ Re-branding example (magenta primary, custom fonts):
   themeOptions={{
     palette: {
       primary: { main: "#BE37A3" },
-      brand: { neutral: { main: "#333333" } },
+      tertiary: { slateGrey: { main: "#333333" } },
     },
     typography: { fontFamily: "MyFont, sans-serif" },
   }}>
