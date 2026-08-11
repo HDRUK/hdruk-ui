@@ -5,6 +5,9 @@ Built on **MUI v7**, with a shared HDRUK brand theme and a set of reusable compo
 
 ## Viewing the components
 
+**[Browse the component catalogue →](https://hdruk.github.io/hdruk-ui/)**
+(published from `main` on every release)
+
 Storybook is the primary dev surface — every component renders through
 `HdrukUiProvider`, so no consumer app is needed:
 
