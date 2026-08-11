@@ -3,6 +3,25 @@
 Common, theme-driven UI for the **HDRUK Tech Team**.  
 Built on **MUI v7**, with a shared HDRUK brand theme and a set of reusable components.
 
+## Viewing the components
+
+Storybook is the primary dev surface — every component renders through
+`HdrukUiProvider`, so no consumer app is needed:
+
+```bash
+npm install
+npm run storybook   # http://localhost:6006
+```
+
+The **Theme** dropdown in the toolbar switches between the library base theme
+and site-flavoured demo themes (`.storybook/demoThemes.ts`). These are QA
+fixtures, not the real site themes — their job is to shake out hardcoded values
+and prove the theming levers work on every story. Anything that doesn't move
+when you switch is a bug.
+
+`npm run build-storybook` produces `storybook-static`, which the Storybook
+workflow publishes to GitHub Pages on merge to `main`.
+
 ## Install
 
 ```bash
@@ -10,6 +29,8 @@ npm i @hdruk/ui
 # peer deps
 npm i @mui/material @emotion/react @emotion/styled
 ```
+
+Peer requirements: React `^18 || ^19`, MUI `^7.3`, Emotion `^11.14`.
 
 ## Setup
 
@@ -170,3 +191,61 @@ import Link from "next/link";
 | `logoImage` | `ReactNode` | HDRUK logo | Override the footer logo |
 | `linkComponent` | `React.ElementType` | `<a>` | Pass `next/link` for client-side routing |
 | `sx` | MUI `SxProps` | — | Style overrides for the footer root element |
+
+---
+
+## Theming contract
+
+`HdrukUiProvider` builds its theme with
+`createTheme(deepmerge(brandThemeOptions, yourThemeOptions))`, so anything you
+pass in `themeOptions` wins over the HDRUK defaults. Components style
+themselves only through theme tokens — no hardcoded colours — so a re-brand is
+a matter of overriding tokens.
+
+Tokens the components rely on (your overrides must keep these keys populated):
+
+- The standard MUI palette slots (`primary`, `secondary`, `background`,
+  `divider`, `action`, `text`) — override freely.
+- `palette.tertiary.{midnightBlue,duckEggBlue,slateGrey,lightGrey,orange}` —
+  the HDRUK brand slots. `tertiary.slateGrey` is used by the `text`/`inherit`
+  Button variant.
+- `palette.link` — used by the `color="link"` variant on Button, Chip,
+  IconButton, Checkbox and Switch.
+
+The base theme, its options and the raw brand colours are exported for
+composing your overrides (or for use outside MUI, e.g. charts):
+
+```ts
+import { theme, themeOptions, brandColors } from "@hdruk/ui";
+```
+
+Re-branding example (magenta primary, custom fonts):
+
+```tsx
+<HdrukUiProvider
+  loadFonts={false}
+  themeOptions={{
+    palette: {
+      primary: { main: "#BE37A3" },
+      tertiary: { slateGrey: { main: "#333333" } },
+    },
+    typography: { fontFamily: "MyFont, sans-serif" },
+  }}>
+  {children}
+</HdrukUiProvider>
+```
+
+### Fonts
+
+By default the provider injects Google Fonts links for Inter and Material
+Symbols. Pass `loadFonts={false}` and load fonts yourself (e.g. with
+`next/font`, which self-hosts and avoids your visitors' browsers calling
+Google) when your app uses different fonts or you want to keep font delivery
+first-party.
+
+## Release process
+
+Publishing is automated: merging to `main` runs semantic-release, which
+versions from conventional-commit messages (`fix:` → patch, `feat:` → minor,
+`feat!:`/`BREAKING CHANGE` → major) and publishes to npm. Don't push work in
+progress to `main`.

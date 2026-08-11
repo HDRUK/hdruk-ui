@@ -1,5 +1,10 @@
-import "@mui/material/styles";
-import { PaletteColor, PaletteColorOptions } from "@mui/material/styles";
+import type { ButtonProps } from "../components/Button/Button";
+import type {
+  PaletteColor,
+  PaletteColorOptions,
+  ComponentsOverrides,
+  ComponentsVariants,
+} from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -21,6 +26,22 @@ declare module "@mui/material/styles" {
       orange?: PaletteColorOptions;
     };
     link?: PaletteColorOptions;
+  }
+}
+
+declare module "@mui/material/styles" {
+  interface ComponentsPropsList {
+    HdrukButton: Partial<ButtonProps>;
+  }
+  interface ComponentNameToClassKey {
+    HdrukButton: "root";
+  }
+  interface Components<Theme = unknown> {
+    HdrukButton?: {
+      defaultProps?: ComponentsPropsList["HdrukButton"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukButton"];
+      variants?: ComponentsVariants<Theme>["HdrukButton"];
+    };
   }
 }
 
@@ -49,3 +70,5 @@ declare module "@mui/material/Switch" {
     link: true;
   }
 }
+
+export {};

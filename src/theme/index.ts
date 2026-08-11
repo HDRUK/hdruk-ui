@@ -3,6 +3,7 @@ import {
   responsiveFontSizes,
   ThemeOptions,
 } from "@mui/material/styles";
+import "../types/themeAugmentation";
 
 export const brandColors = {
   seaGreen: {
@@ -107,7 +108,7 @@ export const themeOptions: ThemeOptions = {
             outlineOffset: 2,
           },
         }),
-        outlined: ({ theme }) => ({
+        outlined: () => ({
           borderWidth: 2,
           "&:hover": { borderWidth: 2 },
         }),
@@ -132,7 +133,7 @@ export const themeOptions: ThemeOptions = {
         },
         {
           props: { color: "link", variant: "text" },
-          style: ({ theme }) => ({
+          style: () => ({
             textDecoration: "underline",
             paddingInline: 0,
             minWidth: 0,

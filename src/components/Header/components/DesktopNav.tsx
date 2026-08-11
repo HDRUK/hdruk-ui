@@ -1,7 +1,7 @@
 import React from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Button, Divider } from "@mui/material";
 import { MenuLinkItem } from "../../../types/navigation";
+import { Icon } from "../../Icon";
 import { HeaderMenuLinkItem } from "../Header.types";
 import { getLinkComponent, headerFocusRingSx } from "../Header.utils";
 import MenuDropdown from "./MenuDropdown";
@@ -26,7 +26,7 @@ export default function DesktopNav({
   const handleOpenMenu = (
     el: HTMLElement,
     label: string,
-    subItems: { label: string; href: string }[],
+    subItems: { label: string; href: string }[]
   ) => {
     setAnchorEl(el);
     setActiveLabel(label);
@@ -48,9 +48,8 @@ export default function DesktopNav({
         alignItems: "center",
         ml: 4,
         gap: 1,
-      }}
-    >
-      {navItems.map((item) => {
+      }}>
+      {navItems.map(item => {
         if (item.subItems?.length) {
           const open = Boolean(anchorEl) && activeLabel === item.label;
 
@@ -59,27 +58,27 @@ export default function DesktopNav({
               key={item.label}
               variant="text"
               endIcon={
-                <ExpandMoreIcon
-                  sx={(theme) => ({
+                <Icon
+                  name="expand_more"
+                  sx={theme => ({
                     color: theme.palette.primary.contrastText,
                   })}
                 />
               }
-              onClick={(event) =>
+              onClick={event =>
                 handleOpenMenu(
                   event.currentTarget,
                   item.label,
-                  item.subItems || [],
+                  item.subItems || []
                 )
               }
               aria-haspopup="menu"
               aria-controls={open ? menuId : undefined}
               aria-expanded={open ? "true" : "false"}
-              sx={(theme) => ({
+              sx={theme => ({
                 color: theme.palette.primary.contrastText,
                 ...headerFocusRingSx,
-              })}
-            >
+              })}>
               {item.label}
             </Button>
           );
@@ -89,7 +88,7 @@ export default function DesktopNav({
           <React.Fragment key={item.label}>
             <Divider
               orientation="vertical"
-              sx={(theme) => ({
+              sx={theme => ({
                 bgcolor: theme.palette.primary.contrastText,
                 mx: 1,
               })}
@@ -97,14 +96,13 @@ export default function DesktopNav({
 
             <Button
               key={item.label}
-              sx={(theme) => ({
+              sx={theme => ({
                 ...headerFocusRingSx,
                 color: theme.palette.primary.contrastText,
               })}
               variant="text"
               component={getLinkComponent(linkComponent)}
-              href={item.href}
-            >
+              href={item.href}>
               {item.label}
             </Button>
           </React.Fragment>

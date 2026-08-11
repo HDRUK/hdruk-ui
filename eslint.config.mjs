@@ -4,12 +4,19 @@ import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+import storybook from "eslint-plugin-storybook";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["**/dist/**", "**/node_modules/**", "**/coverage/**", "docs/**"],
+    ignores: [
+      "**/dist/**",
+      "**/node_modules/**",
+      "**/coverage/**",
+      "**/storybook-static/**",
+      "docs/**",
+    ],
   },
 
   js.configs.recommended,
@@ -130,7 +137,12 @@ export default [
       "import/no-extraneous-dependencies": [
         "error",
         {
-          devDependencies: ["*.config.ts", "*.config.mjs"],
+          devDependencies: [
+            "*.config.ts",
+            "*.config.mjs",
+            ".storybook/**",
+            "**/*.stories.tsx",
+          ],
           peerDependencies: true,
         },
       ],
@@ -142,6 +154,8 @@ export default [
       "no-undef": "off",
     },
   },
+
+  ...storybook.configs["flat/recommended"],
 
   prettier,
 ];
