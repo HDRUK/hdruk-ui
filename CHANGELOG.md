@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/HDRUK/hdruk-ui/compare/v1.1.1...v1.2.0) (2026-08-11)
+
+
+### Features
+
+* **GAT-9252:** add Storybook, Icon component and GitHub Pages deployment ([#30](https://github.com/HDRUK/hdruk-ui/issues/30)) ([48d22b7](https://github.com/HDRUK/hdruk-ui/commit/48d22b712f7bb77969ee5f5f2c1c983100d792ce))
+
 ## [1.1.1](https://github.com/HDRUK/hdruk-ui/compare/v1.1.0...v1.1.1) (2026-06-15)
 
 
