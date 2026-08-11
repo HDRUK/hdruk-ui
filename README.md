@@ -248,7 +248,33 @@ first-party.
 
 ## Release process
 
-Publishing is automated: merging to `main` runs semantic-release, which
-versions from conventional-commit messages (`fix:` → patch, `feat:` → minor,
-`feat!:`/`BREAKING CHANGE` → major) and publishes to npm. Don't push work in
-progress to `main`.
+Every merge to `main` publishes a new version. There is no manual version bump
+and no `npm publish` by hand — don't push work in progress to `main`.
+
+Work lands through a PR into `main`, which is protected: reviewed, with CI
+green. The **PR title** is the thing that matters at merge time — it becomes the
+commit message and decides the version, so it must be a conventional-commit
+title:
+
+- `fix:` or `perf:` → patch
+- `feat:` → minor
+- `feat!:`, or a `BREAKING CHANGE:` footer → major
+- `docs:`, `chore:`, `refactor:`, `test:` → no release
+
+On merge, semantic-release works out the version, publishes to npm, updates
+`CHANGELOG.md`, tags the commit and writes a GitHub Release.
+
+**What counts as breaking** is broader than a changed type signature. Renaming
+or removing a palette token, theme key or breakpoint; changing a slot class or
+the DOM a consumer targets with `styleOverrides`, `sx` or test selectors;
+changing a prop default so existing call sites render differently; raising a
+peer version floor. Any of those is `feat!:`, not `feat:`.
+
+Apps depend on a caret range, so patches and minors reach them as automated
+update PRs and can merge once their own CI is green. Majors sit outside the
+range and are adopted deliberately, using the Release notes as the migration
+guide.
+
+If a bad version ships, fix forward rather than unpublishing: `npm deprecate`
+it with a pointer to the good version, then land the fix as `fix:` so the patch
+supersedes it.
