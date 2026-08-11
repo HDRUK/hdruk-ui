@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/HDRUK/hdruk-ui/compare/v1.2.0...v1.2.1) (2026-08-11)
+
+
+### Bug Fixes
+
+* link the published Storybook and add homepage metadata ([#31](https://github.com/HDRUK/hdruk-ui/issues/31)) ([4342ea5](https://github.com/HDRUK/hdruk-ui/commit/4342ea5c7a061c1be84182c5d74809a4b56998f5))
+* push release commits as a bypass-listed GitHub App ([#32](https://github.com/HDRUK/hdruk-ui/issues/32)) ([cd47b87](https://github.com/HDRUK/hdruk-ui/commit/cd47b87871e157506a0b5b4e721d991db7349cd6))
+
 # [1.2.0](https://github.com/HDRUK/hdruk-ui/compare/v1.1.1...v1.2.0) (2026-08-11)
 
 
