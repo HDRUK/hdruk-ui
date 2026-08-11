@@ -3,6 +3,7 @@ import {
   responsiveFontSizes,
   ThemeOptions,
 } from "@mui/material/styles";
+import "../types/themeAugmentation";
 
 export const brandColors = {
   seaGreen: {
@@ -28,12 +29,12 @@ export const themeOptions: ThemeOptions = {
   palette: {
     primary: brandColors.seaGreen,
     secondary: brandColors.cornflowerBlue,
-    tertiary: {
-      midnightBlue: brandColors.midnightBlue,
-      duckEggBlue: brandColors.duckEggBlue,
-      slateGrey: brandColors.slateGrey,
-      lightGrey: brandColors.lightGrey,
-      orange: brandColors.orange,
+    brand: {
+      emphasis: brandColors.midnightBlue,
+      accent: brandColors.duckEggBlue,
+      neutral: brandColors.slateGrey,
+      surface: brandColors.lightGrey,
+      highlight: brandColors.orange,
     },
     link: { main: brandColors.cornflowerBlue.main },
     background: {
@@ -107,7 +108,7 @@ export const themeOptions: ThemeOptions = {
             outlineOffset: 2,
           },
         }),
-        outlined: ({ theme }) => ({
+        outlined: () => ({
           borderWidth: 2,
           "&:hover": { borderWidth: 2 },
         }),
@@ -124,7 +125,7 @@ export const themeOptions: ThemeOptions = {
         {
           props: { variant: "text", color: "inherit" },
           style: ({ theme }) => ({
-            color: theme.palette.tertiary.slateGrey.main,
+            color: theme.palette.brand.neutral.main,
             "&:hover": {
               backgroundColor: theme.palette.action.hover,
             },
@@ -132,7 +133,7 @@ export const themeOptions: ThemeOptions = {
         },
         {
           props: { color: "link", variant: "text" },
-          style: ({ theme }) => ({
+          style: () => ({
             textDecoration: "underline",
             paddingInline: 0,
             minWidth: 0,

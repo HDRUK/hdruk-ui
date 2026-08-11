@@ -11,6 +11,10 @@
 # linting
 .eslintcache
 
+# storybook
+/storybook-static
+*.storybook.log
+
 # next.js
 /.next/
 /out/

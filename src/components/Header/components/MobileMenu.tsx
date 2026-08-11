@@ -1,7 +1,7 @@
-import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/system/Box";
 import { MenuLinkItem } from "../../../types/navigation";
+import { Icon } from "../../Icon";
 import { AccountNavigation } from "../Header.types";
 import { buildMobileMenuItems, headerFocusRingSx } from "../Header.utils";
 import MenuDropdown from "./MenuDropdown";
@@ -31,8 +31,7 @@ const MobileMenu = ({
     <Box
       sx={{
         display: { xs: "flex", lg: "none" },
-      }}
-    >
+      }}>
       <IconButton
         size="large"
         aria-label="navigation menu"
@@ -40,9 +39,8 @@ const MobileMenu = ({
         aria-haspopup="true"
         onClick={handleOpenNavMenu}
         color="inherit"
-        sx={{ ...headerFocusRingSx }}
-      >
-        <MenuIcon htmlColor="white" />
+        sx={{ ...headerFocusRingSx }}>
+        <Icon name="menu" sx={{ color: "white" }} />
       </IconButton>
 
       <MenuDropdown

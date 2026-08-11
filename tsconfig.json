@@ -5,6 +5,6 @@
     "declaration": false,
     "declarationMap": false
   },
-  "include": ["src/**/*", "*.config.ts", "*.config.mjs"],
+  "include": ["src/**/*", ".storybook/**/*", "*.config.ts", "*.config.mjs"],
   "exclude": ["dist", "node_modules"]
 }
