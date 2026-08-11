@@ -1,4 +1,5 @@
 import * as React from "react";
+import CancelIcon from "@mui/icons-material/Cancel";
 import {
   Box,
   TextField,
@@ -7,10 +8,10 @@ import {
   CircularProgress,
   Paper,
 } from "@mui/material";
-import type { BoxProps, TextFieldProps } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
+import useForkRef from "@mui/utils/useForkRef";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
+import type { BoxProps, TextFieldProps } from "@mui/material";
 
 type SearchBarTextFieldProps = Omit<
   TextFieldProps,
@@ -80,20 +81,7 @@ export function SearchBar({
   const internalInputRef = React.useRef<HTMLInputElement>(null);
   const debounced = useDebounce(val, debounceMs);
 
-  const setInputRef = React.useCallback(
-    (node: HTMLInputElement | null) => {
-      // Update the internal ref (used for focusing and other internal logic)
-      internalInputRef.current = node;
-
-      // Update the external ref passed in props, supporting both callback refs and mutable ref objects
-      if (typeof inputRef === "function") {
-        inputRef(node);
-      } else if (inputRef) {
-        inputRef.current = node;
-      }
-    },
-    [inputRef],
-  );
+  const setInputRef = useForkRef(internalInputRef, inputRef);
 
   const stop = (e: React.SyntheticEvent) => {
     e.stopPropagation();
@@ -195,6 +183,7 @@ export function SearchBar({
           name={name}
           fullWidth
           inputRef={setInputRef}
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- opt-in via the autoFocus prop, off by default
           autoFocus={autoFocus}
           size={size}
           value={val}

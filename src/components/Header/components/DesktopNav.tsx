@@ -1,10 +1,10 @@
 import React from "react";
-import { Box, Button, Divider } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MenuDropdown from "./MenuDropdown";
-import { getLinkComponent, headerFocusRingSx } from "../Header.utils";
+import { Box, Button, Divider } from "@mui/material";
 import { MenuLinkItem } from "../../../types/navigation";
 import { HeaderMenuLinkItem } from "../Header.types";
+import { getLinkComponent, headerFocusRingSx } from "../Header.utils";
+import MenuDropdown from "./MenuDropdown";
 
 type DesktopNavProps = {
   linkComponent?: React.ElementType;

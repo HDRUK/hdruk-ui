@@ -1,5 +1,5 @@
-import type { AppBarProps } from "@mui/material/AppBar";
 import { MenuLinkItem } from "../../types/navigation";
+import type { AppBarProps } from "@mui/material/AppBar";
 
 export interface AccountName {
   /**
@@ -44,12 +44,12 @@ export interface AccountNavigation {
    * Logout action or link.
    * Usually implemented with an `action`.
    */
-  logout?: MenuLinkItem;
+  logout?: HeaderMenuLinkItem;
 
   /**
    * Sign-in action or link shown when the user is logged out.
    */
-  signIn?: MenuLinkItem;
+  signIn?: HeaderMenuLinkItem;
 }
 
 export interface HeaderProps {

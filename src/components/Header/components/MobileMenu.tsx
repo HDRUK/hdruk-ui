@@ -1,10 +1,10 @@
+import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/system/Box";
-import MenuIcon from "@mui/icons-material/Menu";
-import MenuDropdown from "./MenuDropdown";
+import { MenuLinkItem } from "../../../types/navigation";
 import { AccountNavigation } from "../Header.types";
 import { buildMobileMenuItems, headerFocusRingSx } from "../Header.utils";
-import { MenuLinkItem } from "../../../types/navigation";
+import MenuDropdown from "./MenuDropdown";
 
 interface MobileMenuProps {
   accountNavigation?: AccountNavigation;

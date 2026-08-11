@@ -1,10 +1,9 @@
-import { Box, Container, Typography } from "@mui/material";
-import { FooterProps, SocialLinkItem } from "./Footer.types";
-import FooterLink from "./components/FooterLink";
-import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-
+import XIcon from "@mui/icons-material/X";
+import { Box, Container, Typography } from "@mui/material";
 import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.svg";
+import FooterLink from "./components/FooterLink";
+import { FooterProps, SocialLinkItem } from "./Footer.types";
 const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
 
 const defaultLogoImage = (
