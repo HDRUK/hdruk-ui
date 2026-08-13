@@ -5,6 +5,13 @@
     "declaration": false,
     "declarationMap": false
   },
-  "include": ["src/**/*", ".storybook/**/*", "*.config.ts", "*.config.mjs"],
+  "include": [
+    "src/**/*",
+    ".storybook/**/*",
+    "test/**/*",
+    "jest.setup.ts",
+    "*.config.ts",
+    "*.config.mjs"
+  ],
   "exclude": ["dist", "node_modules"]
 }
