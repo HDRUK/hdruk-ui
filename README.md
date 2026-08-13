@@ -307,8 +307,10 @@ title:
 - `feat!:`, or a `BREAKING CHANGE:` footer → major
 - `docs:`, `chore:`, `refactor:`, `test:` → no release
 
-On merge, semantic-release works out the version, publishes to npm, updates
-`CHANGELOG.md`, tags the commit and writes a GitHub Release.
+On merge, semantic-release works out the version, publishes `@hdruk/ui`
+publicly to npmjs, updates `CHANGELOG.md`, tags the commit and writes a GitHub
+Release. A merge that publishes nothing is still not inert: the same push
+redeploys Storybook to GitHub Pages via `.github/workflows/storybook.yml`.
 
 **What counts as breaking** is broader than a changed type signature. Renaming
 or removing a palette token, theme key or breakpoint; changing a slot class or
@@ -316,10 +318,19 @@ the DOM a consumer targets with `styleOverrides`, `sx` or test selectors;
 changing a prop default so existing call sites render differently; raising a
 peer version floor. Any of those is `feat!:`, not `feat:`.
 
-Apps depend on a caret range, so patches and minors reach them as automated
-update PRs and can merge once their own CI is green. Majors sit outside the
-range and are adopted deliberately, using the Release notes as the migration
-guide.
+Palette tokens are worth spelling out, because they are load-bearing three
+times over. A name like `slateGrey` is a key on the exported `brandColors`
+object, a theme path (`palette.tertiary.slateGrey`) that apps read in `sx` and
+`styleOverrides`, **and** a required slot in the module augmentation in
+`src/types/themeAugmentation.ts`, which `src/index.ts` imports for its side
+effect. Rename one and consumers don't just render differently — their build
+stops type-checking. Markup is the same story: a component's rendered DOM is
+API, because apps target it with selectors and tests.
+
+Apps depend on a caret range, so patches and minors reach them as Dependabot
+update PRs — each consuming app carries a `.github/dependabot.yml` — and can
+merge once their own CI is green. Majors sit outside the range and are adopted
+deliberately, using the Release notes as the migration guide.
 
 If a bad version ships, fix forward rather than unpublishing: `npm deprecate`
 it with a pointer to the good version, then land the fix as `fix:` so the patch
