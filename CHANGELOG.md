@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/HDRUK/hdruk-ui/compare/v1.2.1...v1.2.2) (2026-08-13)
+
+
+### Bug Fixes
+
+* **GAT-9262:** add repository metadata to package.json ([0eb7ab9](https://github.com/HDRUK/hdruk-ui/commit/0eb7ab9469cbeb373a195176818fd7b2a5143c1a))
+
 ## [1.2.1](https://github.com/HDRUK/hdruk-ui/compare/v1.2.0...v1.2.1) (2026-08-11)
 
 
