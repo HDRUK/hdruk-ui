@@ -246,6 +246,52 @@ Symbols. Pass `loadFonts={false}` and load fonts yourself (e.g. with
 Google) when your app uses different fonts or you want to keep font delivery
 first-party.
 
+## Tests
+
+Jest + React Testing Library, in a jsdom environment, transformed by
+`@swc/jest` (no Babel — the repo builds with esbuild and Vite).
+
+```bash
+npm run test         # once
+npm run test:watch   # watch mode
+npm run coverage     # with a coverage report
+```
+
+Tests sit next to what they cover, the same way stories do
+(`Button.tsx` → `Button.test.tsx`). Shared scaffolding lives in `test/`:
+
+- `test/renderWithTheme.tsx` re-exports Testing Library with `render` wrapped in
+  `HdrukUiProvider` (and `loadFonts={false}`), so components see the real brand
+  theme. Pass `themeOptions` to exercise app-side overrides the way a consumer
+  would:
+
+  ```tsx
+  import { render, screen } from "../../../test/renderWithTheme";
+
+  render(<Button purpose="primary">Go</Button>, {
+    themeOptions: {
+      components: {
+        HdrukButton: {
+          defaultProps: { purposeMap: { primary: { variant: "outlined" } } },
+        },
+      },
+    },
+  });
+  ```
+
+- `test/svgStub.ts` stands in for SVG imports, which `tsup` resolves to a URL
+  string via its `file` loader.
+
+Favour tests that pin the **consumer-visible contract** — the purpose→variant
+mapping, theme override behaviour, rendered roles and class hooks — over
+implementation detail. A test that only mirrors a literal from the
+implementation has no independent oracle: it can fail only when someone edits
+that literal deliberately, so it earns nothing. See the `## Theming contract`
+section for what counts as breaking.
+
+`.github/workflows/ci.yml` runs lint, typecheck, tests and build on every pull
+request. There is no coverage threshold yet.
+
 ## Release process
 
 Every merge to `main` publishes a new version. There is no manual version bump
