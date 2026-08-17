@@ -22,5 +22,15 @@ export default {
   },
 
   testPathIgnorePatterns: ["/node_modules/", "/dist/", "/storybook-static/"],
+
+  // Without this, coverage only reports files a test already imports, so an
+  // untested component reads as absent rather than as 0%.
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.stories.tsx",
+    "!src/**/*.d.ts",
+    "!src/**/index.ts",
+  ],
+
   clearMocks: true,
 };

@@ -246,6 +246,146 @@ Symbols. Pass `loadFonts={false}` and load fonts yourself (e.g. with
 Google) when your app uses different fonts or you want to keep font delivery
 first-party.
 
+## Local development
+
+Everything below is for working **on** the library rather than with it.
+
+```bash
+git clone https://github.com/HDRUK/hdruk-ui.git
+cd hdruk-ui
+npm install
+npm run storybook     # http://localhost:6006
+```
+
+Use Node 20, the version CI runs on. Storybook is the default place to build a
+component: it renders through `HdrukUiProvider` with a theme switcher, so you
+never need a consumer app to make progress. See
+[Viewing the components](#viewing-the-components) for what the switcher is for.
+
+### Repo layout
+
+```
+src/
+  index.ts       the public surface — everything consumers can import
+  components/    one folder per component, story and test co-located
+  providers/     HdrukUiProvider
+  theme/         brandColors, themeOptions, the base theme
+  types/         theme augmentation and shared prop types
+  hooks/
+  utils/
+  assets/
+test/            renderWithTheme, svgStub — shared test scaffolding
+```
+
+Bigger components split out a `.types.ts`, a `.utils.ts` and a private
+`components/` folder as they grow; small ones keep everything in the one file.
+
+### Adding a component
+
+Create `src/components/Foo/` with `Foo.tsx` and an `index.ts`, then export it up
+the barrel chain — `src/components/index.ts` → `src/index.ts`. A component that
+isn't in `src/index.ts` doesn't exist as far as consumers are concerned, and
+this is the step that's easiest to miss.
+
+Add `Foo.stories.tsx` alongside it and `Foo.test.tsx` using
+`test/renderWithTheme.tsx`, so the component is exercised against the real brand
+theme. Stories and tests are picked up automatically wherever they sit under
+`src/` — there's nothing to register.
+
+If the component needs new theme keys, declare them in
+`src/types/themeAugmentation.ts`. `src/index.ts` imports that file for its side
+effect alone — that import is what carries MUI's module augmentation to
+consumers, so without it their builds stop type-checking.
+
+### Scripts
+
+| Script                                     | What it does                                                          |
+| ------------------------------------------ | --------------------------------------------------------------------- |
+| `npm run storybook`                        | Storybook on port 6006 — the main dev surface                         |
+| `npm run build-storybook`                  | Static Storybook build into `storybook-static`                        |
+| `npm run dev`                              | `tsup` in watch mode (scoped to `src`), rebuilding `dist/`            |
+| `npm run dev:link`                         | Watch **and** push each rebuild into linked consumer apps (see below) |
+| `npm run build`                            | One-off production build into `dist/`                                 |
+| `npm run clean`                            | Delete `dist/`                                                        |
+| `npm run test` / `test:watch` / `coverage` | Jest (see [Tests](#tests))                                            |
+| `npm run lint` / `lint:fix`                | ESLint                                                                |
+| `npm run format` / `format:check`          | Prettier                                                              |
+| `npm run typecheck`                        | `tsc --noEmit` across src, stories, tests and config                  |
+
+`prepublishOnly` and `release` also exist but aren't for local use — CI drives
+them, see [Release process](#release-process).
+
+### Testing a change inside a consumer app
+
+Storybook won't tell you whether a change survives contact with a real app —
+its fonts, its theme overrides, its Next.js build. For that, link the library
+into the app with [yalc](https://github.com/wclr/yalc):
+
+```bash
+# in hdruk-ui
+npm run dev:link
+
+# in your consumer app, once
+npx yalc add @hdruk/ui && npm i
+npm run dev
+```
+
+`npm run dev:link` rebuilds on every save and pushes the result straight into
+every app you've linked, so the normal loop is just "save the file, look at the
+app".
+
+**Use yalc, not `npm link`.** `npm link` points the app at your library checkout,
+so it picks up that checkout's React and Emotion too — two copies of each, and
+hooks break. yalc copies the built package into `.yalc/` inside the app instead,
+which keeps the app on its own single copy.
+
+You don't need to install yalc: it's a devDependency here, and `npx` covers the
+consumer side.
+
+### Tearing the link down
+
+Do this in the consumer app **before you commit anything there**:
+
+```bash
+npx yalc remove @hdruk/ui
+git checkout package.json package-lock.json    # see the warning below first
+rm -rf node_modules/@hdruk/ui
+npm ci
+grep -c '\.yalc' package-lock.json             # expect 0
+```
+
+Run the whole sequence. `yalc remove && npm i` on its own looks like it worked,
+but leaves `package-lock.json` still pointing at `.yalc/@hdruk/ui` and the app
+unable to import the library.
+
+⚠️ `git checkout` throws away **any** uncommitted change to those two files, not
+just yalc's. If you've edited either, stash it first:
+
+```bash
+git stash push -- package.json package-lock.json
+# …tear down…
+git stash pop
+```
+
+`yalc add` rewrites your dependency to `"@hdruk/ui": "file:.yalc/@hdruk/ui"`. That
+line, the lockfile's `.yalc` entries, `.yalc/` and `yalc.lock` must never be
+committed — a linked app only builds on the machine holding the link. Most repos
+gitignore the last two; the manifests are tracked, so nothing catches those for
+you.
+
+### Gotchas
+
+- Next.js caches hard. After a change to exports or types, restart the dev
+  server; if it still looks stale, `rm -rf .next`.
+- Only the built package gets pushed, never your source. If a change isn't
+  showing up, check the watch output actually rebuilt.
+- Types are built in a second pass that finishes after the JavaScript, so a push
+  can carry the previous build's `.d.ts`. If types look a step behind, save again.
+
+For a one-off check with no tooling at all, `npm pack` here and
+`npm i ../hdruk-ui/hdruk-ui-<version>.tgz` in the app does the job. The same
+tear-down rule applies.
+
 ## Tests
 
 Jest + React Testing Library, in a jsdom environment, transformed by
