@@ -77,10 +77,10 @@ describe("SearchBar debounced search", () => {
 
     fireEvent.change(getInput(), { target: { value: "heart" } });
 
-    jest.advanceTimersByTime(299);
+    advance(299);
     expect(onSearch).not.toHaveBeenCalledWith("heart");
 
-    jest.advanceTimersByTime(1);
+    advance(1);
     expect(onSearch).toHaveBeenCalledWith("heart");
   });
 
@@ -90,10 +90,10 @@ describe("SearchBar debounced search", () => {
 
     fireEvent.change(getInput(), { target: { value: "heart" } });
 
-    jest.advanceTimersByTime(300);
+    advance(300);
     expect(onSearch).not.toHaveBeenCalledWith("heart");
 
-    jest.advanceTimersByTime(700);
+    advance(700);
     expect(onSearch).toHaveBeenCalledWith("heart");
   });
 
@@ -102,9 +102,9 @@ describe("SearchBar debounced search", () => {
     render(<SearchBar onSearch={onSearch} />);
 
     fireEvent.change(getInput(), { target: { value: "hea" } });
-    jest.advanceTimersByTime(200);
+    advance(200);
     fireEvent.change(getInput(), { target: { value: "heart" } });
-    jest.advanceTimersByTime(300);
+    advance(300);
 
     expect(onSearch).not.toHaveBeenCalledWith("hea");
     expect(onSearch).toHaveBeenCalledWith("heart");
@@ -123,7 +123,8 @@ describe("SearchBar debounced search", () => {
 });
 
 describe("SearchBar clearing", () => {
-  const clearButton = () => screen.queryByRole("button", { name: "Clear search" });
+  const clearButton = () =>
+    screen.queryByRole("button", { name: "Clear search" });
 
   it("hides the clear button while the field is empty", () => {
     render(<SearchBar />);
@@ -135,7 +136,9 @@ describe("SearchBar clearing", () => {
     const user = userEvent.setup();
     const onChange = jest.fn();
     const onSearch = jest.fn();
-    render(<SearchBar defaultValue="heart" onChange={onChange} onSearch={onSearch} />);
+    render(
+      <SearchBar defaultValue="heart" onChange={onChange} onSearch={onSearch} />
+    );
 
     await user.click(clearButton()!);
 
@@ -260,7 +263,9 @@ describe("SearchBar slots", () => {
     );
 
     expect(screen.getByTestId("consumer-adornment")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Clear search" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Clear search" })
+    ).toBeInTheDocument();
   });
 
   it("resolves a function-form input slot before merging", () => {
@@ -276,7 +281,9 @@ describe("SearchBar slots", () => {
     );
 
     expect(screen.getByTestId("consumer-adornment")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Clear search" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Clear search" })
+    ).toBeInTheDocument();
   });
 
   it("passes id and name through to the input", () => {

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render as rtlRender } from "@testing-library/react";
 import { HdrukUiProvider } from "../src/providers/HdrukUiProvider";
+import { createHdrukTheme } from "../src/theme";
 import type { ThemeOptions } from "@mui/material";
 import type { RenderOptions } from "@testing-library/react";
 
@@ -17,8 +18,10 @@ export function renderWithTheme(
   ui: React.ReactNode,
   { themeOptions, ...options }: RenderWithThemeOptions = {}
 ) {
+  const theme = createHdrukTheme(themeOptions);
+
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <HdrukUiProvider loadFonts={false} themeOptions={themeOptions}>
+    <HdrukUiProvider loadFonts={false} theme={theme}>
       {children}
     </HdrukUiProvider>
   );

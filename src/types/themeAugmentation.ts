@@ -1,30 +1,41 @@
 import type { ButtonProps } from "../components/Button/Button";
 import type {
-  PaletteColor,
   PaletteColorOptions,
   ComponentsOverrides,
   ComponentsVariants,
 } from "@mui/material/styles";
 
+interface BrandPalette {
+  primary: string;
+  primaryHovered: string;
+  accentPrimary: string;
+  secondary: string;
+  secondaryHovered: string;
+  accentSecondary: string;
+}
+
+interface StatusPalette {
+  hovered: string;
+  selected: string;
+  faded: string;
+  disabled: string;
+  keyboardFocus: string;
+  needsAction: string;
+  needsActionHover: string;
+  archived: string;
+  archivedHovered: string;
+  announcement: string;
+}
+
 declare module "@mui/material/styles" {
   interface Palette {
-    tertiary: {
-      midnightBlue: PaletteColor;
-      duckEggBlue: PaletteColor;
-      slateGrey: PaletteColor;
-      lightGrey: PaletteColor;
-      orange: PaletteColor;
-    };
+    brand: BrandPalette;
+    status: StatusPalette;
     link: Palette["primary"];
   }
   interface PaletteOptions {
-    tertiary?: {
-      midnightBlue?: PaletteColorOptions;
-      duckEggBlue?: PaletteColorOptions;
-      slateGrey?: PaletteColorOptions;
-      lightGrey?: PaletteColorOptions;
-      orange?: PaletteColorOptions;
-    };
+    brand?: Partial<BrandPalette>;
+    status?: Partial<StatusPalette>;
     link?: PaletteColorOptions;
   }
 }

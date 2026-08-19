@@ -6,28 +6,55 @@ const fontLinks = () =>
     'link[rel="stylesheet"][href*="fonts.googleapis.com"]'
   );
 
+const preconnects = () =>
+  document.querySelectorAll('link[rel="preconnect"]');
+
 describe("HdrukUiProvider font loading", () => {
-  it("injects the Google Fonts links by default", () => {
+  it("injects nothing by default, so apps load their own fonts", () => {
     rtlRender(
       <HdrukUiProvider>
         <span>content</span>
       </HdrukUiProvider>
     );
 
-    expect(fontLinks()).toHaveLength(2);
-    expect(
-      document.querySelectorAll('link[rel="preconnect"]')
-    ).toHaveLength(2);
+    expect(fontLinks()).toHaveLength(0);
+    expect(preconnects()).toHaveLength(0);
   });
 
-  it("injects nothing when the app loads its own fonts", () => {
+  it("injects Source Sans 3 when the text font is opted into", () => {
     rtlRender(
-      <HdrukUiProvider loadFonts={false}>
+      <HdrukUiProvider loadFonts>
         <span>content</span>
       </HdrukUiProvider>
     );
 
-    expect(fontLinks()).toHaveLength(0);
+    expect(fontLinks()).toHaveLength(1);
+    expect(fontLinks()[0].getAttribute("href")).toContain("Source+Sans+3");
+    expect(preconnects()).toHaveLength(2);
+  });
+
+  it("injects Material Symbols Rounded when the icon font is opted into", () => {
+    rtlRender(
+      <HdrukUiProvider loadIconFont>
+        <span>content</span>
+      </HdrukUiProvider>
+    );
+
+    expect(fontLinks()).toHaveLength(1);
+    expect(fontLinks()[0].getAttribute("href")).toContain(
+      "Material+Symbols+Rounded"
+    );
+  });
+
+  it("preconnects only once when both fonts are opted into", () => {
+    rtlRender(
+      <HdrukUiProvider loadFonts loadIconFont>
+        <span>content</span>
+      </HdrukUiProvider>
+    );
+
+    expect(fontLinks()).toHaveLength(2);
+    expect(preconnects()).toHaveLength(2);
   });
 
   it("renders its children either way", () => {

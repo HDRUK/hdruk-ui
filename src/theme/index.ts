@@ -1,51 +1,141 @@
 import {
   createTheme,
   responsiveFontSizes,
+  PaletteColor,
+  SimplePaletteColorOptions,
+  Theme,
   ThemeOptions,
 } from "@mui/material/styles";
+import { deepmerge } from "@mui/utils";
 import "../types/themeAugmentation";
 
-export const brandColors = {
-  seaGreen: {
-    main: "#3db28c",
-    light: "#6fd3b2",
-    dark: "#2a8c6e",
-    contrastText: "#fff",
+/** The design system's colour tokens, mirroring the Figma `Color/*` namespaces. */
+export const tokens = {
+  brand: {
+    primary: "#475DA7",
+    primaryHovered: "#384B91",
+    accentPrimary: "#C6CEE5",
+    secondary: "#2C8267",
+    secondaryHovered: "#267259",
+    accentSecondary: "#B8E2D8",
   },
-  cornflowerBlue: {
-    main: "#475da7",
-    light: "#6c7cc0",
-    dark: "#354681",
-    contrastText: "#fff",
+  status: {
+    hovered: "#EEEEEE",
+    selected: "#2C8267",
+    information: "#29235C",
+    faded: "#868E96",
+    disabled: "#E2E2E2",
+    keyboardFocus: "#4682B4",
+    success: "#2C8267",
+    successHover: "#1C553F",
+    error: "#DC3645",
+    errorHover: "#C02531",
+    warning: "#F2D12D",
+    warningHover: "#F0BB24",
+    needsAction: "#FE9A2D",
+    needsActionHover: "#F27F28",
+    archived: "#53575A",
+    archivedHovered: "#3C3C3B",
+    announcement: "#FBE71E",
   },
-  midnightBlue: { main: "#29235c", contrastText: "#fff" },
-  duckEggBlue: { main: "#addad9", contrastText: "#111" },
-  slateGrey: { main: "#3c3c3b", contrastText: "#fff" },
-  lightGrey: { main: "#d0d3d4", contrastText: "#111" },
-  orange: { main: "#f98e2b", contrastText: "#111" },
-};
+  background: {
+    white: "#FFFFFF",
+    primary: "#F6F7F8",
+    secondary: "#E2E2E2",
+    error: "#FFECF1",
+    warning: "#FDFCE6",
+    success: "#E2F3F0",
+    information: "#E9ECF4",
+  },
+  text: {
+    primaryBlack: "#262626",
+    secondaryBlack: "#3C3C3B",
+    primaryWhite: "#FFFFFF",
+    secondaryWhite: "#EEEEEE",
+    faded: "#53575A",
+    disabled: "#868E96",
+    error: "#C02531",
+    warning: "#856505",
+  },
+  /** `Sizing/Stroke`, in px. Separate from the spacing scale by design. */
+  stroke: { thin: 1, medium: 2, thick: 3 },
+  /** `RoundedCorner/Global`. `medium` is the theme-wide `shape.borderRadius`. */
+  radius: { small: 4, medium: 8, large: 12 },
+  /** `Type/Icon/Icon{Small,Medium,Large}`, in px. */
+  iconSize: { small: 20, medium: 24, large: 40 },
+} as const;
 
 export const themeOptions: ThemeOptions = {
   palette: {
-    primary: brandColors.seaGreen,
-    secondary: brandColors.cornflowerBlue,
-    tertiary: {
-      midnightBlue: brandColors.midnightBlue,
-      duckEggBlue: brandColors.duckEggBlue,
-      slateGrey: brandColors.slateGrey,
-      lightGrey: brandColors.lightGrey,
-      orange: brandColors.orange,
+    primary: {
+      main: tokens.brand.primary,
+      dark: tokens.brand.primaryHovered,
+      light: tokens.brand.accentPrimary,
+      contrastText: tokens.text.primaryWhite,
     },
-    link: { main: brandColors.cornflowerBlue.main },
+    secondary: {
+      main: tokens.brand.secondary,
+      dark: tokens.brand.secondaryHovered,
+      light: tokens.brand.accentSecondary,
+      contrastText: tokens.text.primaryWhite,
+    },
+    success: {
+      main: tokens.status.success,
+      dark: tokens.status.successHover,
+      light: tokens.background.success,
+      contrastText: tokens.text.primaryWhite,
+    },
+    error: {
+      main: tokens.status.error,
+      dark: tokens.status.errorHover,
+      light: tokens.background.error,
+      contrastText: tokens.text.primaryWhite,
+    },
+    warning: {
+      main: tokens.status.warning,
+      dark: tokens.status.warningHover,
+      light: tokens.background.warning,
+      contrastText: tokens.text.warning,
+    },
+    info: {
+      main: tokens.status.information,
+      light: tokens.background.information,
+      contrastText: tokens.text.primaryWhite,
+    },
+    text: {
+      primary: tokens.text.primaryBlack,
+      secondary: tokens.text.faded,
+      disabled: tokens.text.disabled,
+    },
     background: {
-      default: "#F2F2F2",
-      paper: "#F7F7F7",
+      default: tokens.background.primary,
+      paper: tokens.background.white,
     },
-    divider: brandColors.lightGrey.main,
+    divider: tokens.background.secondary,
+    link: {
+      main: tokens.brand.primary,
+      dark: tokens.brand.primaryHovered,
+      light: tokens.brand.accentPrimary,
+      contrastText: tokens.text.primaryWhite,
+    },
+
+    brand: tokens.brand,
+    status: {
+      hovered: tokens.status.hovered,
+      selected: tokens.status.selected,
+      faded: tokens.status.faded,
+      disabled: tokens.status.disabled,
+      keyboardFocus: tokens.status.keyboardFocus,
+      needsAction: tokens.status.needsAction,
+      needsActionHover: tokens.status.needsActionHover,
+      archived: tokens.status.archived,
+      archivedHovered: tokens.status.archivedHovered,
+      announcement: tokens.status.announcement,
+    },
   },
 
   spacing: 8,
-  shape: { borderRadius: 8 },
+  shape: { borderRadius: tokens.radius.medium },
 
   breakpoints: {
     values: {
@@ -59,23 +149,26 @@ export const themeOptions: ThemeOptions = {
 
   typography: {
     fontFamily:
-      'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-    h1: { fontWeight: 700, fontSize: "2.25rem", lineHeight: 1.2 },
-    h2: { fontWeight: 700, fontSize: "1.875rem", lineHeight: 1.25 },
-    h3: { fontWeight: 600, fontSize: "1.5rem", lineHeight: 1.3 },
-    h4: { fontWeight: 600, fontSize: "1.25rem", lineHeight: 1.35 },
-    h5: { fontWeight: 600, fontSize: "1.125rem", lineHeight: 1.4 },
-    h6: { fontWeight: 600, fontSize: "1rem", lineHeight: 1.45 },
-    subtitle1: { fontWeight: 500 },
-    subtitle2: { fontWeight: 500 },
-    body1: { fontSize: "1rem", lineHeight: 1.6 },
-    body2: { fontSize: "0.875rem", lineHeight: 1.57 },
+      '"Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    fontWeightRegular: 400,
+    fontWeightMedium: 600,
+    h1: { fontWeight: 600, fontSize: "2.5rem", lineHeight: 1.2 }, // 40
+    h2: { fontWeight: 600, fontSize: "2rem", lineHeight: 1.25 }, // 32
+    h3: { fontWeight: 600, fontSize: "1.75rem", lineHeight: 1.3 }, // 28
+    h4: { fontWeight: 600, fontSize: "1.5rem", lineHeight: 1.35 }, // 24
+    h5: { fontWeight: 600, fontSize: "1.25rem", lineHeight: 1.4 }, // 20
+    h6: { fontWeight: 600, fontSize: "1.125rem", lineHeight: 1.45 }, // 18
+    subtitle1: { fontWeight: 600 },
+    subtitle2: { fontWeight: 600 },
+    body1: { fontSize: "1rem", lineHeight: 1.6 }, // Body/Large 16
+    body2: { fontSize: "0.875rem", lineHeight: 1.57 }, // Body/Medium 14
     button: { textTransform: "none", fontWeight: 600, letterSpacing: 0.2 },
-    caption: { fontSize: "0.75rem", lineHeight: 1.4 },
+    caption: { fontSize: "0.75rem", lineHeight: 1.4 }, // Body/X-Small 12
     overline: {
       textTransform: "uppercase",
       letterSpacing: 0.8,
       fontWeight: 600,
+      fontSize: "0.75rem",
     },
   },
 
@@ -95,22 +188,26 @@ export const themeOptions: ThemeOptions = {
         color: "primary",
       },
       styleOverrides: {
+        // ButtonBase zeroes the UA outline, and disableElevation removes MUI's
+        // own focus shadow, so every variant needs this — not just contained.
         root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: tokens.radius.small,
           paddingInline: theme.spacing(2),
           paddingBlock: theme.spacing(1),
-        }),
-        contained: ({ theme }) => ({
-          boxShadow: "none",
-          "&:hover": { boxShadow: "none" },
           "&:focus-visible": {
-            outline: `2px solid ${theme.palette.secondary.main}`,
+            outline: `${tokens.stroke.medium}px solid ${theme.palette.status.keyboardFocus}`,
             outlineOffset: 2,
           },
         }),
+        contained: () => ({
+          boxShadow: "none",
+          "&:hover": { boxShadow: "none" },
+        }),
+        // MUI renders the border at alpha(main, 0.5); the design's are solid.
         outlined: () => ({
-          borderWidth: 2,
-          "&:hover": { borderWidth: 2 },
+          borderWidth: tokens.stroke.medium,
+          "--variant-outlinedBorder": "currentColor",
+          "&:hover": { borderWidth: tokens.stroke.medium },
         }),
         sizeSmall: ({ theme }) => ({
           paddingInline: theme.spacing(1.5),
@@ -125,7 +222,7 @@ export const themeOptions: ThemeOptions = {
         {
           props: { variant: "text", color: "inherit" },
           style: ({ theme }) => ({
-            color: theme.palette.tertiary.slateGrey.main,
+            color: tokens.text.secondaryBlack,
             "&:hover": {
               backgroundColor: theme.palette.action.hover,
             },
@@ -147,10 +244,10 @@ export const themeOptions: ThemeOptions = {
     },
     MuiIconButton: {
       styleOverrides: {
+        // No borderRadius here — MUI's circular default is what the design uses.
         root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
           "&:focus-visible": {
-            outline: `2px solid ${theme.palette.secondary.main}`,
+            outline: `${tokens.stroke.medium}px solid ${theme.palette.status.keyboardFocus}`,
             outlineOffset: 2,
           },
         }),
@@ -183,7 +280,7 @@ export const themeOptions: ThemeOptions = {
             borderColor: theme.palette.primary.main,
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderWidth: 2,
+            borderWidth: tokens.stroke.medium,
           },
         }),
         input: { paddingBlock: 12, paddingInline: 14 },
@@ -347,6 +444,13 @@ export const themeOptions: ThemeOptions = {
     },
 
     /* ----- Misc ----- */
+    MuiIcon: {
+      styleOverrides: {
+        fontSizeLarge: ({ theme }) => ({
+          fontSize: theme.typography.pxToRem(tokens.iconSize.large),
+        }),
+      },
+    },
     MuiTooltip: {
       defaultProps: { arrow: true },
       styleOverrides: {
@@ -383,6 +487,38 @@ export const themeOptions: ThemeOptions = {
   },
 };
 
-const theme = responsiveFontSizes(createTheme(themeOptions));
+const baseTheme = createTheme(themeOptions);
+const theme = responsiveFontSizes(baseTheme);
+
+/**
+ * Fill in the shades of a palette colour. Anything not supplied is derived from
+ * `main`, so a site states one value and gets a complete colour back — the
+ * shades MUI needs for hover and contrast, matched to the site's own colour
+ * rather than inherited from the base.
+ *
+ * ```ts
+ * createHdrukTheme({ palette: { primary: createColor("#a4177f") } });
+ * createHdrukTheme({ palette: { primary: createColor({ main: "#a4177f", dark: "#4a0033" }) } });
+ * ```
+ */
+export function createColor(
+  color: string | SimplePaletteColorOptions
+): PaletteColor {
+  return baseTheme.palette.augmentColor({
+    color: typeof color === "string" ? { main: color } : color,
+  });
+}
+
+/**
+ * Build a site theme on top of the HDR base. A product supplies only what
+ * differs; the base and `responsiveFontSizes` are applied here.
+ *
+ * A site overriding a palette colour should state `light`, `dark` and
+ * `contrastText` alongside `main` — the base's are kept otherwise, and they
+ * were chosen for the base's colour.
+ */
+export function createHdrukTheme(siteOptions: ThemeOptions = {}): Theme {
+  return responsiveFontSizes(createTheme(deepmerge(themeOptions, siteOptions)));
+}
 
 export default theme;

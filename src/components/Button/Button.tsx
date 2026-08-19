@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import { styled, useThemeProps } from "@mui/material/styles";
 
 export type ButtonPurpose =
@@ -23,10 +22,6 @@ export interface ButtonProps extends MuiButtonProps {
    * merge over (and win against) the library's base map.
    */
   purposeMap?: Partial<Record<ButtonPurpose, PurposeMapping>>;
-  /**
-   * Shows a spinner and disables the button.
-   */
-  loading?: boolean;
 }
 
 /**
@@ -57,9 +52,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       purposeMap,
       variant,
       color,
-      loading = false,
-      disabled,
-      startIcon,
+      loadingPosition = "start",
       children,
       ...rest
     } = props;
@@ -72,8 +65,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ownerState={{ purpose }}
         variant={variant ?? mapped.variant}
         color={color ?? mapped.color}
-        disabled={disabled || loading}
-        startIcon={loading ? <CircularProgress size={12} /> : startIcon}
+        loadingPosition={loadingPosition}
         {...rest}>
         {children}
       </ButtonRoot>
@@ -81,4 +73,4 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = "HdrukButton";
+Button.displayName = "Button";

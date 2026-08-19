@@ -159,6 +159,23 @@ export default [
     },
   },
 
+  {
+    // Border and outline widths are deliberately not covered — the design
+    // tokenises those in px (Sizing/Stroke/1, /2).
+    files: ["src/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "Property[key.name=/^(margin|padding|gap|rowGap|columnGap|top|right|bottom|left|width|height|minWidth|maxWidth|minHeight|maxHeight|fontSize|lineHeight|letterSpacing|borderRadius)/] > Literal[value=/[0-9]px/]",
+          message:
+            "Use a theme value instead of px — theme.spacing() for spacing and sizing, theme.typography for font sizes, theme.shape.borderRadius for corners.",
+        },
+      ],
+    },
+  },
+
   ...storybook.configs["flat/recommended"],
 
   prettier,

@@ -1,41 +1,44 @@
 "use client";
 
 import * as React from "react";
-import { useMemo } from "react";
-import {
-  ThemeProvider,
-  CssBaseline,
-  createTheme,
-  ThemeOptions,
-  Theme,
-  responsiveFontSizes,
-} from "@mui/material";
-import { deepmerge } from "@mui/utils";
-import { themeOptions as brandThemeOptions } from "../theme";
+import { ThemeProvider, CssBaseline, Theme } from "@mui/material";
+import { default as brandTheme } from "../theme";
 
 export interface UiProviderProps {
   children: React.ReactNode;
-  themeOptions?: ThemeOptions;
   /**
-   * Injects Google Fonts links for Inter and Material Symbols. Set to false
-   * when the consuming app loads its own fonts (e.g. via next/font, which
-   * also avoids requests to Google from the visitor's browser).
+   * A theme built with `createHdrukTheme`. Defaults to the HDR base theme, so
+   * an app that needs no overrides can mount the provider with no props.
+   */
+  theme?: Theme;
+  /**
+   * Injects the Google Fonts link for Source Sans 3, at the two weights the
+   * theme uses. Off by default: an app is better off self-hosting or using
+   * next/font, which avoids a request to Google from the visitor's browser.
    */
   loadFonts?: boolean;
+  /**
+   * Injects the Google Fonts link for Material Symbols Rounded, which the
+   * `Icon` component renders with. Off by default for the same reason, but
+   * needed by any app using `Icon` that doesn't load the face itself.
+   */
+  loadIconFont?: boolean;
 }
+
+const GOOGLE_FONTS = {
+  text: "https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap",
+  icon: "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+};
 
 export function HdrukUiProvider({
   children,
-  themeOptions,
-  loadFonts = true,
+  theme = brandTheme,
+  loadFonts = false,
+  loadIconFont = false,
 }: UiProviderProps) {
-  const mergedTheme: Theme = useMemo(() => {
-    const theme = createTheme(deepmerge(brandThemeOptions, themeOptions));
-    return responsiveFontSizes(theme);
-  }, [themeOptions]);
   return (
     <>
-      {loadFonts && (
+      {(loadFonts || loadIconFont) && (
         <>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
@@ -43,17 +46,11 @@ export function HdrukUiProvider({
             href="https://fonts.gstatic.com"
             crossOrigin=""
           />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-            rel="stylesheet"
-          />
         </>
       )}
-      <ThemeProvider theme={mergedTheme}>
+      {loadFonts && <link href={GOOGLE_FONTS.text} rel="stylesheet" />}
+      {loadIconFont && <link href={GOOGLE_FONTS.icon} rel="stylesheet" />}
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
       </ThemeProvider>

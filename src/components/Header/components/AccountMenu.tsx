@@ -40,7 +40,7 @@ export default function AccountMenu({
           disableRipple
           sx={theme => ({
             ...headerFocusRingSx,
-            marginLeft: "5px",
+            marginLeft: theme.spacing(0.5),
             color: theme.palette.primary.contrastText,
           })}
           variant="text"

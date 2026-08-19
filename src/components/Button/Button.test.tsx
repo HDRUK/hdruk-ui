@@ -71,6 +71,24 @@ describe("Button theme integration", () => {
     );
   });
 
+  it("lets a site restyle the button without losing the base root styles", () => {
+    render(<Button>Go</Button>, {
+      themeOptions: {
+        components: {
+          HdrukButton: {
+            styleOverrides: { root: { borderRadius: 999 } },
+          },
+        },
+      },
+    });
+
+    const style = getComputedStyle(screen.getByRole("button"));
+
+    expect(style.borderRadius).toBe("999px");
+    // HdrukButton is the seam: the base MuiButton root styles still apply.
+    expect(style.paddingLeft).toBe("16px");
+  });
+
   it("leaves unmapped purposes on the library base map", () => {
     render(<Button purpose="secondary">Go</Button>, {
       themeOptions: {
@@ -112,14 +130,20 @@ describe("Button loading state", () => {
     expect(screen.getByRole("button")).toBeDisabled();
   });
 
-  it("replaces a supplied startIcon with the spinner", () => {
+  it("keeps the label readable by loading from the start position", () => {
+    render(<Button loading>Go</Button>);
+
+    expect(screen.getByText("Go")).toBeInTheDocument();
+  });
+
+  it("keeps a supplied startIcon mounted, with the spinner over it", () => {
     render(
       <Button loading startIcon={<span data-testid="start-icon" />}>
         Go
       </Button>
     );
 
-    expect(screen.queryByTestId("start-icon")).not.toBeInTheDocument();
+    expect(screen.getByTestId("start-icon")).toBeInTheDocument();
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 });
