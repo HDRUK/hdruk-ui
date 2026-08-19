@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/HDRUK/hdruk-ui/compare/v1.2.2...v1.3.0) (2026-08-19)
+
+
+### Features
+
+* **GAT-9490:** Align the theme to the design tokens ([#35](https://github.com/HDRUK/hdruk-ui/issues/35)) ([b03a419](https://github.com/HDRUK/hdruk-ui/commit/b03a4194591115b8c564e479c3191b6d1eb5310a))
+
 ## [1.2.2](https://github.com/HDRUK/hdruk-ui/compare/v1.2.1...v1.2.2) (2026-08-13)
 
 
