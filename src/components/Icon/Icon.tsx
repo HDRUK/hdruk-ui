@@ -7,7 +7,7 @@ export interface IconProps extends Omit<MuiIconProps, "baseClassName"> {
 
 export function Icon({ name, ...props }: IconProps) {
   return (
-    <MuiIcon baseClassName="material-symbols-outlined" {...props}>
+    <MuiIcon baseClassName="material-symbols-rounded" {...props}>
       {name}
     </MuiIcon>
   );

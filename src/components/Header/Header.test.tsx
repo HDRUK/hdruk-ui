@@ -296,7 +296,10 @@ describe("Header account area", () => {
         accountLoading={false}
         isLoggedIn
         logoImage={logoImage}
-        accountNavigation={{ ...accountNavigation, logout: { label: "Log out", action } }}
+        accountNavigation={{
+          ...accountNavigation,
+          logout: { label: "Log out", action },
+        }}
         accountName={{ first: "Ada", last: "Lovelace" }}
       />
     );
@@ -322,9 +325,7 @@ describe("Header mobile menu", () => {
 
     await user.click(screen.getByRole("button", { name: "navigation menu" }));
 
-    const items = screen
-      .getAllByRole("menuitem")
-      .map(item => item.textContent);
+    const items = screen.getAllByRole("menuitem").map(item => item.textContent);
 
     expect(items).toEqual(["Sign in", "Search"]);
   });
@@ -343,9 +344,7 @@ describe("Header mobile menu", () => {
 
     await user.click(screen.getByRole("button", { name: "navigation menu" }));
 
-    const items = screen
-      .getAllByRole("menuitem")
-      .map(item => item.textContent);
+    const items = screen.getAllByRole("menuitem").map(item => item.textContent);
 
     expect(items).toEqual(["My profile", "Search", "Settings", "Log out"]);
   });

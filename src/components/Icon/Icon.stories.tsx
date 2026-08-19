@@ -3,11 +3,12 @@ import { Icon } from "./Icon";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 /**
- * Thin wrapper around MUI `Icon` pinned to the **Material Symbols Outlined**
+ * Thin wrapper around MUI `Icon` pinned to the **Material Symbols Rounded**
  * font, so `name` is any symbol name from
- * [fonts.google.com/icons](https://fonts.google.com/icons). The font is loaded
- * by `HdrukUiProvider` — if you see the literal name as text instead of a
- * glyph, the provider is missing.
+ * [fonts.google.com/icons](https://fonts.google.com/icons). The face is not
+ * loaded by default — pass `loadIconFont` to `HdrukUiProvider`, or load it in
+ * the app. If you see the literal name as text instead of a glyph, neither
+ * has happened.
  */
 const meta: Meta<typeof Icon> = {
   component: Icon,
