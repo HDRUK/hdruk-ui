@@ -1,9 +1,16 @@
 <!-- Storybook loads the fonts itself: Source Sans 3 is the base theme's face,
-     and Material Symbols Rounded is what the Icon component renders with. -->
+     Inter is Safe People Registry's, and Material Symbols Rounded is what the
+     Icon component renders with. Consumers self-host, so the provider's own
+     `loadFonts` list stays narrower than this — the switcher needs every face
+     any site theme asks for, or a rebrand renders in a fallback and reads as a
+     styling bug. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap"
+  rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
   rel="stylesheet" />
 <link
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"

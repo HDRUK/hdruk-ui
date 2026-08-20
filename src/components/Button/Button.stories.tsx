@@ -32,6 +32,26 @@ export const Purposes: Story = {
       <Button purpose="secondary">Secondary</Button>
       <Button purpose="tertiary">Tertiary</Button>
       <Button purpose="destructive">Destructive</Button>
+      <Button purpose="link">Link</Button>
+    </Stack>
+  ),
+};
+
+export const Links: Story = {
+  render: () => (
+    <Stack gap={2} alignItems="flex-start">
+      <Stack direction="row" gap={3} alignItems="baseline">
+        <Button purpose="link">Medium</Button>
+        <Button purpose="link" size="small">
+          Small
+        </Button>
+        <Button purpose="link" disabled>
+          Disabled
+        </Button>
+      </Stack>
+      <Button purpose="link" href="#">
+        Rendered as an anchor
+      </Button>
     </Stack>
   ),
 };
@@ -63,10 +83,25 @@ export const WithIcons: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <Stack direction="row" gap={2} alignItems="center" flexWrap="wrap">
-      <Button size="small">Small</Button>
-      <Button size="medium">Medium</Button>
-      <Button size="large">Large</Button>
+    <Stack gap={2}>
+      <Stack direction="row" gap={2} alignItems="center" flexWrap="wrap">
+        <Button size="small">Small</Button>
+        <Button size="small" purpose="secondary">
+          Small
+        </Button>
+        <Button size="small" purpose="tertiary">
+          Small
+        </Button>
+      </Stack>
+      <Stack direction="row" gap={2} alignItems="center" flexWrap="wrap">
+        <Button size="medium">Medium</Button>
+        <Button size="medium" purpose="secondary">
+          Medium
+        </Button>
+        <Button size="medium" purpose="tertiary">
+          Medium
+        </Button>
+      </Stack>
     </Stack>
   ),
 };
