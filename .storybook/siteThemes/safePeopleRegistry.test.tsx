@@ -4,19 +4,12 @@ import { IconButton } from "../../src/components/IconButton";
 import { render, screen } from "../../test/renderWithTheme";
 import { safePeopleRegistryThemeOptions } from "./safePeopleRegistry";
 
-/**
- * Guards the decisions in the SPR theme that a colour change would not catch.
- */
 const spr = { themeOptions: safePeopleRegistryThemeOptions };
 const MAGENTA = "#BE37A3";
 
 const styleOf = (name: string) =>
   getComputedStyle(screen.getByRole("button", { name }));
 
-/**
- * MUI resolves a variant's colour through a CSS custom property, which jsdom
- * leaves unevaluated — so the assignment is read off the emitted rule instead.
- */
 const emittedVar = (name: string, property: string) => {
   const el = screen.getByRole("button", { name });
   const cls = [...el.classList].find(c => c.startsWith("css-"));
@@ -39,7 +32,6 @@ describe("safe people registry buttons", () => {
       spr
     );
 
-    // Outlined then bare text, rather than the base's shift to a second hue.
     expect(screen.getByRole("button", { name: "S" })).toHaveClass(
       "MuiButton-outlinedPrimary"
     );
@@ -68,8 +60,6 @@ describe("safe people registry buttons", () => {
   });
 
   it("darkens tertiary's label on hover without filling it", () => {
-    // MUI tints a text button's background on hover, so staying unfilled is an
-    // override rather than an omission.
     render(<Button purpose="tertiary">T</Button>, spr);
 
     const el = screen.getByRole("button", { name: "T" });
@@ -93,8 +83,6 @@ describe("safe people registry type", () => {
   });
 
   it("weights the link SemiBold, and in the rebranded link colour", () => {
-    // `palette.link` is its own slot rather than derived from brand, so a site
-    // that rebrands `primary` and forgets it keeps the base's gateway blue.
     render(<Button purpose="link">L</Button>, spr);
 
     expect(styleOf("L").fontWeight).toBe("600");

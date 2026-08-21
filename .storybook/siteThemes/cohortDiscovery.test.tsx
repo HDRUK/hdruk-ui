@@ -4,10 +4,6 @@ import { IconButton } from "../../src/components/IconButton";
 import { render, screen } from "../../test/renderWithTheme";
 import { cohortDiscoveryThemeOptions } from "./cohortDiscovery";
 
-/**
- * Guards the decisions in the CD theme that a colour change would not catch —
- * the ones derived from reading two token exports against each other.
- */
 const cd = { themeOptions: cohortDiscoveryThemeOptions };
 
 const radiusOf = (name: string) =>
@@ -15,8 +11,6 @@ const radiusOf = (name: string) =>
 
 describe("cohort discovery button rounding", () => {
   it("pills the boxed purposes but leaves tertiary square", () => {
-    // `Buttons/cornerRounding` is 48 against `tertiaryCornerRounding` 4 — the
-    // one token pair that differs in kind rather than value between products.
     render(
       <>
         <Button purpose="primary">P</Button>
@@ -26,14 +20,12 @@ describe("cohort discovery button rounding", () => {
       cd
     );
 
-    expect(radiusOf("P")).toBe("9999px");
-    expect(radiusOf("S")).toBe("9999px");
+    expect(radiusOf("P")).toBe("48px");
+    expect(radiusOf("S")).toBe("48px");
     expect(radiusOf("T")).toBe("4px");
   });
 
   it("keeps the link's focus ring square", () => {
-    // The reason the pill is set per boxed variant rather than on `root`: a root
-    // radius reaches the link too, and an outline follows the element's radius.
     render(<Button purpose="link">L</Button>, cd);
 
     expect(radiusOf("L")).toBe("0");

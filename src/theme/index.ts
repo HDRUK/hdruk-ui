@@ -9,7 +9,6 @@ import {
 import { deepmerge } from "@mui/utils";
 import "../types/themeAugmentation";
 
-/** The design system's colour tokens, mirroring the Figma `Color/*` namespaces. */
 export const tokens = {
   brand: {
     primary: "#475DA7",
@@ -59,22 +58,12 @@ export const tokens = {
     error: "#C02531",
     warning: "#856505",
   },
-  /** `Sizing/Stroke`, in px. Separate from the spacing scale by design. */
   stroke: { thin: 1, medium: 2, thick: 3 },
-  /** `RoundedCorner/Global`. `medium` is the theme-wide `shape.borderRadius`. */
   radius: { small: 4, medium: 8, large: 12 },
-  /** `Type/Icon/Icon{Small,Medium,Large}`, in px. */
   iconSize: { small: 20, medium: 24, large: 40 },
-  /** `Type/Icon/fontStyle` "Light" as a Material Symbols `wght` axis value. */
   iconWeight: 300,
 } as const;
 
-// The design draws focus as a 3px border, i.e. flush to the box, so the offset
-// is 0 — but it stays an `outline`, which cannot move layout the way a border
-// would. Stated explicitly rather than left to the UA default: flush is a choice
-// here, and every product's focus colour is close in luminance to its own brand
-// fill (#4682B4 on #475DA7 is 1.5:1, #937C42 on #BE37A3 is 1.2:1), so the ring
-// reads against the page rather than against the button it surrounds.
 const focusRing = (theme: Theme) => ({
   outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
   outlineOffset: 0,
@@ -180,10 +169,6 @@ export const themeOptions: ThemeOptions = {
     subtitle2: { fontWeight: 600 },
     body1: { fontSize: "1rem", lineHeight: 1.6 }, // Body/Large 16
     body2: { fontSize: "0.875rem", lineHeight: 1.57 }, // Body/Medium 14
-    // Body/Small and Body/X-X-Small complete the design's five-step Body scale.
-    // The DTCG export carries no line-height for any step — the three that have
-    // one were hand-picked — so these are left unset rather than guessing a
-    // value that would apply everywhere the step is used.
     bodySmall: { fontSize: "0.8125rem" }, // Body/Small 13
     button: {
       textTransform: "none",
@@ -216,8 +201,6 @@ export const themeOptions: ThemeOptions = {
         color: "primary",
       },
       styleOverrides: {
-        // ButtonBase zeroes the UA outline, and disableElevation removes MUI's
-        // own focus shadow, so every variant needs this — not just contained.
         root: ({ theme }) => ({
           minHeight: theme.spacing(5),
           borderRadius: tokens.radius.small,
@@ -234,7 +217,6 @@ export const themeOptions: ThemeOptions = {
           boxShadow: "none",
           "&:hover": { boxShadow: "none" },
         }),
-        // MUI renders the border at alpha(main, 0.5); the design's are solid.
         outlined: ({ theme }) => ({
           borderWidth: tokens.stroke.medium,
           "--variant-outlinedBorder": "currentColor",
@@ -252,21 +234,12 @@ export const themeOptions: ThemeOptions = {
           lineHeight: "1.25rem",
           padding: theme.spacing(0.5, 1.5),
         }),
-        // `large` is not a design size and `ButtonProps` omits it, but a raw
-        // MuiButton still reaches it. Clamped to medium so it can't render on
-        // MUI's own larger padding and font.
         sizeLarge: ({ theme }) => ({
           padding: theme.spacing(1, 1.5),
           fontSize: theme.typography.button.fontSize,
         }),
       },
       variants: [
-        // The outlined variants below adopt their hover fill on focus, and the
-        // design does the same for filled buttons. MUI drives contained hover by
-        // reassigning `--variant-containedBg`, and ships no hover-specific
-        // variable to reuse, so each contained colour in the base purpose map
-        // states its own dark fill. An app mapping a purpose onto another
-        // contained colour adds its own entry, as it would for any treatment.
         {
           props: { variant: "contained", color: "primary" },
           style: ({ theme }) => ({
@@ -324,12 +297,6 @@ export const themeOptions: ThemeOptions = {
             },
           }),
         },
-        // A link opts out of the button box entirely — no padding, no minimum
-        // box — so unlike every other variant it owns its line-height. The
-        // resting `textDecoration` matters because `<Button href>` renders an
-        // anchor, which the UA would otherwise underline at rest. `borderRadius`
-        // is zeroed for the focus ring: an outline follows the element's radius,
-        // so without this the ring implies a box the link does not have.
         {
           props: { color: "link", variant: "text" },
           style: ({ theme }) => ({
@@ -349,7 +316,6 @@ export const themeOptions: ThemeOptions = {
             },
           }),
         },
-        // Medium is left on the button's own 14px, matching `Body/Medium`.
         {
           props: { color: "link", variant: "text", size: "small" },
           style: ({ theme }) => ({
@@ -360,9 +326,6 @@ export const themeOptions: ThemeOptions = {
     },
     MuiIconButton: {
       styleOverrides: {
-        // No borderRadius here — MUI's circular default is what the design uses.
-        // Figma's inside stroke paints over the padding, so the 1px border is
-        // paid for out of the design's 4px: 3 + 1 leaves the icon its 40px.
         root: ({ theme }) => ({
           padding: theme.spacing(0.375),
           border: `${tokens.stroke.thin}px solid ${theme.palette.status.faded}`,
@@ -380,14 +343,10 @@ export const themeOptions: ThemeOptions = {
             color: theme.palette.text.disabled,
           },
         }),
-        // MUI sets padding in its own size variants (5px and 12px), so each
-        // size restates it rather than relying on emission order.
         sizeSmall: ({ theme }) => ({
           padding: theme.spacing(0.375),
           fontSize: theme.typography.pxToRem(tokens.iconSize.medium),
         }),
-        // `large` is not a design size and `IconButtonProps` omits it, but a raw
-        // MuiIconButton still reaches it. Clamped to medium.
         sizeLarge: ({ theme }) => ({
           padding: theme.spacing(0.375),
           fontSize: theme.typography.pxToRem(tokens.iconSize.large),

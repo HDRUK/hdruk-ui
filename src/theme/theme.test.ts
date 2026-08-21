@@ -1,16 +1,5 @@
 import theme, { createColor, createHdrukTheme, tokens } from ".";
 
-/**
- * Covers the theme's *structure and behaviour* — how tokens are wired into MUI's
- * slots, how a site theme merges over the base, and decisions that would be
- * silently re-broken.
- *
- * Colours and type sizes are deliberately not pinned: a wrong one is obvious in
- * Storybook, and asserting them only means updating a test every time the design
- * changes. Values are pinned only where breakage is invisible — spacing and
- * breakpoints, which reflow apps without anyone looking at that screen.
- */
-
 const HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
 describe("palette contract", () => {
@@ -47,8 +36,6 @@ describe("palette contract", () => {
   });
 
   it("exposes the tokens MUI has no slot for", () => {
-    // The key sets are the contract — apps reference these by name, so adding
-    // or removing one changes what they can rely on.
     expect(Object.keys(theme.palette.brand).sort()).toEqual([
       "accentPrimary",
       "accentSecondary",
@@ -71,17 +58,11 @@ describe("palette contract", () => {
       "needsActionHover",
       "selected",
     ]);
-    // `background.secondary` has no MUI slot either, and IconButton's focus fill
-    // reads it — a raw `tokens` read there is not re-themeable by an app.
     expect(theme.palette.background.secondary).toBe(tokens.background.secondary);
   });
 });
 
 describe("layout contract", () => {
-  // Only values whose breakage is invisible: apps write `spacing(2)` and
-  // `breakpoints.up("md")` all over, so a change here silently reflows them.
-  // Colours and type sizes are deliberately not pinned — those show up the
-  // moment you open Storybook.
   it("keeps the 8px spacing step", () => {
     expect(theme.spacing(1)).toBe("8px");
     expect(theme.spacing(2)).toBe("16px");
@@ -100,14 +81,10 @@ describe("layout contract", () => {
 
 describe("typography", () => {
   it("points fontWeightMedium at Semi Bold, not MUI's 500", () => {
-    // MUI defaults medium to 500, which is not one of the weights the base
-    // uses — anything MUI styles as "medium" would fall off the scale.
     expect(theme.typography.fontWeightMedium).toBe(600);
   });
 
   it("carries every step of the design's Body scale", () => {
-    // Body/Small (13) and Body/X-X-Small (10) have no MUI equivalent. A missing
-    // step doesn't fail loudly — it turns up as a literal px in a component.
     (
       ["body1", "body2", "bodySmall", "caption", "bodyXxSmall"] as const
     ).forEach(step => {
@@ -116,14 +93,11 @@ describe("typography", () => {
   });
 
   it("leaves the two added Body steps out of responsiveFontSizes", () => {
-    // It only rewrites h1-h6 by default. Body text at 13px and 10px has no
-    // headroom to scale into anyway, but a future `variants` option would.
     expect(Object.keys(theme.typography.bodySmall)).toEqual(["fontSize"]);
     expect(Object.keys(theme.typography.bodyXxSmall)).toEqual(["fontSize"]);
   });
 
   it("applies responsiveFontSizes to the headings", () => {
-    // h6 is left alone — at 1rem it's already at the floor MUI scales from.
     HEADINGS.filter(variant => variant !== "h6").forEach(variant => {
       const mediaQueries = Object.keys(theme.typography[variant]).filter(key =>
         key.startsWith("@media")
@@ -135,8 +109,6 @@ describe("typography", () => {
 
 describe("createHdrukTheme", () => {
   it("returns the base theme when a site overrides nothing", () => {
-    // Same shape as the default export, so `<HdrukUiProvider>` with no props
-    // and `createHdrukTheme()` cannot drift apart.
     const bare = createHdrukTheme();
 
     expect(bare.palette.primary.main).toBe(theme.palette.primary.main);
@@ -186,8 +158,6 @@ describe("createColor", () => {
     const color = createColor("#a4177f");
 
     expect(color.main).toBe("#a4177f");
-    // Distinct from main and from each other — `toBeTruthy` would pass on a
-    // helper that just copied main into all three.
     expect(new Set([color.main, color.light, color.dark]).size).toBe(3);
     expect(color.contrastText).toBe("#fff");
   });
@@ -247,9 +217,6 @@ describe("button styling contract", () => {
   });
 
   it("gives every variant a focus ring, not just contained", () => {
-    // ButtonBase zeroes the UA outline and disableElevation removes MUI's
-    // focus shadow, so a ring on `contained` alone leaves outlined and text
-    // with no keyboard indicator at all.
     expect(slot("MuiButton", "root")["&:focus-visible"]).toMatchObject({
       outline: expect.stringContaining(tokens.status.keyboardFocus),
     });
@@ -257,20 +224,16 @@ describe("button styling contract", () => {
   });
 
   it("draws buttons and icon buttons the same focus ring, at the thick stroke", () => {
-    // Pinning the width, not just the colour: the two share a helper, so
-    // changing one silently changes the other.
     const ring = {
       outline: `${tokens.stroke.thick}px solid ${tokens.status.keyboardFocus}`,
       outlineOffset: 0,
     };
 
     expect(slot("MuiButton", "root")["&:focus-visible"]).toEqual(ring);
-    // The icon button adds the design's focus fill on top of the shared ring.
     expect(slot("MuiIconButton", "root")["&:focus-visible"]).toMatchObject(ring);
   });
 
   it("draws outlined borders solid, at full strength", () => {
-    // Without this MUI renders them at alpha(main, 0.5).
     const outlined = slot("MuiButton", "outlined");
 
     expect(outlined["--variant-outlinedBorder"]).toBe("currentColor");
@@ -292,9 +255,6 @@ describe("button styling contract", () => {
   });
 
   it("gives each size its own label height, and lets no boxed variant compete", () => {
-    // The third number in a size spec: 40/8/24 and 28/4/20. A variant setting
-    // lineHeight resolves after the size slots and would win, so a small
-    // tertiary would get a different label box from a small primary.
     expect(slot("MuiButton", "root").lineHeight).toBe("1.5rem");
     expect(slot("MuiButton", "sizeSmall").lineHeight).toBe("1.25rem");
 
@@ -305,8 +265,6 @@ describe("button styling contract", () => {
           : entry.style
       ) as Record<string, unknown>;
 
-      // A variant may only own its line-height by giving up the box first —
-      // then there is no shared label box left for it to diverge from.
       if (style?.minHeight === 0) {
         expect(style.padding).toBe(0);
         return;
@@ -317,9 +275,6 @@ describe("button styling contract", () => {
   });
 
   it("darkens filled buttons on focus, like the outlined ones", () => {
-    // Every purpose adopts its hover fill on focus. MUI drives contained hover
-    // by reassigning `--variant-containedBg` and ships no hover variable to
-    // reuse, so each contained colour in the base purpose map states its own.
     expect(
       variant({ variant: "contained", color: "primary" })["&:focus-visible"]
     ).toEqual({ backgroundColor: theme.palette.primary.dark });
@@ -329,10 +284,6 @@ describe("button styling contract", () => {
   });
 
   it("draws focus with an outline, never a border", () => {
-    // The design specifies a 3px border, and it is drawn flush to match — but as
-    // an outline, because a border participates in layout and would have to be
-    // paid for out of each variant's padding at every size. This is the one
-    // property where following the export literally would be wrong.
     const ring = slot("MuiButton", "root")["&:focus-visible"] as Record<
       string,
       unknown
@@ -346,7 +297,6 @@ describe("button styling contract", () => {
   it("draws the link as text, underlined only on hover", () => {
     const link = variant({ color: "link", variant: "text" });
 
-    // `<Button href>` renders an anchor, which the UA underlines at rest.
     expect(link.textDecoration).toBe("none");
     expect(link["&:hover"]).toEqual({
       backgroundColor: "transparent",
@@ -364,8 +314,6 @@ describe("button styling contract", () => {
   });
 
   it("fades the disabled link to grey text with no filled pill", () => {
-    // The root's `.Mui-disabled` fills with status.disabled, which would give a
-    // grey pill behind a link that has no box.
     expect(variant({ color: "link", variant: "text" })["&.Mui-disabled"]).toEqual(
       {
         backgroundColor: "transparent",
@@ -381,8 +329,6 @@ describe("button styling contract", () => {
   });
 
   it("clamps `large` to the medium metrics", () => {
-    // `ButtonProps` omits it, but a raw MuiButton still reaches it — and MUI's
-    // own sizeLarge carries a bigger font and padding than the design has.
     expect(slot("MuiButton", "sizeLarge").padding).toBe("8px 12px");
     expect(slot("MuiButton", "sizeLarge").fontSize).toBe(
       theme.typography.button.fontSize
@@ -412,8 +358,6 @@ describe("button styling contract", () => {
   });
 
   it("gives every purpose the same disabled fill, border colour and label", () => {
-    // Without the label colour MUI's own action.disabled applies, which sits
-    // at about 1.9:1 on this fill.
     expect(slot("MuiButton", "root")["&.Mui-disabled"]).toEqual({
       backgroundColor: tokens.status.disabled,
       borderColor: tokens.status.disabled,
@@ -447,8 +391,6 @@ describe("button styling contract", () => {
 });
 
 describe("component theme keys", () => {
-  // `HdrukButton` is absent by design — declared in the type augmentation and
-  // set by apps, with no base entry shipped.
   it("registers exactly the components the apps override against", () => {
     expect(Object.keys(theme.components ?? {}).sort()).toEqual([
       "MuiAlert",

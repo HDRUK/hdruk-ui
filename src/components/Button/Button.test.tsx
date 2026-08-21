@@ -98,7 +98,6 @@ describe("Button theme integration", () => {
     const style = getComputedStyle(screen.getByRole("button"));
 
     expect(style.borderRadius).toBe("999px");
-    // HdrukButton is the seam: the base MuiButton root styles still apply.
     expect(style.minHeight).toBe("40px");
   });
 
@@ -135,10 +134,6 @@ describe("Button theme integration", () => {
   });
 
   it("lets a site add a prop-matched variant, not just flat overrides", () => {
-    // How cohort discovery keeps its tertiary square while every other purpose
-    // is a pill: `cornerRounding` is 48 but `tertiaryCornerRounding` is 4. An
-    // app-level `MuiButton.variants` would replace the library's whole array,
-    // so `HdrukButton.variants` is the only seam that can express this.
     render(
       <>
         <Button purpose="primary">Matched</Button>
@@ -148,7 +143,7 @@ describe("Button theme integration", () => {
         themeOptions: {
           components: {
             HdrukButton: {
-              styleOverrides: { root: { borderRadius: 9999 } },
+              styleOverrides: { root: { borderRadius: 48 } },
               variants: [
                 {
                   props: { variant: "contained", color: "primary" },
@@ -161,8 +156,6 @@ describe("Button theme integration", () => {
       }
     );
 
-    // The variant must beat the site's own root override, or the exception
-    // cannot be carved out of it.
     expect(
       getComputedStyle(screen.getByRole("button", { name: "Matched" }))
         .borderRadius
@@ -170,12 +163,10 @@ describe("Button theme integration", () => {
     expect(
       getComputedStyle(screen.getByRole("button", { name: "Unmatched" }))
         .borderRadius
-    ).toBe("9999px");
+    ).toBe("48px");
   });
 
   it("lets a site override a state rule, not just a resting one", () => {
-    // The library's state rules land at 0,2,0. A site only reaches them by
-    // repeating the selector — a flat property in `root` is 0,1,0 and loses.
     render(<Button disabled>Go</Button>, {
       themeOptions: {
         components: {
@@ -262,8 +253,6 @@ describe("Button metrics", () => {
   });
 
   it("clamps a `large` that reaches the theme past ButtonProps", () => {
-    // `size` is narrowed to small|medium, so this is only reachable from a raw
-    // MuiButton — which a consuming app still has.
     render(<MuiButton size="large">Go</MuiButton>);
 
     const style = getComputedStyle(screen.getByRole("button"));
@@ -348,9 +337,6 @@ describe("Button link metrics", () => {
   });
 
   it("squares the focus ring off, since a link has no box", () => {
-    // An outline follows the element's border-radius and CSS has no
-    // outline-radius, so zeroing the link's own radius is what keeps the ring
-    // from implying a box. A site rounding its buttons must not reach it.
     render(<Button purpose="link">Read more</Button>);
 
     expect(getComputedStyle(screen.getByRole("button")).borderRadius).toBe("0");

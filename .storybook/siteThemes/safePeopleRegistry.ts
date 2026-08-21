@@ -1,18 +1,6 @@
 import { createColor } from "../../src/theme";
 import type { ThemeOptions } from "@mui/material/styles";
 
-/**
- * Safe People Registry's real theme, derived from its Figma token export — 78 of
- * the 158 keys differ from the gateway export the library base is built from.
- *
- * Portable by design: it imports only `createColor` and a type, both of which
- * `@hdruk/ui` exports publicly, so safepeopleregistry-web can take this file
- * as-is and change the import to the package name.
-
- *
- * Not covered, for want of a library component to theme: the export's
- * `Components/Tables` deltas (vertical border 1 → 0, cell height 43 → 44).
- */
 const spr = {
   brand: {
     primary: "#BE37A3",
@@ -56,7 +44,6 @@ const spr = {
     disabled: "#7C7C7C",
     warning: "#937C42",
   },
-  /** `Buttons/Secondary/Default/borderWidth`, against the base's 2. */
   secondaryBorderWidth: 1,
 } as const;
 
@@ -98,8 +85,6 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
       light: spr.background.information,
       contrastText: spr.text.primaryWhite,
     },
-    // `palette.link` is its own slot, not derived from brand — without this a
-    // site keeps the base's gateway blue however it rebrands primary.
     link: {
       main: spr.brand.primary,
       dark: spr.brand.primaryHovered,
@@ -132,7 +117,6 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
   },
 
   typography: {
-    // Inter throughout, where gateway and cohort discovery both use Source Sans 3.
     fontFamily:
       'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
     h1: { fontSize: "2rem", fontWeight: 700 },
@@ -146,17 +130,12 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
   components: {
     HdrukButton: {
       defaultProps: {
-        // Every purpose is drawn in brand primary, separated by weight rather
-        // than by hue: filled, then outlined, then bare text.
         purposeMap: {
           secondary: { variant: "outlined", color: "primary" },
           tertiary: { variant: "text", color: "primary" },
         },
       },
       variants: [
-        // Secondary carries a 1px border where the base draws 2px, so it pays a
-        // narrower stroke out of the same 12px inset — the arithmetic the base
-        // already does for its own 1px tertiary.
         {
           props: { variant: "outlined", color: "primary" },
           style: ({ theme }) => ({
@@ -174,9 +153,6 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
             padding: theme.spacing(0.375, 1.375),
           }),
         },
-        // Tertiary darkens its label and stays unfilled. MUI's text variant
-        // tints its background on hover, so `Status/Default/noColor` has to be
-        // restated as transparent rather than simply left alone.
         {
           props: { variant: "text", color: "primary" },
           style: {
@@ -186,7 +162,6 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
             },
           },
         },
-        // `Type/Links/linkStyle` is SemiBold here, against Regular elsewhere.
         {
           props: { variant: "text", color: "link" },
           style: { fontWeight: 600 },
