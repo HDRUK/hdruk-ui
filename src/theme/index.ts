@@ -9,7 +9,6 @@ import {
 import { deepmerge } from "@mui/utils";
 import "../types/themeAugmentation";
 
-/** The design system's colour tokens, mirroring the Figma `Color/*` namespaces. */
 export const tokens = {
   brand: {
     primary: "#475DA7",
@@ -20,6 +19,8 @@ export const tokens = {
     accentSecondary: "#B8E2D8",
   },
   status: {
+    default: "#FFFFFF",
+    grey: "#E2E2E2",
     hovered: "#EEEEEE",
     selected: "#2C8267",
     information: "#29235C",
@@ -57,12 +58,10 @@ export const tokens = {
     error: "#C02531",
     warning: "#856505",
   },
-  /** `Sizing/Stroke`, in px. Separate from the spacing scale by design. */
   stroke: { thin: 1, medium: 2, thick: 3 },
-  /** `RoundedCorner/Global`. `medium` is the theme-wide `shape.borderRadius`. */
   radius: { small: 4, medium: 8, large: 12 },
-  /** `Type/Icon/Icon{Small,Medium,Large}`, in px. */
   iconSize: { small: 20, medium: 24, large: 40 },
+  iconWeight: 300,
 } as const;
 
 export const themeOptions: ThemeOptions = {
@@ -110,6 +109,7 @@ export const themeOptions: ThemeOptions = {
     background: {
       default: tokens.background.primary,
       paper: tokens.background.white,
+      secondary: tokens.background.secondary,
     },
     divider: tokens.background.secondary,
     link: {
@@ -121,6 +121,8 @@ export const themeOptions: ThemeOptions = {
 
     brand: tokens.brand,
     status: {
+      default: tokens.status.default,
+      grey: tokens.status.grey,
       hovered: tokens.status.hovered,
       selected: tokens.status.selected,
       faded: tokens.status.faded,
@@ -162,8 +164,14 @@ export const themeOptions: ThemeOptions = {
     subtitle2: { fontWeight: 600 },
     body1: { fontSize: "1rem", lineHeight: 1.6 }, // Body/Large 16
     body2: { fontSize: "0.875rem", lineHeight: 1.57 }, // Body/Medium 14
-    button: { textTransform: "none", fontWeight: 600, letterSpacing: 0.2 },
+    bodySmall: { fontSize: "0.8125rem" }, // Body/Small 13
+    button: {
+      textTransform: "none",
+      fontWeight: 400,
+      letterSpacing: 0.2,
+    },
     caption: { fontSize: "0.75rem", lineHeight: 1.4 }, // Body/X-Small 12
+    bodyXxSmall: { fontSize: "0.625rem" }, // Body/X-X-Small 10
     overline: {
       textTransform: "uppercase",
       letterSpacing: 0.8,
@@ -188,37 +196,96 @@ export const themeOptions: ThemeOptions = {
         color: "primary",
       },
       styleOverrides: {
-        // ButtonBase zeroes the UA outline, and disableElevation removes MUI's
-        // own focus shadow, so every variant needs this — not just contained.
         root: ({ theme }) => ({
+          minHeight: theme.spacing(5),
           borderRadius: tokens.radius.small,
-          paddingInline: theme.spacing(2),
-          paddingBlock: theme.spacing(1),
+          padding: theme.spacing(1, 1.5),
+          lineHeight: "1.5rem",
           "&:focus-visible": {
-            outline: `${tokens.stroke.medium}px solid ${theme.palette.status.keyboardFocus}`,
-            outlineOffset: 2,
+            outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
+            outlineOffset: 0,
+          },
+          "&.Mui-disabled": {
+            backgroundColor: theme.palette.status.disabled,
+            borderColor: theme.palette.status.disabled,
+            color: theme.palette.text.disabled,
           },
         }),
         contained: () => ({
           boxShadow: "none",
           "&:hover": { boxShadow: "none" },
         }),
-        // MUI renders the border at alpha(main, 0.5); the design's are solid.
-        outlined: () => ({
+        outlined: ({ theme }) => ({
           borderWidth: tokens.stroke.medium,
           "--variant-outlinedBorder": "currentColor",
-          "&:hover": { borderWidth: tokens.stroke.medium },
+          padding: theme.spacing(0.75, 1.25),
+          "&:hover, &.Mui-disabled": { borderWidth: tokens.stroke.medium },
+        }),
+        outlinedSizeSmall: ({ theme }) => ({
+          padding: theme.spacing(0.25, 1.25),
+        }),
+        outlinedSizeLarge: ({ theme }) => ({
+          padding: theme.spacing(0.75, 1.25),
         }),
         sizeSmall: ({ theme }) => ({
-          paddingInline: theme.spacing(1.5),
-          paddingBlock: theme.spacing(0.5),
+          minHeight: theme.spacing(3.5),
+          lineHeight: "1.25rem",
+          padding: theme.spacing(0.5, 1.5),
         }),
         sizeLarge: ({ theme }) => ({
-          paddingInline: theme.spacing(2.5),
-          paddingBlock: theme.spacing(1.25),
+          padding: theme.spacing(1, 1.5),
+          fontSize: theme.typography.button.fontSize,
         }),
       },
       variants: [
+        {
+          props: { variant: "contained", color: "primary" },
+          style: ({ theme }) => ({
+            "&:focus-visible": {
+              backgroundColor: theme.palette.primary.dark,
+            },
+          }),
+        },
+        {
+          props: { variant: "contained", color: "error" },
+          style: ({ theme }) => ({
+            "&:focus-visible": {
+              backgroundColor: theme.palette.error.dark,
+            },
+          }),
+        },
+        {
+          props: { variant: "outlined", color: "inherit" },
+          style: ({ theme }) => ({
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.background.paper,
+            borderWidth: tokens.stroke.thin,
+            borderColor: theme.palette.status.faded,
+            padding: theme.spacing(0.875, 1.375),
+            "&:hover, &.Mui-disabled": { borderWidth: tokens.stroke.thin },
+            "&:hover, &:focus-visible": {
+              backgroundColor: theme.palette.status.hovered,
+            },
+          }),
+        },
+        {
+          props: { variant: "outlined", color: "inherit", size: "small" },
+          style: ({ theme }) => ({
+            padding: theme.spacing(0.375, 1.375),
+          }),
+        },
+        {
+          props: { variant: "outlined", color: "secondary" },
+          style: ({ theme }) => ({
+            color: theme.palette.text.primary,
+            borderColor: theme.palette.secondary.main,
+            "&:hover, &:focus-visible": {
+              backgroundColor: theme.palette.secondary.dark,
+              borderColor: theme.palette.secondary.dark,
+              color: theme.palette.secondary.contrastText,
+            },
+          }),
+        },
         {
           props: { variant: "text", color: "inherit" },
           style: ({ theme }) => ({
@@ -230,28 +297,66 @@ export const themeOptions: ThemeOptions = {
         },
         {
           props: { color: "link", variant: "text" },
-          style: () => ({
-            textDecoration: "underline",
-            paddingInline: 0,
+          style: ({ theme }) => ({
+            padding: 0,
             minWidth: 0,
+            minHeight: 0,
+            borderRadius: 0,
+            lineHeight: 1.3,
+            textDecoration: "none",
             "&:hover": {
               backgroundColor: "transparent",
-              textDecoration: "none",
+              textDecoration: "underline",
             },
+            "&.Mui-disabled": {
+              backgroundColor: "transparent",
+              color: theme.palette.text.disabled,
+            },
+          }),
+        },
+        {
+          props: { color: "link", variant: "text", size: "small" },
+          style: ({ theme }) => ({
+            fontSize: theme.typography.bodySmall.fontSize,
           }),
         },
       ],
     },
     MuiIconButton: {
       styleOverrides: {
-        // No borderRadius here — MUI's circular default is what the design uses.
         root: ({ theme }) => ({
+          padding: theme.spacing(0.375),
+          border: `${tokens.stroke.thin}px solid ${theme.palette.status.faded}`,
+          backgroundColor: theme.palette.status.default,
+          fontSize: theme.typography.pxToRem(tokens.iconSize.large),
+          "& .MuiIcon-root, & .MuiSvgIcon-root": { fontSize: "inherit" },
+          "&:hover": { backgroundColor: theme.palette.status.hovered },
           "&:focus-visible": {
-            outline: `${tokens.stroke.medium}px solid ${theme.palette.status.keyboardFocus}`,
-            outlineOffset: 2,
+            outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
+            outlineOffset: 0,
+            backgroundColor: theme.palette.background.secondary,
+          },
+          "&.Mui-disabled": {
+            backgroundColor: theme.palette.status.disabled,
+            borderColor: theme.palette.status.disabled,
+            color: theme.palette.text.disabled,
           },
         }),
+        sizeSmall: ({ theme }) => ({
+          padding: theme.spacing(0.375),
+          fontSize: theme.typography.pxToRem(tokens.iconSize.medium),
+        }),
+        sizeLarge: ({ theme }) => ({
+          padding: theme.spacing(0.375),
+          fontSize: theme.typography.pxToRem(tokens.iconSize.large),
+        }),
       },
+      variants: [
+        {
+          props: { color: "default" },
+          style: ({ theme }) => ({ color: theme.palette.text.secondary }),
+        },
+      ],
     },
 
     /* ----- Inputs / TextFields ----- */
@@ -446,6 +551,9 @@ export const themeOptions: ThemeOptions = {
     /* ----- Misc ----- */
     MuiIcon: {
       styleOverrides: {
+        root: {
+          fontVariationSettings: `'wght' ${tokens.iconWeight}`,
+        },
         fontSizeLarge: ({ theme }) => ({
           fontSize: theme.typography.pxToRem(tokens.iconSize.large),
         }),

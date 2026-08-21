@@ -1,16 +1,5 @@
 import theme, { createColor, createHdrukTheme, tokens } from ".";
 
-/**
- * Covers the theme's *structure and behaviour* — how tokens are wired into MUI's
- * slots, how a site theme merges over the base, and decisions that would be
- * silently re-broken.
- *
- * Colours and type sizes are deliberately not pinned: a wrong one is obvious in
- * Storybook, and asserting them only means updating a test every time the design
- * changes. Values are pinned only where breakage is invisible — spacing and
- * breakpoints, which reflow apps without anyone looking at that screen.
- */
-
 const HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
 describe("palette contract", () => {
@@ -47,8 +36,6 @@ describe("palette contract", () => {
   });
 
   it("exposes the tokens MUI has no slot for", () => {
-    // The key sets are the contract — apps reference these by name, so adding
-    // or removing one changes what they can rely on.
     expect(Object.keys(theme.palette.brand).sort()).toEqual([
       "accentPrimary",
       "accentSecondary",
@@ -61,22 +48,21 @@ describe("palette contract", () => {
       "announcement",
       "archived",
       "archivedHovered",
+      "default",
       "disabled",
       "faded",
+      "grey",
       "hovered",
       "keyboardFocus",
       "needsAction",
       "needsActionHover",
       "selected",
     ]);
+    expect(theme.palette.background.secondary).toBe(tokens.background.secondary);
   });
 });
 
 describe("layout contract", () => {
-  // Only values whose breakage is invisible: apps write `spacing(2)` and
-  // `breakpoints.up("md")` all over, so a change here silently reflows them.
-  // Colours and type sizes are deliberately not pinned — those show up the
-  // moment you open Storybook.
   it("keeps the 8px spacing step", () => {
     expect(theme.spacing(1)).toBe("8px");
     expect(theme.spacing(2)).toBe("16px");
@@ -95,13 +81,23 @@ describe("layout contract", () => {
 
 describe("typography", () => {
   it("points fontWeightMedium at Semi Bold, not MUI's 500", () => {
-    // MUI defaults medium to 500, which is not one of the weights the base
-    // uses — anything MUI styles as "medium" would fall off the scale.
     expect(theme.typography.fontWeightMedium).toBe(600);
   });
 
+  it("carries every step of the design's Body scale", () => {
+    (
+      ["body1", "body2", "bodySmall", "caption", "bodyXxSmall"] as const
+    ).forEach(step => {
+      expect(theme.typography[step].fontSize).toBeDefined();
+    });
+  });
+
+  it("leaves the two added Body steps out of responsiveFontSizes", () => {
+    expect(Object.keys(theme.typography.bodySmall)).toEqual(["fontSize"]);
+    expect(Object.keys(theme.typography.bodyXxSmall)).toEqual(["fontSize"]);
+  });
+
   it("applies responsiveFontSizes to the headings", () => {
-    // h6 is left alone — at 1rem it's already at the floor MUI scales from.
     HEADINGS.filter(variant => variant !== "h6").forEach(variant => {
       const mediaQueries = Object.keys(theme.typography[variant]).filter(key =>
         key.startsWith("@media")
@@ -113,8 +109,6 @@ describe("typography", () => {
 
 describe("createHdrukTheme", () => {
   it("returns the base theme when a site overrides nothing", () => {
-    // Same shape as the default export, so `<HdrukUiProvider>` with no props
-    // and `createHdrukTheme()` cannot drift apart.
     const bare = createHdrukTheme();
 
     expect(bare.palette.primary.main).toBe(theme.palette.primary.main);
@@ -164,8 +158,6 @@ describe("createColor", () => {
     const color = createColor("#a4177f");
 
     expect(color.main).toBe("#a4177f");
-    // Distinct from main and from each other — `toBeTruthy` would pass on a
-    // helper that just copied main into all three.
     expect(new Set([color.main, color.light, color.dark]).size).toBe(3);
     expect(color.contrastText).toBe("#fff");
   });
@@ -207,26 +199,190 @@ describe("button styling contract", () => {
       : (overrides as Record<string, unknown>);
   };
 
+  const variant = (props: Record<string, unknown>) => {
+    const entry = theme.components?.MuiButton?.variants?.find(
+      v => JSON.stringify(v.props) === JSON.stringify(props)
+    );
+
+    return (
+      typeof entry?.style === "function"
+        ? entry.style({ theme } as never)
+        : entry?.style
+    ) as Record<string, unknown>;
+  };
+
   it("rounds buttons to the design's button radius, not the global one", () => {
     expect(slot("MuiButton", "root").borderRadius).toBe(tokens.radius.small);
     expect(tokens.radius.small).not.toBe(theme.shape.borderRadius);
   });
 
   it("gives every variant a focus ring, not just contained", () => {
-    // ButtonBase zeroes the UA outline and disableElevation removes MUI's
-    // focus shadow, so a ring on `contained` alone leaves outlined and text
-    // with no keyboard indicator at all.
     expect(slot("MuiButton", "root")["&:focus-visible"]).toMatchObject({
       outline: expect.stringContaining(tokens.status.keyboardFocus),
     });
     expect(slot("MuiButton", "contained")["&:focus-visible"]).toBeUndefined();
   });
 
-  it("draws outlined borders at full strength", () => {
-    // Without this MUI renders them at alpha(main, 0.5).
-    expect(slot("MuiButton", "outlined")["--variant-outlinedBorder"]).toBe(
-      "currentColor"
+  it("draws buttons and icon buttons the same focus ring, at the thick stroke", () => {
+    const ring = {
+      outline: `${tokens.stroke.thick}px solid ${tokens.status.keyboardFocus}`,
+      outlineOffset: 0,
+    };
+
+    expect(slot("MuiButton", "root")["&:focus-visible"]).toEqual(ring);
+    expect(slot("MuiIconButton", "root")["&:focus-visible"]).toMatchObject(ring);
+  });
+
+  it("draws outlined borders solid, at full strength", () => {
+    const outlined = slot("MuiButton", "outlined");
+
+    expect(outlined["--variant-outlinedBorder"]).toBe("currentColor");
+    expect(outlined.borderWidth).toBe(tokens.stroke.medium);
+  });
+
+  it("shaves each variant's padding by its border, as MUI's own outlined does", () => {
+    expect(slot("MuiButton", "root").padding).toBe("8px 12px");
+    expect(slot("MuiButton", "outlined").padding).toBe("6px 10px");
+    expect(variant({ variant: "outlined", color: "inherit" }).padding).toBe(
+      "7px 11px"
     );
+
+    expect(slot("MuiButton", "sizeSmall").padding).toBe("4px 12px");
+    expect(slot("MuiButton", "outlinedSizeSmall").padding).toBe("2px 10px");
+    expect(
+      variant({ variant: "outlined", color: "inherit", size: "small" }).padding
+    ).toBe("3px 11px");
+  });
+
+  it("gives each size its own label height, and lets no boxed variant compete", () => {
+    expect(slot("MuiButton", "root").lineHeight).toBe("1.5rem");
+    expect(slot("MuiButton", "sizeSmall").lineHeight).toBe("1.25rem");
+
+    theme.components?.MuiButton?.variants?.forEach(entry => {
+      const style = (
+        typeof entry.style === "function"
+          ? entry.style({ theme } as never)
+          : entry.style
+      ) as Record<string, unknown>;
+
+      if (style?.minHeight === 0) {
+        expect(style.padding).toBe(0);
+        return;
+      }
+
+      expect(style).not.toHaveProperty("lineHeight");
+    });
+  });
+
+  it("darkens filled buttons on focus, like the outlined ones", () => {
+    expect(
+      variant({ variant: "contained", color: "primary" })["&:focus-visible"]
+    ).toEqual({ backgroundColor: theme.palette.primary.dark });
+    expect(
+      variant({ variant: "contained", color: "error" })["&:focus-visible"]
+    ).toEqual({ backgroundColor: theme.palette.error.dark });
+  });
+
+  it("draws focus with an outline, never a border", () => {
+    const ring = slot("MuiButton", "root")["&:focus-visible"] as Record<
+      string,
+      unknown
+    >;
+
+    expect(ring.outline).toContain("solid");
+    expect(ring).not.toHaveProperty("border");
+    expect(ring).not.toHaveProperty("borderWidth");
+  });
+
+  it("draws the link as text, underlined only on hover", () => {
+    const link = variant({ color: "link", variant: "text" });
+
+    expect(link.textDecoration).toBe("none");
+    expect(link["&:hover"]).toEqual({
+      backgroundColor: "transparent",
+      textDecoration: "underline",
+    });
+  });
+
+  it("drops the button box from the link entirely", () => {
+    const link = variant({ color: "link", variant: "text" });
+
+    expect(link.padding).toBe(0);
+    expect(link.minWidth).toBe(0);
+    expect(link.minHeight).toBe(0);
+    expect(link.lineHeight).toBe(1.3);
+  });
+
+  it("fades the disabled link to grey text with no filled pill", () => {
+    expect(variant({ color: "link", variant: "text" })["&.Mui-disabled"]).toEqual(
+      {
+        backgroundColor: "transparent",
+        color: tokens.text.disabled,
+      }
+    );
+  });
+
+  it("takes the small link's size from the Body/Small step, not a literal", () => {
+    expect(
+      variant({ color: "link", variant: "text", size: "small" }).fontSize
+    ).toBe(theme.typography.bodySmall.fontSize);
+  });
+
+  it("clamps `large` to the medium metrics", () => {
+    expect(slot("MuiButton", "sizeLarge").padding).toBe("8px 12px");
+    expect(slot("MuiButton", "sizeLarge").fontSize).toBe(
+      theme.typography.button.fontSize
+    );
+    expect(slot("MuiButton", "outlinedSizeLarge").padding).toBe("6px 10px");
+  });
+
+  it("keeps each variant's border width when disabled", () => {
+    expect(slot("MuiButton", "outlined")["&:hover, &.Mui-disabled"]).toEqual({
+      borderWidth: tokens.stroke.medium,
+    });
+    expect(
+      variant({ variant: "outlined", color: "inherit" })[
+        "&:hover, &.Mui-disabled"
+      ]
+    ).toEqual({ borderWidth: tokens.stroke.thin });
+  });
+
+  it("fills the secondary button on hover and focus, flipping the label", () => {
+    const secondary = variant({ variant: "outlined", color: "secondary" });
+
+    expect(secondary["&:hover, &:focus-visible"]).toMatchObject({
+      backgroundColor: theme.palette.secondary.dark,
+      borderColor: theme.palette.secondary.dark,
+      color: theme.palette.secondary.contrastText,
+    });
+  });
+
+  it("gives every purpose the same disabled fill, border colour and label", () => {
+    expect(slot("MuiButton", "root")["&.Mui-disabled"]).toEqual({
+      backgroundColor: tokens.status.disabled,
+      borderColor: tokens.status.disabled,
+      color: tokens.text.disabled,
+    });
+  });
+
+  it("keeps every button label at the regular weight", () => {
+    expect(theme.typography.button.fontWeight).toBe(
+      theme.typography.fontWeightRegular
+    );
+  });
+
+  it("gives the tertiary button its own fill, thin ring and dark label", () => {
+    const tertiary = variant({ variant: "outlined", color: "inherit" });
+
+    expect(tertiary).toMatchObject({
+      color: theme.palette.text.primary,
+      backgroundColor: theme.palette.background.paper,
+      borderWidth: tokens.stroke.thin,
+      borderColor: tokens.status.faded,
+    });
+    expect(tertiary["&:hover, &:focus-visible"]).toMatchObject({
+      backgroundColor: tokens.status.hovered,
+    });
   });
 
   it("leaves icon buttons circular", () => {
@@ -235,8 +391,6 @@ describe("button styling contract", () => {
 });
 
 describe("component theme keys", () => {
-  // `HdrukButton` is absent by design — declared in the type augmentation and
-  // set by apps, with no base entry shipped.
   it("registers exactly the components the apps override against", () => {
     expect(Object.keys(theme.components ?? {}).sort()).toEqual([
       "MuiAlert",

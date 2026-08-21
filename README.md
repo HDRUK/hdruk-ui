@@ -238,10 +238,49 @@ Re-branding example (magenta primary, custom fonts):
 </HdrukUiProvider>
 ```
 
+### Type scale
+
+Five body steps and six headings, mirroring the design's `Type/*` tokens. Two of
+the body steps have no MUI equivalent and are added by module augmentation:
+
+| variant | token | size |
+| --- | --- | --- |
+| `h1`–`h6` | `Type/H1`–`H6` | 40 / 32 / 28 / 24 / 20 / 18 |
+| `body1` | `Body/Large` | 16 |
+| `body2` | `Body/Medium` | 14 |
+| `bodySmall` | `Body/Small` | **13** — custom |
+| `caption` | `Body/X-Small` | 12 |
+| `bodyXxSmall` | `Body/X-X-Small` | **10** — custom |
+
+Use them like any MUI variant:
+
+```tsx
+<Typography variant="bodySmall">Supporting detail</Typography>
+```
+
+The two custom variants have no entry in MUI's `variantMapping`, so they render
+as `<span>`. Pass `component` where you need a block element:
+
+```tsx
+<Typography variant="bodySmall" component="p">…</Typography>
+```
+
+In theme or component code, read the step rather than restating the number — a
+literal `13` in a `styleOverrides` block is the thing this scale exists to stop:
+
+```ts
+fontSize: theme.typography.bodySmall.fontSize;
+```
+
+`bodySmall` and `bodyXxSmall` carry a **`fontSize` only**. The design tokens
+define no line-height for any body step, so the three that have one were chosen
+by hand and these two are left to inherit rather than guess. Set them in your
+`themeOptions` if your app needs a specific line box.
+
 ### Fonts
 
-By default the provider injects Google Fonts links for Inter and Material
-Symbols. Pass `loadFonts={false}` and load fonts yourself (e.g. with
+By default the provider injects Google Fonts links for Source Sans 3 and
+Material Symbols Rounded. Pass `loadFonts={false}` and load fonts yourself (e.g. with
 `next/font`, which self-hosts and avoids your visitors' browsers calling
 Google) when your app uses different fonts or you want to keep font delivery
 first-party.
