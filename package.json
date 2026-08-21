@@ -17,7 +17,7 @@
   "files": [
     "dist"
   ],
-  "sideEffects": false,
+  "sideEffects": ["./src/types/themeAugmentation.ts"],
   "scripts": {
     "dev": "tsup --watch src",
     "dev:link": "tsup --watch src --onSuccess \"yalc push --no-scripts\"",
