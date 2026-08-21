@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/HDRUK/hdruk-ui/compare/v1.4.0...v1.4.1) (2026-08-21)
+
+
+### Bug Fixes
+
+* **GAT-9256:** mark themeAugmentation as a side-effect import ([#37](https://github.com/HDRUK/hdruk-ui/issues/37)) ([728c9b3](https://github.com/HDRUK/hdruk-ui/commit/728c9b310d9a2fc0bf61295b73855761340b5800))
+
 # [1.4.0](https://github.com/HDRUK/hdruk-ui/compare/v1.3.0...v1.4.0) (2026-08-21)
 
 
