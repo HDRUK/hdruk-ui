@@ -1,5 +1,5 @@
-import { HdrukUiProvider } from "../src/providers/HdrukUiProvider";
-import { createHdrukTheme } from "../src/theme";
+import { HdrukUiProvider } from "@/providers/HdrukUiProvider";
+import { createHdrukTheme } from "@/theme";
 import { demoThemes } from "./demoThemes";
 import type { Decorator } from "@storybook/react-vite";
 

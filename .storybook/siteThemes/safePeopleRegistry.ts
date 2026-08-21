@@ -1,4 +1,4 @@
-import { createColor } from "../../src/theme";
+import { createColor } from "@/theme";
 import type { ThemeOptions } from "@mui/material/styles";
 
 const spr = {

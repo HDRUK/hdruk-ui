@@ -1,4 +1,4 @@
-import "../src/types/themeAugmentation";
+import "@/types/themeAugmentation";
 import { cohortDiscoveryThemeOptions } from "./siteThemes/cohortDiscovery";
 import { safePeopleRegistryThemeOptions } from "./siteThemes/safePeopleRegistry";
 import type { ThemeOptions } from "@mui/material/styles";

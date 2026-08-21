@@ -18,6 +18,7 @@ export default {
 
   // tsup loads SVGs with the `file` loader, so imports resolve to a URL string.
   moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
     "\\.svg$": "<rootDir>/test/svgStub.ts",
   },
 

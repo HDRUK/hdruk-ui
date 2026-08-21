@@ -1,6 +1,6 @@
-import { Button } from "../../src/components/Button";
-import { Icon } from "../../src/components/Icon";
-import { IconButton } from "../../src/components/IconButton";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
+import { IconButton } from "@/components/IconButton";
 import { render, screen } from "../../test/renderWithTheme";
 import { safePeopleRegistryThemeOptions } from "./safePeopleRegistry";
 
