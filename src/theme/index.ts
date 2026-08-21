@@ -64,11 +64,6 @@ export const tokens = {
   iconWeight: 300,
 } as const;
 
-const focusRing = (theme: Theme) => ({
-  outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
-  outlineOffset: 0,
-});
-
 export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
@@ -206,7 +201,10 @@ export const themeOptions: ThemeOptions = {
           borderRadius: tokens.radius.small,
           padding: theme.spacing(1, 1.5),
           lineHeight: "1.5rem",
-          "&:focus-visible": focusRing(theme),
+          "&:focus-visible": {
+            outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
+            outlineOffset: 0,
+          },
           "&.Mui-disabled": {
             backgroundColor: theme.palette.status.disabled,
             borderColor: theme.palette.status.disabled,
@@ -334,7 +332,8 @@ export const themeOptions: ThemeOptions = {
           "& .MuiIcon-root, & .MuiSvgIcon-root": { fontSize: "inherit" },
           "&:hover": { backgroundColor: theme.palette.status.hovered },
           "&:focus-visible": {
-            ...focusRing(theme),
+            outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
+            outlineOffset: 0,
             backgroundColor: theme.palette.background.secondary,
           },
           "&.Mui-disabled": {

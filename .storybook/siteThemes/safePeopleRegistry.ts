@@ -44,7 +44,6 @@ const spr = {
     disabled: "#7C7C7C",
     warning: "#937C42",
   },
-  secondaryBorderWidth: 1,
 } as const;
 
 export const safePeopleRegistryThemeOptions: ThemeOptions = {
@@ -140,10 +139,10 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
           props: { variant: "outlined", color: "primary" },
           style: ({ theme }) => ({
             backgroundColor: spr.background.white,
-            borderWidth: spr.secondaryBorderWidth,
+            borderWidth: 1,
             padding: theme.spacing(0.875, 1.375),
             "&:hover, &.Mui-disabled": {
-              borderWidth: spr.secondaryBorderWidth,
+              borderWidth: 1,
             },
           }),
         },
