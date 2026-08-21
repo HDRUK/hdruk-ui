@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/HDRUK/hdruk-ui/compare/v1.3.0...v1.4.0) (2026-08-21)
+
+
+### Features
+
+* **GAT-9256:** Add Button, IconButton and site theme fixtures ([#36](https://github.com/HDRUK/hdruk-ui/issues/36)) ([a2ac6f0](https://github.com/HDRUK/hdruk-ui/commit/a2ac6f0c3f98031057d58276a37c8c3d475d2afd))
+
 # [1.3.0](https://github.com/HDRUK/hdruk-ui/compare/v1.2.2...v1.3.0) (2026-08-19)
 
 
