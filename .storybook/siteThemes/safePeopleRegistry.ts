@@ -1,4 +1,4 @@
-import { createColor } from "../../src/theme";
+import { createColor, tokens } from "../../src/theme";
 import type { ThemeOptions } from "@mui/material/styles";
 
 const spr = {
@@ -127,6 +127,21 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
   },
 
   components: {
+    MuiIconButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          border: `${tokens.stroke.thin}px solid ${theme.palette.status.faded}`,
+          backgroundColor: theme.palette.status.default,
+        }),
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          border: `1px solid ${theme.palette.divider}`,
+        }),
+      },
+    },
     HdrukButton: {
       defaultProps: {
         purposeMap: {

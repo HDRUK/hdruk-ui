@@ -1,6 +1,5 @@
 import {
   createTheme,
-  responsiveFontSizes,
   PaletteColor,
   SimplePaletteColorOptions,
   Theme,
@@ -160,6 +159,8 @@ export const themeOptions: ThemeOptions = {
     h4: { fontWeight: 600, fontSize: "1.5rem", lineHeight: 1.35 }, // 24
     h5: { fontWeight: 600, fontSize: "1.25rem", lineHeight: 1.4 }, // 20
     h6: { fontWeight: 600, fontSize: "1.125rem", lineHeight: 1.45 }, // 18
+    // Headers/Article Lead — 20px Regular, a heading-scale size at body weight
+    articleLead: { fontWeight: 400, fontSize: "1.25rem", lineHeight: "normal" },
     subtitle1: { fontWeight: 600 },
     subtitle2: { fontWeight: 600 },
     body1: { fontSize: "1rem", lineHeight: 1.6 }, // Body/Large 16
@@ -224,17 +225,10 @@ export const themeOptions: ThemeOptions = {
         outlinedSizeSmall: ({ theme }) => ({
           padding: theme.spacing(0.25, 1.25),
         }),
-        outlinedSizeLarge: ({ theme }) => ({
-          padding: theme.spacing(0.75, 1.25),
-        }),
         sizeSmall: ({ theme }) => ({
           minHeight: theme.spacing(3.5),
           lineHeight: "1.25rem",
           padding: theme.spacing(0.5, 1.5),
-        }),
-        sizeLarge: ({ theme }) => ({
-          padding: theme.spacing(1, 1.5),
-          fontSize: theme.typography.button.fontSize,
         }),
       },
       variants: [
@@ -323,12 +317,16 @@ export const themeOptions: ThemeOptions = {
       ],
     },
     MuiIconButton: {
+      defaultProps: {
+        size: "small",
+      },
       styleOverrides: {
+        // Deliberately no border or background here — a site theme adds those
+        // if it wants them, so consumers don't inherit a bordered icon button
+        // they never asked for.
         root: ({ theme }) => ({
           padding: theme.spacing(0.375),
-          border: `${tokens.stroke.thin}px solid ${theme.palette.status.faded}`,
-          backgroundColor: theme.palette.status.default,
-          fontSize: theme.typography.pxToRem(tokens.iconSize.large),
+          // Icons inherit the button's font-size, so size is set in one place.
           "& .MuiIcon-root, & .MuiSvgIcon-root": { fontSize: "inherit" },
           "&:hover": { backgroundColor: theme.palette.status.hovered },
           "&:focus-visible": {
@@ -337,17 +335,13 @@ export const themeOptions: ThemeOptions = {
             backgroundColor: theme.palette.background.secondary,
           },
           "&.Mui-disabled": {
-            backgroundColor: theme.palette.status.disabled,
-            borderColor: theme.palette.status.disabled,
             color: theme.palette.text.disabled,
           },
         }),
         sizeSmall: ({ theme }) => ({
-          padding: theme.spacing(0.375),
           fontSize: theme.typography.pxToRem(tokens.iconSize.medium),
         }),
-        sizeLarge: ({ theme }) => ({
-          padding: theme.spacing(0.375),
+        sizeMedium: ({ theme }) => ({
           fontSize: theme.typography.pxToRem(tokens.iconSize.large),
         }),
       },
@@ -418,23 +412,24 @@ export const themeOptions: ThemeOptions = {
       },
     },
     MuiMenu: {
-      defaultProps: { elevation: 0 },
+      // List's padding comes from a MUI `variants` entry, which is emitted
+      // after theme styleOverrides — so no `list` slot value can win. Turning
+      // the variant off is the only way to make the list flush.
+      defaultProps: {
+        elevation: 0,
+        slotProps: { list: { disablePadding: true } },
+      },
       styleOverrides: {
         paper: ({ theme }) => ({
           borderRadius: theme.shape.borderRadius,
           border: `1px solid ${theme.palette.divider}`,
           backgroundColor: theme.palette.background.paper,
         }),
-        list: {
-          paddingBlock: 4,
-        },
       },
     },
     MuiMenuItem: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: (theme.shape.borderRadius as number) - 2,
-          marginInline: 4,
           "&.Mui-selected": {
             backgroundColor: theme.palette.action.selected,
           },
@@ -478,22 +473,13 @@ export const themeOptions: ThemeOptions = {
     MuiPaper: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
-        root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
+        root: {
           backgroundImage: "none",
-          border: `1px solid ${theme.palette.divider}`,
-        }),
+        },
       },
     },
     MuiCard: {
       defaultProps: { elevation: 0 },
-      styleOverrides: {
-        root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
-          border: `1px solid ${theme.palette.divider}`,
-          backgroundColor: theme.palette.background.paper,
-        }),
-      },
     },
     MuiToolbar: {
       styleOverrides: {
@@ -595,8 +581,7 @@ export const themeOptions: ThemeOptions = {
   },
 };
 
-const baseTheme = createTheme(themeOptions);
-const theme = responsiveFontSizes(baseTheme);
+const theme = createTheme(themeOptions);
 
 /**
  * Fill in the shades of a palette colour. Anything not supplied is derived from
@@ -612,21 +597,73 @@ const theme = responsiveFontSizes(baseTheme);
 export function createColor(
   color: string | SimplePaletteColorOptions
 ): PaletteColor {
-  return baseTheme.palette.augmentColor({
+  return theme.palette.augmentColor({
     color: typeof color === "string" ? { main: color } : color,
   });
 }
 
 /**
  * Build a site theme on top of the HDR base. A product supplies only what
- * differs; the base and `responsiveFontSizes` are applied here.
+ * differs; the base is applied here.
  *
  * A site overriding a palette colour should state `light`, `dark` and
  * `contrastText` alongside `main` — the base's are kept otherwise, and they
  * were chosen for the base's colour.
  */
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+type SlotRecord = Record<string, any>;
+
 export function createHdrukTheme(siteOptions: ThemeOptions = {}): Theme {
-  return responsiveFontSizes(createTheme(deepmerge(themeOptions, siteOptions)));
+  const merged = deepmerge(themeOptions, siteOptions);
+
+  const baseComps = (themeOptions.components ?? {}) as SlotRecord;
+  const siteComps = (siteOptions.components ?? {}) as SlotRecord;
+  const outComps = (merged.components ?? {}) as SlotRecord;
+
+  for (const name in siteComps) {
+    const baseOverrides = baseComps[name]?.styleOverrides;
+    const siteOverrides = siteComps[name]?.styleOverrides;
+
+    // A site keeps the base's styling unless it overrides that specific
+    // property. deepmerge gets object-on-object slots right and keeps site-only
+    // ones, but it cannot merge a slot *function* — it can't call one, so it
+    // replaces and one side's styles vanish. One uniform rule for every
+    // colliding slot: merge base-then-site, calling whichever side is a
+    // function. Anything deepmerge already handled is left untouched.
+    if (baseOverrides && siteOverrides) {
+      const mergedOverrides = outComps[name].styleOverrides;
+
+      for (const slot in siteOverrides) {
+        const baseSlot = baseOverrides[slot];
+        if (baseSlot === undefined) continue;
+
+        const siteSlot = siteOverrides[slot];
+        const baseIsFn = typeof baseSlot === "function";
+        const siteIsFn = typeof siteSlot === "function";
+
+        if (baseIsFn || siteIsFn) {
+          mergedOverrides[slot] = (params: SlotRecord) =>
+            deepmerge(
+              baseIsFn ? baseSlot(params) : baseSlot,
+              siteIsFn ? siteSlot(params) : siteSlot
+            );
+        }
+      }
+    }
+
+    // `variants` is an array, and deepmerge replaces arrays outright — so a
+    // site declaring any variants would silently drop every base one (which is
+    // where the purpose styling lives). Concatenate instead, base first so a
+    // site entry matching the same props still wins.
+    const baseVariants = baseComps[name]?.variants;
+    const siteVariants = siteComps[name]?.variants;
+
+    if (Array.isArray(baseVariants) && Array.isArray(siteVariants)) {
+      outComps[name].variants = [...baseVariants, ...siteVariants];
+    }
+  }
+
+  return createTheme(merged);
 }
 
 export default theme;

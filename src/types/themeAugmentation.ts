@@ -51,10 +51,12 @@ declare module "@mui/material/styles" {
   interface TypographyVariants {
     bodySmall: TypographyStyle;
     bodyXxSmall: TypographyStyle;
+    articleLead: TypographyStyle;
   }
   interface TypographyVariantsOptions {
     bodySmall?: TypographyStyle;
     bodyXxSmall?: TypographyStyle;
+    articleLead?: TypographyStyle;
   }
 }
 
@@ -64,6 +66,7 @@ declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
     bodySmall: true;
     bodyXxSmall: true;
+    articleLead: true;
   }
 }
 
