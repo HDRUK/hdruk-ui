@@ -493,8 +493,6 @@ export const themeOptions: ThemeOptions = {
     MuiListItemButton: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
-          marginInline: theme.spacing(0.5),
           "&.Mui-selected": {
             backgroundColor: theme.palette.action.selected,
           },

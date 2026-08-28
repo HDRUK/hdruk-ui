@@ -522,6 +522,13 @@ describe("menu styling contract", () => {
     expect(root).not.toHaveProperty("margin");
   });
 
+  it("leaves nav list items square and full-bleed", () => {
+    const root = slot("MuiListItemButton", "root");
+    expect(root).not.toHaveProperty("borderRadius");
+    expect(root).not.toHaveProperty("marginInline");
+    expect(root).not.toHaveProperty("margin");
+  });
+
   it("keeps the menu paper rounded and bordered", () => {
     expect(slot("MuiMenu", "paper")).toMatchObject({
       borderRadius: theme.shape.borderRadius,

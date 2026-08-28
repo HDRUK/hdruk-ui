@@ -120,6 +120,13 @@ export const cohortDiscoveryThemeOptions: ThemeOptions = {
         },
       },
     },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: tokens.radius.medium,
+        },
+      },
+    },
     HdrukButton: {
       defaultProps: {
         purposeMap: {
