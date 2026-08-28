@@ -553,13 +553,6 @@ export const themeOptions: ThemeOptions = {
         }),
       },
     },
-    MuiDialog: {
-      styleOverrides: {
-        paper: ({ theme }) => ({
-          borderRadius: (theme.shape.borderRadius as number) + 4,
-        }),
-      },
-    },
     MuiTabs: {
       styleOverrides: {
         indicator: ({ theme }) => ({

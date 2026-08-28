@@ -538,7 +538,6 @@ describe("component theme keys", () => {
       "MuiButtonBase",
       "MuiCard",
       "MuiChip",
-      "MuiDialog",
       "MuiDivider",
       "MuiFilledInput",
       "MuiFormLabel",

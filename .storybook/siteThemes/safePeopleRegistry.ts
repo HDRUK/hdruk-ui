@@ -142,6 +142,13 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
         }),
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: tokens.radius.large,
+        },
+      },
+    },
     HdrukButton: {
       defaultProps: {
         purposeMap: {

@@ -113,6 +113,13 @@ export const cohortDiscoveryThemeOptions: ThemeOptions = {
         }),
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: tokens.radius.large,
+        },
+      },
+    },
     HdrukButton: {
       defaultProps: {
         purposeMap: {
