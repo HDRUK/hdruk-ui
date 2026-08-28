@@ -344,6 +344,9 @@ export const themeOptions: ThemeOptions = {
         sizeMedium: ({ theme }) => ({
           fontSize: theme.typography.pxToRem(tokens.iconSize.large),
         }),
+        sizeLarge: ({ theme }) => ({
+          padding: theme.spacing(1.5),
+        }),
       },
       variants: [
         {
