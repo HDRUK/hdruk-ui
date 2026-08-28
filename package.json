@@ -14,6 +14,13 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "theme": [
+        "./dist/theme.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
@@ -105,6 +112,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js",
+      "require": "./dist/theme.cjs"
     },
     "./package.json": "./package.json",
     "./dist/*": "./dist/*"

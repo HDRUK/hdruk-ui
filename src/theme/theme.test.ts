@@ -1,4 +1,5 @@
 import theme, { createColor, createHdrukTheme, tokens } from ".";
+import type { ThemeOptions } from "@mui/material/styles";
 
 const HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
@@ -92,18 +93,26 @@ describe("typography", () => {
     });
   });
 
-  it("leaves the two added Body steps out of responsiveFontSizes", () => {
-    expect(Object.keys(theme.typography.bodySmall)).toEqual(["fontSize"]);
-    expect(Object.keys(theme.typography.bodyXxSmall)).toEqual(["fontSize"]);
+  it("carries Headers/Article Lead at 20px regular", () => {
+    expect(theme.typography.articleLead).toMatchObject({
+      fontSize: "1.25rem",
+      fontWeight: 400,
+      lineHeight: "normal",
+    });
   });
 
-  it("applies responsiveFontSizes to the headings", () => {
-    HEADINGS.filter(variant => variant !== "h6").forEach(variant => {
+  it("keeps heading sizes flat, as the design tokens define them", () => {
+    HEADINGS.forEach(variant => {
       const mediaQueries = Object.keys(theme.typography[variant]).filter(key =>
         key.startsWith("@media")
       );
-      expect(mediaQueries.length).toBeGreaterThan(0);
+      expect(mediaQueries).toHaveLength(0);
     });
+  });
+
+  it("renders the heading steps at their token sizes", () => {
+    expect(theme.typography.h5.fontSize).toBe("1.25rem");
+    expect(theme.typography.h6.fontSize).toBe("1.125rem");
   });
 });
 
@@ -128,13 +137,127 @@ describe("createHdrukTheme", () => {
     expect(site.shape.borderRadius).toBe(tokens.radius.medium);
   });
 
-  it("applies responsiveFontSizes so a site can't forget it", () => {
+  it("keeps the base variants when a site adds its own", () => {
+    const baseCount = (
+      theme.components?.MuiButton as { variants?: unknown[] } | undefined
+    )?.variants?.length;
+
+    const site = createHdrukTheme({
+      components: {
+        MuiButton: {
+          variants: [{ props: { color: "primary" }, style: { margin: 1 } }],
+        },
+      },
+    });
+
+    const siteVariants = (
+      site.components?.MuiButton as { variants?: unknown[] } | undefined
+    )?.variants;
+
+    // deepmerge replaces arrays, so without composition the base variants —
+    // which carry the purpose styling — would be silently dropped.
+    expect(baseCount).toBeGreaterThan(0);
+    expect(siteVariants).toHaveLength((baseCount ?? 0) + 1);
+  });
+
+  describe("styleOverrides merging", () => {
+    type Slot =
+      | Record<string, unknown>
+      | ((params: unknown) => Record<string, unknown>);
+
+    const overridesFor = (siteOptions: ThemeOptions, component: string) => {
+      const site = createHdrukTheme(siteOptions);
+      return (
+        site.components?.[
+          component as keyof NonNullable<typeof site.components>
+        ] as { styleOverrides?: Record<string, Slot> } | undefined
+      )?.styleOverrides;
+    };
+
+    /** Slots may be objects or functions; resolve either to plain styles. */
+    const resolve = (slot: Slot | undefined) =>
+      typeof slot === "function" ? slot({ theme }) : (slot ?? {});
+
+    it("keeps a site's object override on a base object slot", () => {
+      // MuiPaper.root is an object in the base. Gateway sets borderRadius: 0
+      // here; dropping it is what left the search table rounded.
+      const root = resolve(
+        overridesFor(
+          {
+            components: {
+              MuiPaper: { styleOverrides: { root: { borderRadius: 0 } } },
+            },
+          },
+          "MuiPaper"
+        )?.root
+      );
+
+      expect(root.borderRadius).toBe(0);
+      expect(root.backgroundImage).toBe("none");
+    });
+
+    it("composes a site's object override with a base function slot", () => {
+      // MuiChip.root is a function in the base carrying borderRadius and
+      // fontWeight. A site passing a plain object must not wipe them — this is
+      // what left Chips on MUI's 16px pill instead of the 8px token.
+      const root = resolve(
+        overridesFor(
+          { components: { MuiChip: { styleOverrides: { root: { zIndex: 7 } } } } },
+          "MuiChip"
+        )?.root
+      );
+
+      expect(root.zIndex).toBe(7);
+      expect(root.borderRadius).toBe(theme.shape.borderRadius);
+      expect(root.fontWeight).toBe(600);
+    });
+
+    it("keeps a slot only the site declares", () => {
+      const overrides = overridesFor(
+        {
+          components: {
+            MuiPaper: { styleOverrides: { elevation1: { zIndex: 3 } } },
+          },
+        },
+        "MuiPaper"
+      );
+
+      expect(overrides).toHaveProperty("elevation1");
+      expect(overrides).toHaveProperty("root");
+    });
+
+    it("composes two slot functions, deep-merging nested selectors", () => {
+      // The real collision: a site adding a border to MuiIconButton must not
+      // wipe the base's hover/focus/disabled rules.
+      const root = overridesFor(
+        {
+          components: {
+            MuiIconButton: {
+              styleOverrides: {
+                root: () => ({ border: "1px solid red" }),
+              },
+            },
+          },
+        },
+        "MuiIconButton"
+      )?.root;
+
+      const resolved = resolve(root);
+
+      expect(resolved.border).toBe("1px solid red");
+      expect(resolved).toHaveProperty("&:hover");
+      expect(resolved).toHaveProperty("&:focus-visible");
+    });
+  });
+
+  it("gives a site the token heading sizes, flat across breakpoints", () => {
     const site = createHdrukTheme({ palette: { primary: { main: "#123456" } } });
-    const mediaQueries = Object.keys(site.typography.h1).filter(key =>
+    const mediaQueries = Object.keys(site.typography.h5).filter(key =>
       key.startsWith("@media")
     );
 
-    expect(mediaQueries.length).toBeGreaterThan(0);
+    expect(mediaQueries).toHaveLength(0);
+    expect(site.typography.h5.fontSize).toBe("1.25rem");
   });
 
   it("lets a site override one custom token without restating the set", () => {
@@ -185,20 +308,20 @@ describe("createColor", () => {
   });
 });
 
+const slot = (component: string, name: string) => {
+  const overrides = (
+    theme.components as Record<
+      string,
+      { styleOverrides?: Record<string, unknown> }
+    >
+  )[component]?.styleOverrides?.[name];
+
+  return typeof overrides === "function"
+    ? (overrides({ theme } as never) as Record<string, unknown>)
+    : (overrides as Record<string, unknown>);
+};
+
 describe("button styling contract", () => {
-  const slot = (component: string, name: string) => {
-    const overrides = (
-      theme.components as Record<
-        string,
-        { styleOverrides?: Record<string, unknown> }
-      >
-    )[component]?.styleOverrides?.[name];
-
-    return typeof overrides === "function"
-      ? (overrides({ theme } as never) as Record<string, unknown>)
-      : (overrides as Record<string, unknown>);
-  };
-
   const variant = (props: Record<string, unknown>) => {
     const entry = theme.components?.MuiButton?.variants?.find(
       v => JSON.stringify(v.props) === JSON.stringify(props)
@@ -328,14 +451,6 @@ describe("button styling contract", () => {
     ).toBe(theme.typography.bodySmall.fontSize);
   });
 
-  it("clamps `large` to the medium metrics", () => {
-    expect(slot("MuiButton", "sizeLarge").padding).toBe("8px 12px");
-    expect(slot("MuiButton", "sizeLarge").fontSize).toBe(
-      theme.typography.button.fontSize
-    );
-    expect(slot("MuiButton", "outlinedSizeLarge").padding).toBe("6px 10px");
-  });
-
   it("keeps each variant's border width when disabled", () => {
     expect(slot("MuiButton", "outlined")["&:hover, &.Mui-disabled"]).toEqual({
       borderWidth: tokens.stroke.medium,
@@ -385,8 +500,40 @@ describe("button styling contract", () => {
     });
   });
 
-  it("leaves icon buttons circular", () => {
-    expect(slot("MuiIconButton", "root")).not.toHaveProperty("borderRadius");
+  it("leaves icon buttons borderless and circular", () => {
+    const root = slot("MuiIconButton", "root");
+    expect(root).not.toHaveProperty("border");
+    expect(root).not.toHaveProperty("borderRadius");
+  });
+});
+
+describe("menu styling contract", () => {
+  it("disables list padding at the prop, since a style override cannot win", () => {
+    expect(theme.components?.MuiMenu?.defaultProps).toMatchObject({
+      slotProps: { list: { disablePadding: true } },
+    });
+    expect(slot("MuiMenu", "list")).toBeUndefined();
+  });
+
+  it("leaves menu items square and full-bleed", () => {
+    const root = slot("MuiMenuItem", "root");
+    expect(root).not.toHaveProperty("borderRadius");
+    expect(root).not.toHaveProperty("marginInline");
+    expect(root).not.toHaveProperty("margin");
+  });
+
+  it("leaves nav list items square and full-bleed", () => {
+    const root = slot("MuiListItemButton", "root");
+    expect(root).not.toHaveProperty("borderRadius");
+    expect(root).not.toHaveProperty("marginInline");
+    expect(root).not.toHaveProperty("margin");
+  });
+
+  it("keeps the menu paper rounded and bordered", () => {
+    expect(slot("MuiMenu", "paper")).toMatchObject({
+      borderRadius: theme.shape.borderRadius,
+      border: `1px solid ${theme.palette.divider}`,
+    });
   });
 });
 
@@ -398,7 +545,6 @@ describe("component theme keys", () => {
       "MuiButtonBase",
       "MuiCard",
       "MuiChip",
-      "MuiDialog",
       "MuiDivider",
       "MuiFilledInput",
       "MuiFormLabel",

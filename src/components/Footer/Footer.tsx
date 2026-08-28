@@ -3,11 +3,9 @@ import hdrukLogoUrl from "../../assets/heath_data_research_gateway_logo_white.sv
 import FooterLink from "./components/FooterLink";
 import { FooterProps, SocialLinkItem } from "./Footer.types";
 
-const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
-
 const defaultLogoImage = (
   <img
-    src={hdrukLogo}
+    src={hdrukLogoUrl}
     alt="HDRUK logo"
     height={50}
     width={110}

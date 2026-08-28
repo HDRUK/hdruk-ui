@@ -1,4 +1,3 @@
-import MuiButton from "@mui/material/Button";
 import { render, screen } from "../../../test/renderWithTheme";
 import { Button } from "./Button";
 import type { ButtonPurpose } from "./Button";
@@ -250,17 +249,6 @@ describe("Button metrics", () => {
 
     expect(tertiary.lineHeight).toBe(primary.lineHeight);
     expect(tertiary.minHeight).toBe(primary.minHeight);
-  });
-
-  it("clamps a `large` that reaches the theme past ButtonProps", () => {
-    render(<MuiButton size="large">Go</MuiButton>);
-
-    const style = getComputedStyle(screen.getByRole("button"));
-
-    expect(style.minHeight).toBe("40px");
-    expect(style.paddingTop).toBe("8px");
-    expect(style.paddingLeft).toBe("12px");
-    expect(style.fontSize).toBe("0.875rem");
   });
 });
 

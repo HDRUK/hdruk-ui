@@ -1,6 +1,8 @@
+import { List, ListItemButton } from "@mui/material";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
 import { IconButton } from "@/components/IconButton";
+import { tokens } from "@/theme";
 import { render, screen } from "../../test/renderWithTheme";
 import { cohortDiscoveryThemeOptions } from "./cohortDiscovery";
 
@@ -78,5 +80,29 @@ describe("cohort discovery icon button", () => {
     expect(rules).toContain("#dee3f2");
     expect(rules).toContain("#f2f2f2");
     expect(rules).toContain("#0000ff");
+  });
+});
+
+describe("cohort discovery nav list items", () => {
+  it("rounds list items, which the base leaves square", () => {
+    render(
+      <List>
+        <ListItemButton component="button">I</ListItemButton>
+      </List>,
+      cd
+    );
+
+    expect(radiusOf("I")).toBe(`${tokens.radius.medium}px`);
+  });
+
+  it("keeps them full-bleed, with no inset from the base", () => {
+    render(
+      <List>
+        <ListItemButton component="button">I</ListItemButton>
+      </List>,
+      cd
+    );
+
+    expect(getComputedStyle(screen.getByRole("button")).margin).toBe("0px");
   });
 });

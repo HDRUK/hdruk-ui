@@ -1,7 +1,15 @@
 "use client";
 
 import * as React from "react";
-import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
+import MuiButton, {
+  ButtonProps as MuiButtonProps,
+  ButtonOwnProps as MuiButtonOwnProps,
+} from "@mui/material/Button";
+import { ExtendButtonBaseTypeMap } from "@mui/material/ButtonBase";
+import {
+  OverridableComponent,
+  OverrideProps,
+} from "@mui/material/OverridableComponent";
 import { styled, useThemeProps } from "@mui/material/styles";
 
 export type ButtonPurpose =
@@ -16,7 +24,8 @@ export type PurposeMapping = Pick<MuiButtonProps, "variant" | "color">;
 
 export type ButtonSize = "small" | "medium";
 
-export interface ButtonProps extends Omit<MuiButtonProps, "size"> {
+/** Props of the button itself, independent of the element it renders as. */
+export interface ButtonOwnProps extends Omit<MuiButtonOwnProps, "size"> {
   size?: ButtonSize;
   /**
    * What the button means. The app theme decides what it looks like via
@@ -30,6 +39,28 @@ export interface ButtonProps extends Omit<MuiButtonProps, "size"> {
    */
   purposeMap?: Partial<Record<ButtonPurpose, PurposeMapping>>;
 }
+
+/**
+ * Polymorphic like MUI's own Button: `component="a"` / `component={Link}` swaps
+ * the root element and widens the accepted props to that element's attributes
+ * (`href`, `target`, `rel`). A button that navigates should render as an anchor,
+ * so this needs to be expressible rather than bolted on as extra props.
+ */
+export type ButtonTypeMap<
+  AdditionalProps = object,
+  RootComponent extends React.ElementType = "button",
+> = ExtendButtonBaseTypeMap<{
+  props: AdditionalProps & ButtonOwnProps;
+  defaultComponent: RootComponent;
+}>;
+
+export type ButtonProps<
+  RootComponent extends React.ElementType = ButtonTypeMap["defaultComponent"],
+  AdditionalProps = object,
+> = OverrideProps<
+  ButtonTypeMap<AdditionalProps, RootComponent>,
+  RootComponent
+> & { component?: React.ElementType };
 
 /**
  * Library base map — used when the app theme doesn't override a purpose.
@@ -54,7 +85,10 @@ const ButtonRoot = styled(MuiButton, {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(inProps, ref) {
-    const props = useThemeProps({ props: inProps, name: "HdrukButton" });
+    const props = useThemeProps({
+      props: inProps,
+      name: "HdrukButton",
+    }) as ButtonProps;
     const {
       purpose = "primary",
       purposeMap,
@@ -78,6 +112,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       </ButtonRoot>
     );
   }
-);
+  // Re-typed as polymorphic so `component` swaps the root element and widens
+  // the accepted props to that element's attributes, as MUI's Button does.
+) as OverridableComponent<ButtonTypeMap>;
 
-Button.displayName = "Button";
+(Button as { displayName?: string }).displayName = "Button";

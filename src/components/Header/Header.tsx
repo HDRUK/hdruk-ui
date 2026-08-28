@@ -6,11 +6,9 @@ import MobileMenu from "./components/MobileMenu";
 import { HeaderProps } from "./Header.types";
 import { getLinkComponent, headerFocusRingSx } from "./Header.utils";
 
-const hdrukLogo = new URL(hdrukLogoUrl, import.meta.url).href;
-
 const defaultLogoImage = (
   <img
-    src={hdrukLogo}
+    src={hdrukLogoUrl}
     alt="HDRUK logo"
     height={50}
     width={110}
