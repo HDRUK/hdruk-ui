@@ -136,7 +136,7 @@ export const themeOptions: ThemeOptions = {
   },
 
   spacing: 8,
-  shape: { borderRadius: tokens.radius.medium },
+  shape: { borderRadius: tokens.radius.small },
 
   breakpoints: {
     values: {
@@ -199,7 +199,6 @@ export const themeOptions: ThemeOptions = {
       styleOverrides: {
         root: ({ theme }) => ({
           minHeight: theme.spacing(5),
-          borderRadius: tokens.radius.small,
           padding: theme.spacing(1, 1.5),
           lineHeight: "1.5rem",
           "&:focus-visible": {
@@ -377,7 +376,6 @@ export const themeOptions: ThemeOptions = {
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: theme.palette.primary.main,
           },
@@ -548,11 +546,6 @@ export const themeOptions: ThemeOptions = {
     },
     MuiTooltip: {
       defaultProps: { arrow: true },
-      styleOverrides: {
-        tooltip: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
-        }),
-      },
     },
     MuiTabs: {
       styleOverrides: {
