@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/HDRUK/hdruk-ui/compare/v1.4.3...v1.4.4) (2026-09-01)
+
+
+### Bug Fixes
+
+* **GAT-9256:** Styling updates ([#40](https://github.com/HDRUK/hdruk-ui/issues/40)) ([3a16524](https://github.com/HDRUK/hdruk-ui/commit/3a165248b13b9c5617751e87632c81948d28f4ac))
+
 ## [1.4.3](https://github.com/HDRUK/hdruk-ui/compare/v1.4.2...v1.4.3) (2026-09-01)
 
 
