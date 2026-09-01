@@ -134,7 +134,7 @@ describe("createHdrukTheme", () => {
 
     expect(site.palette.primary.main).toBe("#123456");
     expect(site.palette.secondary.main).toBe(tokens.brand.secondary);
-    expect(site.shape.borderRadius).toBe(tokens.radius.medium);
+    expect(site.shape.borderRadius).toBe(tokens.radius.small);
   });
 
   it("keeps the base variants when a site adds its own", () => {
@@ -334,9 +334,9 @@ describe("button styling contract", () => {
     ) as Record<string, unknown>;
   };
 
-  it("rounds buttons to the design's button radius, not the global one", () => {
-    expect(slot("MuiButton", "root").borderRadius).toBe(tokens.radius.small);
-    expect(tokens.radius.small).not.toBe(theme.shape.borderRadius);
+  it("lets buttons inherit the global radius rather than restating it", () => {
+    expect(theme.shape.borderRadius).toBe(tokens.radius.small);
+    expect(slot("MuiButton", "root")).not.toHaveProperty("borderRadius");
   });
 
   it("gives every variant a focus ring, not just contained", () => {
@@ -534,6 +534,30 @@ describe("menu styling contract", () => {
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${theme.palette.divider}`,
     });
+  });
+});
+
+describe("radius contract", () => {
+  it("leaves the slots MUI already rounds to `shape` alone", () => {
+    expect(slot("MuiTooltip", "tooltip")).toBeUndefined();
+    expect(slot("MuiOutlinedInput", "root")).not.toHaveProperty("borderRadius");
+  });
+
+  // MUI's own default differs on each of these: Chip is a pill, FilledInput
+  // rounds only its top corners, and the Paper-backed slots lose their radius
+  // wherever an app squares MuiPaper — as gateway-web does.
+  it("restates the radius on the slots that would otherwise lose it", () => {
+    expect(slot("MuiChip", "root").borderRadius).toBe(theme.shape.borderRadius);
+    expect(slot("MuiFilledInput", "root").borderRadius).toBe(
+      theme.shape.borderRadius
+    );
+    expect(slot("MuiAlert", "root").borderRadius).toBe(theme.shape.borderRadius);
+    expect(slot("MuiSnackbarContent", "root").borderRadius).toBe(
+      theme.shape.borderRadius
+    );
+    expect(slot("MuiPopover", "paper").borderRadius).toBe(
+      theme.shape.borderRadius
+    );
   });
 });
 
