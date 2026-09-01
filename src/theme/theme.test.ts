@@ -539,7 +539,7 @@ describe("menu styling contract", () => {
 
 describe("radius contract", () => {
   it("leaves the slots MUI already rounds to `shape` alone", () => {
-    expect(slot("MuiTooltip", "tooltip")).toBeUndefined();
+    expect(slot("MuiTooltip", "tooltip")).not.toHaveProperty("borderRadius");
     expect(slot("MuiOutlinedInput", "root")).not.toHaveProperty("borderRadius");
   });
 
@@ -601,6 +601,19 @@ describe("component theme keys", () => {
     });
     expect(theme.components?.MuiButtonBase?.defaultProps).toEqual({
       disableRipple: true,
+    });
+  });
+});
+
+describe("Tooltip", () => {
+  it("paints the tooltip and its arrow in the information status colour", () => {
+    expect(slot("MuiTooltip", "tooltip")).toMatchObject({
+      backgroundColor: tokens.status.information,
+      color: tokens.text.primaryWhite,
+      fontSize: theme.typography.bodySmall.fontSize,
+    });
+    expect(slot("MuiTooltip", "arrow")).toMatchObject({
+      color: tokens.status.information,
     });
   });
 });
