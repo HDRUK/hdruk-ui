@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/HDRUK/hdruk-ui/compare/v1.4.2...v1.4.3) (2026-09-01)
+
+
+### Bug Fixes
+
+* **GAT-9256:** Update border radius ([#39](https://github.com/HDRUK/hdruk-ui/issues/39)) ([41fb452](https://github.com/HDRUK/hdruk-ui/commit/41fb452c5a42d5c73348ad2882efa460ae4df1f7))
+
 ## [1.4.2](https://github.com/HDRUK/hdruk-ui/compare/v1.4.1...v1.4.2) (2026-08-28)
 
 
