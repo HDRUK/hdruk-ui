@@ -383,8 +383,18 @@ export const themeOptions: ThemeOptions = {
             borderWidth: tokens.stroke.medium,
           },
         }),
-        input: { paddingBlock: 12, paddingInline: 14 },
+        input: ({ theme, ownerState }) => ({
+          padding: ownerState.multiline ? 0 : theme.spacing(1.5, 1.75),
+        }),
       },
+      variants: [
+        {
+          props: { multiline: true },
+          style: ({ theme }) => ({
+            padding: theme.spacing(1.5, 1.75),
+          }),
+        },
+      ],
     },
     MuiFilledInput: {
       styleOverrides: {
@@ -546,6 +556,18 @@ export const themeOptions: ThemeOptions = {
     },
     MuiTooltip: {
       defaultProps: { arrow: true },
+      styleOverrides: {
+        tooltip: ({ theme }) => ({
+          backgroundColor: theme.palette.info.main,
+          color: theme.palette.info.contrastText,
+          fontSize: theme.typography.bodySmall.fontSize,
+          padding: theme.spacing(2),
+          maxWidth: 395,
+        }),
+        arrow: ({ theme }) => ({
+          color: theme.palette.info.main,
+        }),
+      },
     },
     MuiTabs: {
       styleOverrides: {
