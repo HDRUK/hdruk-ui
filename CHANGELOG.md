@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/HDRUK/hdruk-ui/compare/v1.4.4...v1.5.0) (2026-09-02)
+
+
+### Features
+
+* **GAT-9525:** Button style tweak ([#41](https://github.com/HDRUK/hdruk-ui/issues/41)) ([9fea3d8](https://github.com/HDRUK/hdruk-ui/commit/9fea3d819febb2ca62bac644a012f47c740f5325))
+
 ## [1.4.4](https://github.com/HDRUK/hdruk-ui/compare/v1.4.3...v1.4.4) (2026-09-01)
 
 
