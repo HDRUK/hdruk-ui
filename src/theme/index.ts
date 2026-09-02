@@ -378,10 +378,11 @@ export const themeOptions: ThemeOptions = {
       styleOverrides: {
         root: ({ theme }) => ({
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.primary.main,
+            borderColor: theme.palette.secondary.main,
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderWidth: tokens.stroke.medium,
+            borderColor: theme.palette.secondary.main,
           },
         }),
         input: ({ theme, ownerState }) =>
