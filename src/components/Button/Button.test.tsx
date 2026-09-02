@@ -196,6 +196,14 @@ describe("Button metrics", () => {
     expect(style.paddingLeft).toBe("12px");
   });
 
+  it("keeps a long label on one line, since the box is a fixed height", () => {
+    render(<Button>A label long enough to wrap in a narrow column</Button>);
+
+    expect(getComputedStyle(screen.getByRole("button")).whiteSpace).toBe(
+      "nowrap"
+    );
+  });
+
   it("keeps the secondary button's text 12px from the outer edge", () => {
     render(<Button purpose="secondary">Go</Button>);
 

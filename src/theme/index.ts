@@ -201,6 +201,7 @@ export const themeOptions: ThemeOptions = {
           minHeight: theme.spacing(5),
           padding: theme.spacing(1, 1.5),
           lineHeight: "1.5rem",
+          whiteSpace: "nowrap",
           "&:focus-visible": {
             outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
             outlineOffset: 0,
@@ -383,15 +384,20 @@ export const themeOptions: ThemeOptions = {
             borderWidth: tokens.stroke.medium,
           },
         }),
-        input: ({ theme, ownerState }) => ({
-          padding: ownerState.multiline ? 0 : theme.spacing(1.5, 1.75),
-        }),
+        input: ({ theme, ownerState }) =>
+          ownerState.multiline
+            ? { padding: 0 }
+            : {
+                padding: theme.spacing(1.5, 1.75),
+                paddingTop: theme.spacing(1.5),
+              },
       },
       variants: [
         {
           props: { multiline: true },
           style: ({ theme }) => ({
             padding: theme.spacing(1.5, 1.75),
+            paddingTop: theme.spacing(1.5),
           }),
         },
       ],
