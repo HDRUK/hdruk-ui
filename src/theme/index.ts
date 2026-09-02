@@ -58,7 +58,7 @@ export const tokens = {
     warning: "#856505",
   },
   stroke: { thin: 1, medium: 2, thick: 3 },
-  radius: { small: 4, medium: 8, large: 12 },
+  radius: { none: 0, small: 4, medium: 8, large: 12 },
   iconSize: { small: 20, medium: 24, large: 40 },
   iconWeight: 300,
 } as const;
@@ -438,7 +438,7 @@ export const themeOptions: ThemeOptions = {
       },
       styleOverrides: {
         paper: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: tokens.radius.none,
           border: `1px solid ${theme.palette.divider}`,
           backgroundColor: theme.palette.background.paper,
         }),
@@ -456,9 +456,23 @@ export const themeOptions: ThemeOptions = {
     MuiPopover: {
       styleOverrides: {
         paper: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: tokens.radius.none,
           border: `1px solid ${theme.palette.divider}`,
         }),
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: tokens.radius.none,
+        },
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        paper: {
+          borderRadius: tokens.radius.none,
+        },
       },
     },
 
@@ -550,6 +564,17 @@ export const themeOptions: ThemeOptions = {
     },
 
     /* ----- Misc ----- */
+    MuiTypography: {
+      defaultProps: { variant: "body2" },
+    },
+    MuiCssBaseline: {
+      styleOverrides: theme => ({
+        body: {
+          fontSize: theme.typography.body2.fontSize,
+          lineHeight: theme.typography.body2.lineHeight,
+        },
+      }),
+    },
     MuiIcon: {
       styleOverrides: {
         root: {
