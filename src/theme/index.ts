@@ -389,6 +389,7 @@ export const themeOptions: ThemeOptions = {
             ? { padding: 0 }
             : {
                 padding: theme.spacing(1.5, 1.75),
+                paddingTop: theme.spacing(1.5),
               },
       },
       variants: [
@@ -396,6 +397,7 @@ export const themeOptions: ThemeOptions = {
           props: { multiline: true },
           style: ({ theme }) => ({
             padding: theme.spacing(1.5, 1.75),
+            paddingTop: theme.spacing(1.5),
           }),
         },
       ],
