@@ -85,12 +85,34 @@ describe("typography", () => {
     expect(theme.typography.fontWeightMedium).toBe(600);
   });
 
-  it("carries every step of the design's Body scale", () => {
-    (
-      ["body1", "body2", "bodySmall", "caption", "bodyXxSmall"] as const
-    ).forEach(step => {
-      expect(theme.typography[step].fontSize).toBeDefined();
+  it("carries every step of the design's Body scale at its token size", () => {
+    const BODY_SCALE = [
+      ["body1", "1rem"], // Body/Large 16
+      ["body2", "0.875rem"], // Body/Medium 14
+      ["bodySmall", "0.8125rem"], // Body/Small 13
+      ["caption", "0.75rem"], // Body/X-Small 12
+      ["bodyXxSmall", "0.625rem"], // Body/X-X-Small 10
+    ] as const;
+
+    BODY_SCALE.forEach(([step, fontSize]) => {
+      expect(theme.typography[step].fontSize).toBe(fontSize);
     });
+  });
+
+  it("defaults body text to Body/Medium, not MUI's body1", () => {
+    expect(theme.components?.MuiTypography?.defaultProps?.variant).toBe(
+      "body2"
+    );
+  });
+
+  it("puts Body/Medium on <body>, so inherited text matches Typography", () => {
+    const overrides = theme.components?.MuiCssBaseline?.styleOverrides;
+    const sheet =
+      typeof overrides === "function"
+        ? (overrides(theme) as { body: { fontSize: string } })
+        : (overrides as unknown as { body: { fontSize: string } });
+
+    expect(sheet.body.fontSize).toBe(theme.typography.body2.fontSize);
   });
 
   it("carries Headers/Article Lead at 20px regular", () => {
@@ -529,9 +551,9 @@ describe("menu styling contract", () => {
     expect(root).not.toHaveProperty("margin");
   });
 
-  it("keeps the menu paper rounded and bordered", () => {
+  it("keeps the menu paper square and bordered", () => {
     expect(slot("MuiMenu", "paper")).toMatchObject({
-      borderRadius: theme.shape.borderRadius,
+      borderRadius: tokens.radius.none,
       border: `1px solid ${theme.palette.divider}`,
     });
   });
@@ -555,8 +577,14 @@ describe("radius contract", () => {
     expect(slot("MuiSnackbarContent", "root").borderRadius).toBe(
       theme.shape.borderRadius
     );
-    expect(slot("MuiPopover", "paper").borderRadius).toBe(
-      theme.shape.borderRadius
+  });
+
+  it("squares the overlay surfaces, which the design states as 0", () => {
+    expect(slot("MuiPopover", "paper").borderRadius).toBe(tokens.radius.none);
+    expect(slot("MuiMenu", "paper").borderRadius).toBe(tokens.radius.none);
+    expect(slot("MuiDialog", "paper").borderRadius).toBe(tokens.radius.none);
+    expect(slot("MuiAutocomplete", "paper").borderRadius).toBe(
+      tokens.radius.none
     );
   });
 });
@@ -565,10 +593,13 @@ describe("component theme keys", () => {
   it("registers exactly the components the apps override against", () => {
     expect(Object.keys(theme.components ?? {}).sort()).toEqual([
       "MuiAlert",
+      "MuiAutocomplete",
       "MuiButton",
       "MuiButtonBase",
       "MuiCard",
       "MuiChip",
+      "MuiCssBaseline",
+      "MuiDialog",
       "MuiDivider",
       "MuiFilledInput",
       "MuiFormLabel",
@@ -590,6 +621,7 @@ describe("component theme keys", () => {
       "MuiTextField",
       "MuiToolbar",
       "MuiTooltip",
+      "MuiTypography",
     ]);
   });
 
