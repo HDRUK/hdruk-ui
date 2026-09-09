@@ -118,6 +118,24 @@ describe("Loading layout", () => {
 });
 
 describe("Loading theme integration", () => {
+  it("takes the base theme's spinner colour", () => {
+    render(<Loading />);
+
+    expect(progress()).toHaveClass("MuiCircularProgress-colorSecondary");
+  });
+
+  it("lets a site swap the spinner colour", () => {
+    render(<Loading />, {
+      themeOptions: {
+        components: {
+          HdrukLoading: { defaultProps: { color: "primary" } },
+        },
+      },
+    });
+
+    expect(progress()).toHaveClass("MuiCircularProgress-colorPrimary");
+  });
+
   it("lets a site restyle the root without losing the base layout", () => {
     render(<Loading />, {
       themeOptions: {
@@ -137,7 +155,7 @@ describe("Loading theme integration", () => {
     render(<Loading />, {
       themeOptions: {
         components: {
-          HdrukLoading: { defaultProps: { size: "small", color: "secondary" } },
+          HdrukLoading: { defaultProps: { size: "small" } },
         },
       },
     });
@@ -145,7 +163,6 @@ describe("Loading theme integration", () => {
     expect(getComputedStyle(progress()).width).toBe(
       `${tokens.iconSize.small}px`
     );
-    expect(progress()).toHaveClass("MuiCircularProgress-colorSecondary");
   });
 
   it("lets an explicit prop win over the theme default", () => {

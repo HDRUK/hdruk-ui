@@ -562,6 +562,9 @@ export const themeOptions: ThemeOptions = {
         }),
       },
     },
+    HdrukLoading: {
+      defaultProps: { color: "secondary" },
+    },
 
     /* ----- Misc ----- */
     MuiTypography: {

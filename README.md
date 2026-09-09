@@ -101,7 +101,7 @@ if (isLoading) return <Loading label="Loading search results" />;
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | `"small" \| "medium" \| "large" \| number` | `"large"` | Diameter; tokens map to the icon size scale (20/24/40) |
-| `color` | MUI `color` | `"primary"` | Palette colour of the spinner |
+| `color` | MUI `color` | `"secondary"` | Palette colour of the spinner |
 | `inline` | `boolean` | `false` | Sits in a line of content rather than centring in a block, dropping the block padding |
 | `label` | `string` | `"Loading"` | Announced to screen readers; pass `""` inside an already-labelled control |
 | `slotProps.progress` | `CircularProgressProps` | — | Props applied to the spinner |
