@@ -196,12 +196,13 @@ describe("Button metrics", () => {
     expect(style.paddingLeft).toBe("12px");
   });
 
-  it("keeps a long label on one line, since the box is a fixed height", () => {
+  it("lets a long label wrap, since minHeight is a floor and not a fixed height", () => {
     render(<Button>A label long enough to wrap in a narrow column</Button>);
 
-    expect(getComputedStyle(screen.getByRole("button")).whiteSpace).toBe(
-      "nowrap"
-    );
+    const style = getComputedStyle(screen.getByRole("button"));
+
+    expect(style.whiteSpace).toBe("");
+    expect(style.minHeight).toBe("40px");
   });
 
   it("keeps the secondary button's text 12px from the outer edge", () => {

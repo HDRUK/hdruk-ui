@@ -201,7 +201,6 @@ export const themeOptions: ThemeOptions = {
           minHeight: theme.spacing(5),
           padding: theme.spacing(1, 1.5),
           lineHeight: "1.5rem",
-          whiteSpace: "nowrap",
           "&:focus-visible": {
             outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
             outlineOffset: 0,
