@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/HDRUK/hdruk-ui/compare/v1.5.0...v1.5.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* let long Button labels wrap ([#43](https://github.com/HDRUK/hdruk-ui/issues/43)) ([3a1e55c](https://github.com/HDRUK/hdruk-ui/commit/3a1e55c052d4bcdd095b9d1d4f0dfb9e989165b9))
+
 # [1.5.0](https://github.com/HDRUK/hdruk-ui/compare/v1.4.4...v1.5.0) (2026-09-02)
 
 
