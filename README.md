@@ -88,6 +88,34 @@ All other MUI `Button` props are supported.
 
 ---
 
+### Loading
+
+Centred spinner with a screen-reader announcement, for the gap between a request starting and its content arriving.
+
+```tsx
+import { Loading } from "@hdruk/ui";
+
+if (isLoading) return <Loading label="Loading search results" />;
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `"small" \| "medium" \| "large" \| number` | `"large"` | Diameter; tokens map to the icon size scale (20/24/40) |
+| `color` | MUI `color` | `"primary"` | Palette colour of the spinner |
+| `inline` | `boolean` | `false` | Sits in a line of content rather than centring in a block, dropping the block padding |
+| `label` | `string` | `"Loading"` | Announced to screen readers; pass `""` inside an already-labelled control |
+| `slotProps.progress` | `CircularProgressProps` | — | Props applied to the spinner |
+
+Reserve space with `sx` so the container does not collapse when content arrives:
+
+```tsx
+<Loading sx={{ minHeight: 500 }} />
+```
+
+Not for buttons — `Button` has its own `loading` prop, which handles the disabled and `aria-busy` semantics too.
+
+---
+
 ### SearchBar
 
 Controlled or uncontrolled search input with debounce, clear button, and an optional `⌘K` / `Ctrl+K` focus shortcut.
