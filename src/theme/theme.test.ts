@@ -592,6 +592,7 @@ describe("radius contract", () => {
 describe("component theme keys", () => {
   it("registers exactly the components the apps override against", () => {
     expect(Object.keys(theme.components ?? {}).sort()).toEqual([
+      "HdrukLoading",
       "MuiAlert",
       "MuiAutocomplete",
       "MuiButton",

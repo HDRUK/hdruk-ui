@@ -1,5 +1,6 @@
 import type { ButtonProps } from "../components/Button/Button";
 import type { IconButtonProps } from "../components/IconButton/IconButton";
+import type { LoadingProps } from "../components/Loading/Loading";
 import type {
   PaletteColorOptions,
   ComponentsOverrides,
@@ -74,10 +75,12 @@ declare module "@mui/material/styles" {
   interface ComponentsPropsList {
     HdrukButton: Partial<ButtonProps>;
     HdrukIconButton: Partial<IconButtonProps>;
+    HdrukLoading: Partial<LoadingProps>;
   }
   interface ComponentNameToClassKey {
     HdrukButton: "root";
     HdrukIconButton: "root";
+    HdrukLoading: "root" | "progress" | "label";
   }
   interface Components<Theme = unknown> {
     HdrukButton?: {
@@ -89,6 +92,11 @@ declare module "@mui/material/styles" {
       defaultProps?: ComponentsPropsList["HdrukIconButton"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukIconButton"];
       variants?: ComponentsVariants<Theme>["HdrukIconButton"];
+    };
+    HdrukLoading?: {
+      defaultProps?: ComponentsPropsList["HdrukLoading"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukLoading"];
+      variants?: ComponentsVariants<Theme>["HdrukLoading"];
     };
   }
 }

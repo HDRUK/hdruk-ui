@@ -127,6 +127,9 @@ export const cohortDiscoveryThemeOptions: ThemeOptions = {
         },
       },
     },
+    HdrukLoading: {
+      defaultProps: { color: "primary" },
+    },
     HdrukButton: {
       defaultProps: {
         purposeMap: {

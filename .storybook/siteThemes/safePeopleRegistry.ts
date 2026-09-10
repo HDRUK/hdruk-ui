@@ -149,6 +149,9 @@ export const safePeopleRegistryThemeOptions: ThemeOptions = {
         },
       },
     },
+    HdrukLoading: {
+      defaultProps: { color: "primary" },
+    },
     HdrukButton: {
       defaultProps: {
         purposeMap: {
