@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/HDRUK/hdruk-ui/compare/v1.5.1...v1.6.0) (2026-09-10)
+
+
+### Features
+
+* **GAT-9257:** add Loading component ([#44](https://github.com/HDRUK/hdruk-ui/issues/44)) ([5e7da36](https://github.com/HDRUK/hdruk-ui/commit/5e7da365ed0e13aef8e9e1decedd795a239b74e0))
+
 ## [1.5.1](https://github.com/HDRUK/hdruk-ui/compare/v1.5.0...v1.5.1) (2026-09-09)
 
 
