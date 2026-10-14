@@ -11,7 +11,7 @@ import {
   BannerTitle,
   BannerMessage,
   BannerActions,
-  BannerAction,
+  BannerActionButton,
   BannerSuppress,
   BannerCheckbox,
   BannerCheckboxIcon,
@@ -28,9 +28,10 @@ export interface BannerCloseDetails {
 
 export interface BannerAction {
   label: string;
+  /** Also fires for links; navigation still happens. */
   onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
   href?: string;
-  /** `"_blank"` defaults `rel` to `"noopener noreferrer"`. */
+  /** `"_blank"` on a link defaults `rel` to `"noopener noreferrer"`. */
   target?: React.HTMLAttributeAnchorTarget;
   rel?: string;
   disabled?: boolean;
@@ -52,9 +53,15 @@ export interface BannerProps extends Omit<
     details: BannerCloseDetails
   ) => void;
   closeLabel?: string;
-  /** Shows a checkbox for suppressing future display. Persisting the choice is up to the app. */
+  /**
+   * Shows a checkbox for suppressing future display. Pair with `closable`: the
+   * choice is reported in `onClose` details. Persisting it is up to the app.
+   */
   suppressible?: boolean;
-  onSuppressChange?: (checked: boolean) => void;
+  onSuppressChange?: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => void;
   suppressLabel?: string;
   slotProps?: {
     action?: Partial<Omit<ButtonProps, keyof BannerAction | "children">>;
@@ -95,15 +102,16 @@ export const Banner = React.forwardRef<HTMLElement, BannerProps>(
       .filter(Boolean)
       .join(" ");
 
-    const { label: actionLabel, ...actionProps } = action ?? { label: "" };
+    const { label: actionLabel, ...actionProps } =
+      action ?? ({} as Partial<BannerAction>);
 
     const handleSuppressChange = (
-      _event: React.ChangeEvent<HTMLInputElement>,
+      event: React.ChangeEvent<HTMLInputElement>,
       checked: boolean
     ) => {
       setSuppressed(checked);
       if (onSuppressChange) {
-        onSuppressChange(checked);
+        onSuppressChange(event, checked);
       }
     };
 
@@ -121,21 +129,21 @@ export const Banner = React.forwardRef<HTMLElement, BannerProps>(
           {title ? <BannerTitle id={`${id}-title`}>{title}</BannerTitle> : null}
           {children ? <BannerMessage>{children}</BannerMessage> : null}
         </BannerContent>
-        {action || suppressible ? (
+        {actionLabel || suppressible ? (
           <BannerActions>
-            {action ? (
-              <BannerAction
+            {actionLabel ? (
+              <BannerActionButton
                 purpose="tertiary"
                 {...slotProps?.action}
                 {...actionProps}
                 rel={
-                  action.rel ??
-                  (action.target === "_blank"
+                  actionProps.rel ??
+                  (actionProps.href && actionProps.target === "_blank"
                     ? "noopener noreferrer"
                     : undefined)
                 }>
                 {actionLabel}
-              </BannerAction>
+              </BannerActionButton>
             ) : null}
             {suppressible ? (
               <BannerSuppress

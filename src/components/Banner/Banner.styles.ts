@@ -62,7 +62,7 @@ export const BannerActions = styled("div", {
   [theme.breakpoints.down("sm")]: { flexBasis: "100%", order: 1 },
 }));
 
-export const BannerAction = styled(Button, {
+export const BannerActionButton = styled(Button, {
   name: "HdrukBanner",
   slot: "Action",
 })({});

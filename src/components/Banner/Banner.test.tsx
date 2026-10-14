@@ -29,6 +29,12 @@ describe("Banner", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders no action button for an empty label", () => {
+    render(<Banner action={{ label: "" }}>Message</Banner>);
+
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
   it("renders no controls unless asked", () => {
     render(<Banner tag="Beta!">Message</Banner>);
 
@@ -134,7 +140,7 @@ describe("Banner", () => {
     await user.click(
       screen.getByRole("checkbox", { name: "Don't show me this again" })
     );
-    expect(onChange).toHaveBeenLastCalledWith(true);
+    expect(onChange).toHaveBeenLastCalledWith(expect.anything(), true);
 
     await user.click(screen.getByRole("button", { name: "Close banner" }));
     expect(onClose).toHaveBeenCalledWith(expect.anything(), {
@@ -173,7 +179,7 @@ describe("Banner", () => {
     await user.click(screen.getByRole("button", { name: "Close banner" }));
 
     expect(onAction).toHaveBeenCalledTimes(1);
-    expect(onSuppressChange).toHaveBeenCalledWith(true);
+    expect(onSuppressChange).toHaveBeenCalledWith(expect.anything(), true);
     expect(onClose).toHaveBeenCalledWith(expect.anything(), {
       suppressed: true,
     });
