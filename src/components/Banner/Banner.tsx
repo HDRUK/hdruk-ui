@@ -6,7 +6,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import MuiCheckbox, { CheckboxProps } from "@mui/material/Checkbox";
 import MuiFormControlLabel from "@mui/material/FormControlLabel";
 import { styled, useThemeProps } from "@mui/material/styles";
-import MuiTypography from "@mui/material/Typography";
 import { tokens } from "../../theme";
 import { Button, ButtonProps } from "../Button";
 import { IconButton, IconButtonProps } from "../IconButton";
@@ -74,24 +73,26 @@ const BannerContent = styled("div", {
   minWidth: 0,
 }));
 
-const BannerHighlight = styled(MuiTypography, {
+const BannerHighlight = styled("span", {
   name: "HdrukBanner",
   slot: "Highlight",
 })(({ theme }) => ({
+  ...theme.typography.h4,
   color: theme.palette.status.announcement,
-})) as typeof MuiTypography;
+}));
 
-const BannerTitle = styled(MuiTypography, {
+const BannerTitle = styled("span", {
   name: "HdrukBanner",
   slot: "Title",
-})({}) as typeof MuiTypography;
+})(({ theme }) => theme.typography.articleLead);
 
-const BannerMessage = styled(MuiTypography, {
+const BannerMessage = styled("div", {
   name: "HdrukBanner",
   slot: "Message",
 })(({ theme }) => ({
+  ...theme.typography.body1,
   [theme.breakpoints.down("sm")]: { flexBasis: "100%" },
-})) as typeof MuiTypography;
+}));
 
 const BannerActions = styled("div", {
   name: "HdrukBanner",
@@ -206,26 +207,12 @@ export const Banner = React.forwardRef<HTMLElement, BannerProps>(
       <BannerRoot ref={ref} aria-labelledby={labelledBy || undefined} {...rest}>
         <BannerContent>
           {highlight ? (
-            <BannerHighlight
-              id={`${id}-highlight`}
-              variant="h5"
-              component="span">
+            <BannerHighlight id={`${id}-highlight`}>
               {highlight}
             </BannerHighlight>
           ) : null}
-          {title ? (
-            <BannerTitle
-              id={`${id}-title`}
-              variant="articleLead"
-              component="span">
-              {title}
-            </BannerTitle>
-          ) : null}
-          {children ? (
-            <BannerMessage variant="body1" component="div">
-              {children}
-            </BannerMessage>
-          ) : null}
+          {title ? <BannerTitle id={`${id}-title`}>{title}</BannerTitle> : null}
+          {children ? <BannerMessage>{children}</BannerMessage> : null}
         </BannerContent>
         {actionLabel || suppressible ? (
           <BannerActions>

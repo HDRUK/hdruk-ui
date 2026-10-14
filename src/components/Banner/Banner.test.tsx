@@ -175,6 +175,33 @@ describe("Banner theme integration", () => {
     expect(screen.getByRole("button", { name: "Hide" })).toBeInTheDocument();
   });
 
+  it("keeps app Typography margins out of the banner text", () => {
+    render(
+      <Banner highlight="New!" title="Announcement">
+        Message
+      </Banner>,
+      {
+        themeOptions: {
+          components: {
+            MuiTypography: {
+              styleOverrides: {
+                h4: { marginBottom: 8 },
+                body1: { marginBottom: 8 },
+              },
+            },
+          },
+        },
+      }
+    );
+
+    expect(getComputedStyle(screen.getByText("New!")).marginBottom).not.toBe(
+      "8px"
+    );
+    expect(getComputedStyle(screen.getByText("Message")).marginBottom).not.toBe(
+      "8px"
+    );
+  });
+
   it("lets a site restyle the root without losing the base styles", () => {
     render(<Banner highlight="New!">Message</Banner>, {
       themeOptions: {
