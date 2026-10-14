@@ -54,7 +54,9 @@ describe("Banner", () => {
     render(
       <Banner
         actionLabel="Share feedback"
-        slotProps={{ action: { href: "/feedback" } }}>
+        slotProps={{
+          action: { href: "/feedback", target: "_blank", rel: "noreferrer" },
+        }}>
         Message
       </Banner>
     );
@@ -62,6 +64,9 @@ describe("Banner", () => {
     expect(
       screen.getByRole("link", { name: "Share feedback" })
     ).toHaveAttribute("href", "/feedback");
+    expect(
+      screen.getByRole("link", { name: "Share feedback" })
+    ).toHaveAttribute("target", "_blank");
   });
 
   it("hides itself and calls onClose when closed", async () => {

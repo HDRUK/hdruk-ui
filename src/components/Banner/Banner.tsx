@@ -38,7 +38,11 @@ export interface BannerProps extends Omit<
   onSuppressChange?: (checked: boolean) => void;
   suppressLabel?: string;
   slotProps?: {
-    action?: Partial<ButtonProps> & { href?: string };
+    action?: Partial<ButtonProps> &
+      Pick<
+        React.AnchorHTMLAttributes<HTMLAnchorElement>,
+        "href" | "target" | "rel"
+      >;
     closeButton?: Partial<IconButtonProps>;
     checkbox?: Partial<CheckboxProps>;
   };
