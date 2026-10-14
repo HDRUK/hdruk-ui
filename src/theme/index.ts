@@ -352,6 +352,14 @@ export const themeOptions: ThemeOptions = {
           props: { color: "default" },
           style: ({ theme }) => ({ color: theme.palette.text.secondary }),
         },
+        {
+          props: { color: "inherit" },
+          style: ({ theme }) => ({
+            "&:hover, &:focus-visible": {
+              backgroundColor: `color-mix(in srgb, currentColor ${theme.palette.action.focusOpacity * 100}%, transparent)`,
+            },
+          }),
+        },
       ],
     },
 
