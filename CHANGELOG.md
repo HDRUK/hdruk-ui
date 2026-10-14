@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/HDRUK/hdruk-ui/compare/v1.6.0...v1.7.0) (2026-10-14)
+
+
+### Features
+
+* **GAT-9693:** Add banner component ([#46](https://github.com/HDRUK/hdruk-ui/issues/46)) ([17a61a6](https://github.com/HDRUK/hdruk-ui/commit/17a61a6d81a7653d2643f8e96c701c8646bb9d7e))
+
 # [1.6.0](https://github.com/HDRUK/hdruk-ui/compare/v1.5.1...v1.6.0) (2026-09-10)
 
 
