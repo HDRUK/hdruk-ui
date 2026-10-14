@@ -7,10 +7,10 @@ const meta: Meta<typeof Banner> = {
   title: "Components/Banner",
   tags: ["autodocs"],
   args: {
-    highlight: "Beta!",
+    tag: "Beta!",
     children:
       "This dashboard will be periodically improved based on usage and user feedback.",
-    actionLabel: "Share feedback",
+    action: { label: "Share feedback" },
   },
 };
 
@@ -32,18 +32,18 @@ export const WithTitle: Story = {
 
 export const MessageOnly: Story = {
   args: {
-    highlight: undefined,
-    actionLabel: undefined,
+    tag: undefined,
+    action: undefined,
   },
 };
 
 export const Disabled: Story = {
   args: {
     title: "Custodian Dashboard",
+    action: { label: "Share feedback", disabled: true },
     closable: true,
     suppressible: true,
     slotProps: {
-      action: { disabled: true },
       checkbox: { disabled: true },
       closeButton: { disabled: true },
     },
@@ -52,10 +52,10 @@ export const Disabled: Story = {
 
 export const InPage: Story = {
   args: {
-    highlight: "New!",
+    tag: "New!",
     title: "Announcement",
     children: "More about this announcement…",
-    actionLabel: "Action Button",
+    action: { label: "Action Button" },
     closable: true,
     suppressible: true,
   },

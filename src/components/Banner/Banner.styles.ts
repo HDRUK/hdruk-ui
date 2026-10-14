@@ -30,9 +30,9 @@ export const BannerContent = styled("div", {
   minWidth: 0,
 }));
 
-export const BannerHighlight = styled("span", {
+export const BannerTag = styled("span", {
   name: "HdrukBanner",
-  slot: "Highlight",
+  slot: "Tag",
 })(({ theme }) => ({
   ...theme.typography.h4,
   color: theme.palette.status.announcement,

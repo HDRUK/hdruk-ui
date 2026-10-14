@@ -85,7 +85,7 @@ declare module "@mui/material/styles" {
     HdrukBanner:
       | "root"
       | "content"
-      | "highlight"
+      | "tag"
       | "title"
       | "message"
       | "actions"

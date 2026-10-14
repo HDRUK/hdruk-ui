@@ -7,7 +7,7 @@ import { useThemeProps } from "@mui/material/styles";
 import {
   BannerRoot,
   BannerContent,
-  BannerHighlight,
+  BannerTag,
   BannerTitle,
   BannerMessage,
   BannerActions,
@@ -26,16 +26,25 @@ export interface BannerCloseDetails {
   suppressed: boolean;
 }
 
+export interface BannerAction {
+  label: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+  href?: string;
+  /** `"_blank"` defaults `rel` to `"noopener noreferrer"`. */
+  target?: React.HTMLAttributeAnchorTarget;
+  rel?: string;
+  disabled?: boolean;
+}
+
 export interface BannerProps extends Omit<
   React.ComponentPropsWithoutRef<"section">,
   "title"
 > {
-  /** Lead text in the announcement colour, e.g. "Beta!". */
-  highlight?: React.ReactNode;
+  /** Short label classifying the message, e.g. "BETA" or "New!". */
+  tag?: React.ReactNode;
   title?: React.ReactNode;
-  /** Renders the action button when set. */
-  actionLabel?: string;
-  onAction?: React.MouseEventHandler<HTMLButtonElement>;
+  /** Renders the action button when set; an `href` makes it a link. */
+  action?: BannerAction;
   /** Shows a close button. Closing always hides the banner; `onClose` runs as well. */
   closable?: boolean;
   onClose?: (
@@ -48,11 +57,7 @@ export interface BannerProps extends Omit<
   onSuppressChange?: (checked: boolean) => void;
   suppressLabel?: string;
   slotProps?: {
-    action?: Partial<Omit<ButtonProps, "onClick" | "children">> &
-      Pick<
-        React.AnchorHTMLAttributes<HTMLAnchorElement>,
-        "href" | "target" | "rel"
-      >;
+    action?: Partial<Omit<ButtonProps, keyof BannerAction | "children">>;
     closeButton?: Partial<
       Omit<IconButtonProps, "onClick" | "aria-label" | "children">
     >;
@@ -64,11 +69,10 @@ export interface BannerProps extends Omit<
 export const Banner = React.forwardRef<HTMLElement, BannerProps>(
   function Banner(inProps, ref) {
     const {
-      highlight,
+      tag,
       title,
       children,
-      actionLabel,
-      onAction,
+      action,
       closable = false,
       onClose,
       closeLabel = "Close banner",
@@ -87,12 +91,11 @@ export const Banner = React.forwardRef<HTMLElement, BannerProps>(
       return null;
     }
 
-    const labelledBy = [
-      highlight ? `${id}-highlight` : null,
-      title ? `${id}-title` : null,
-    ]
+    const labelledBy = [tag ? `${id}-tag` : null, title ? `${id}-title` : null]
       .filter(Boolean)
       .join(" ");
+
+    const { label: actionLabel, ...actionProps } = action ?? { label: "" };
 
     const handleSuppressChange = (
       _event: React.ChangeEvent<HTMLInputElement>,
@@ -114,21 +117,23 @@ export const Banner = React.forwardRef<HTMLElement, BannerProps>(
     return (
       <BannerRoot ref={ref} aria-labelledby={labelledBy || undefined} {...rest}>
         <BannerContent>
-          {highlight ? (
-            <BannerHighlight id={`${id}-highlight`}>
-              {highlight}
-            </BannerHighlight>
-          ) : null}
+          {tag ? <BannerTag id={`${id}-tag`}>{tag}</BannerTag> : null}
           {title ? <BannerTitle id={`${id}-title`}>{title}</BannerTitle> : null}
           {children ? <BannerMessage>{children}</BannerMessage> : null}
         </BannerContent>
-        {actionLabel || suppressible ? (
+        {action || suppressible ? (
           <BannerActions>
-            {actionLabel ? (
+            {action ? (
               <BannerAction
                 purpose="tertiary"
                 {...slotProps?.action}
-                onClick={onAction}>
+                {...actionProps}
+                rel={
+                  action.rel ??
+                  (action.target === "_blank"
+                    ? "noopener noreferrer"
+                    : undefined)
+                }>
                 {actionLabel}
               </BannerAction>
             ) : null}

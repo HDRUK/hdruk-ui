@@ -3,9 +3,9 @@ import { render, screen } from "../../../test/renderWithTheme";
 import { Banner } from "./Banner";
 
 describe("Banner", () => {
-  it("renders the highlight, title and message", () => {
+  it("renders the tag, title and message", () => {
     render(
-      <Banner highlight="New!" title="Announcement">
+      <Banner tag="New!" title="Announcement">
         More about this announcement
       </Banner>
     );
@@ -17,9 +17,9 @@ describe("Banner", () => {
     ).toBeInTheDocument();
   });
 
-  it("names its region from the highlight and title", () => {
+  it("names its region from the tag and title", () => {
     render(
-      <Banner highlight="New!" title="Announcement">
+      <Banner tag="New!" title="Announcement">
         More about this announcement
       </Banner>
     );
@@ -30,17 +30,17 @@ describe("Banner", () => {
   });
 
   it("renders no controls unless asked", () => {
-    render(<Banner highlight="Beta!">Message</Banner>);
+    render(<Banner tag="Beta!">Message</Banner>);
 
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   });
 
-  it("calls onAction from the action button", async () => {
+  it("calls the action's onClick from the action button", async () => {
     const user = userEvent.setup();
     const onAction = jest.fn();
     render(
-      <Banner actionLabel="Share feedback" onAction={onAction}>
+      <Banner action={{ label: "Share feedback", onClick: onAction }}>
         Message
       </Banner>
     );
@@ -53,9 +53,10 @@ describe("Banner", () => {
   it("renders the action as a link when given an href", () => {
     render(
       <Banner
-        actionLabel="Share feedback"
-        slotProps={{
-          action: { href: "/feedback", target: "_blank", rel: "noreferrer" },
+        action={{
+          label: "Share feedback",
+          href: "/feedback",
+          target: "_blank",
         }}>
         Message
       </Banner>
@@ -67,6 +68,27 @@ describe("Banner", () => {
     expect(
       screen.getByRole("link", { name: "Share feedback" })
     ).toHaveAttribute("target", "_blank");
+    expect(
+      screen.getByRole("link", { name: "Share feedback" })
+    ).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("keeps a caller-supplied rel on a new-tab link", () => {
+    render(
+      <Banner
+        action={{
+          label: "Share feedback",
+          href: "/feedback",
+          target: "_blank",
+          rel: "noreferrer",
+        }}>
+        Message
+      </Banner>
+    );
+
+    expect(
+      screen.getByRole("link", { name: "Share feedback" })
+    ).toHaveAttribute("rel", "noreferrer");
   });
 
   it("hides itself and calls onClose when closed", async () => {
@@ -127,8 +149,7 @@ describe("Banner", () => {
     const onAction = jest.fn();
     render(
       <Banner
-        actionLabel="Share feedback"
-        onAction={onAction}
+        action={{ label: "Share feedback", onClick: onAction }}
         closable
         onClose={onClose}
         suppressible
@@ -216,7 +237,7 @@ describe("Banner theme integration", () => {
 
   it("keeps app Typography margins out of the banner text", () => {
     render(
-      <Banner highlight="New!" title="Announcement">
+      <Banner tag="New!" title="Announcement">
         Message
       </Banner>,
       {
@@ -242,7 +263,7 @@ describe("Banner theme integration", () => {
   });
 
   it("lets a site restyle the root without losing the base styles", () => {
-    render(<Banner highlight="New!">Message</Banner>, {
+    render(<Banner tag="New!">Message</Banner>, {
       themeOptions: {
         components: {
           HdrukBanner: { styleOverrides: { root: { minHeight: 200 } } },
