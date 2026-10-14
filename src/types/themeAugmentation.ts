@@ -1,3 +1,4 @@
+import type { BannerProps } from "../components/Banner/Banner";
 import type { ButtonProps } from "../components/Button/Button";
 import type { IconButtonProps } from "../components/IconButton/IconButton";
 import type { LoadingProps } from "../components/Loading/Loading";
@@ -75,11 +76,24 @@ declare module "@mui/material/styles" {
   interface ComponentsPropsList {
     HdrukButton: Partial<ButtonProps>;
     HdrukIconButton: Partial<IconButtonProps>;
+    HdrukBanner: Partial<BannerProps>;
     HdrukLoading: Partial<LoadingProps>;
   }
   interface ComponentNameToClassKey {
     HdrukButton: "root";
     HdrukIconButton: "root";
+    HdrukBanner:
+      | "root"
+      | "content"
+      | "tag"
+      | "title"
+      | "message"
+      | "actions"
+      | "action"
+      | "suppress"
+      | "checkbox"
+      | "checkboxIcon"
+      | "closeButton";
     HdrukLoading: "root" | "progress" | "label";
   }
   interface Components<Theme = unknown> {
@@ -92,6 +106,11 @@ declare module "@mui/material/styles" {
       defaultProps?: ComponentsPropsList["HdrukIconButton"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukIconButton"];
       variants?: ComponentsVariants<Theme>["HdrukIconButton"];
+    };
+    HdrukBanner?: {
+      defaultProps?: ComponentsPropsList["HdrukBanner"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukBanner"];
+      variants?: ComponentsVariants<Theme>["HdrukBanner"];
     };
     HdrukLoading?: {
       defaultProps?: ComponentsPropsList["HdrukLoading"];
