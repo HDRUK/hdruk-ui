@@ -120,6 +120,45 @@ describe("Banner", () => {
     });
   });
 
+  it("keeps its own handlers and labels when slotProps are passed", async () => {
+    const user = userEvent.setup();
+    const onClose = jest.fn();
+    const onSuppressChange = jest.fn();
+    const onAction = jest.fn();
+    render(
+      <Banner
+        actionLabel="Share feedback"
+        onAction={onAction}
+        closable
+        onClose={onClose}
+        suppressible
+        onSuppressChange={onSuppressChange}
+        slotProps={{
+          // @ts-expect-error onClick is owned by the banner
+          action: { onClick: jest.fn() },
+          // @ts-expect-error onClick and aria-label are owned by the banner
+          closeButton: { onClick: jest.fn(), "aria-label": "Dismiss" },
+          // @ts-expect-error onChange is owned by the banner
+          checkbox: { onChange: jest.fn() },
+        }}>
+        Message
+      </Banner>
+    );
+
+    await user.click(screen.getByRole("button", { name: "Share feedback" }));
+    await user.click(
+      screen.getByRole("checkbox", { name: "Don't show me this again" })
+    );
+    await user.click(screen.getByRole("button", { name: "Close banner" }));
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onSuppressChange).toHaveBeenCalledWith(true);
+    expect(onClose).toHaveBeenCalledWith(expect.anything(), {
+      suppressed: true,
+    });
+    expect(screen.queryByText("Message")).not.toBeInTheDocument();
+  });
+
   it("uses caller-supplied labels", () => {
     render(
       <Banner
