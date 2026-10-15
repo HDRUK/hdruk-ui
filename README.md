@@ -550,7 +550,8 @@ title:
 
 - `fix:` or `perf:` → patch
 - `feat:` → minor
-- `feat!:`, or a `BREAKING CHANGE:` footer → major
+- a `BREAKING CHANGE:` footer in the commit body → major (a `!` in the title
+  isn't recognised and releases nothing)
 - `docs:`, `chore:`, `refactor:`, `test:` → no release
 
 On merge, semantic-release works out the version, publishes `@hdruk/ui`
@@ -562,7 +563,8 @@ redeploys Storybook to GitHub Pages via `.github/workflows/storybook.yml`.
 or removing a palette token, theme key or breakpoint; changing a slot class or
 the DOM a consumer targets with `styleOverrides`, `sx` or test selectors;
 changing a prop default so existing call sites render differently; raising a
-peer version floor. Any of those is `feat!:`, not `feat:`.
+peer version floor. Any of those needs a `BREAKING CHANGE:` footer, not just
+`feat:`.
 
 Palette tokens are worth spelling out, because they are load-bearing three
 times over. A name like `slateGrey` is a key on the exported `brandColors`
