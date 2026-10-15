@@ -1,7 +1,7 @@
 import MuiCheckbox from "@mui/material/Checkbox";
 import MuiFormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
-import { tokens } from "../../theme";
+import { focusRing, tokens } from "../../theme";
 import { Button } from "../Button";
 import { IconButton } from "../IconButton";
 
@@ -81,8 +81,7 @@ export const BannerCheckbox = styled(MuiCheckbox, {
 })(({ theme }) => ({
   padding: theme.spacing(1),
   "&.Mui-focusVisible": {
-    outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
-    outlineOffset: 0,
+    ...focusRing(theme),
   },
 }));
 

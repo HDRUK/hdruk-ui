@@ -59,7 +59,9 @@ describe("palette contract", () => {
       "needsActionHover",
       "selected",
     ]);
-    expect(theme.palette.background.secondary).toBe(tokens.background.secondary);
+    expect(theme.palette.background.secondary).toBe(
+      tokens.background.secondary
+    );
   });
 });
 
@@ -184,8 +186,7 @@ describe("createHdrukTheme", () => {
 
   describe("styleOverrides merging", () => {
     type Slot =
-      | Record<string, unknown>
-      | ((params: unknown) => Record<string, unknown>);
+      Record<string, unknown> | ((params: unknown) => Record<string, unknown>);
 
     const overridesFor = (siteOptions: ThemeOptions, component: string) => {
       const site = createHdrukTheme(siteOptions);
@@ -224,7 +225,11 @@ describe("createHdrukTheme", () => {
       // what left Chips on MUI's 16px pill instead of the 8px token.
       const root = resolve(
         overridesFor(
-          { components: { MuiChip: { styleOverrides: { root: { zIndex: 7 } } } } },
+          {
+            components: {
+              MuiChip: { styleOverrides: { root: { zIndex: 7 } } },
+            },
+          },
           "MuiChip"
         )?.root
       );
@@ -273,7 +278,9 @@ describe("createHdrukTheme", () => {
   });
 
   it("gives a site the token heading sizes, flat across breakpoints", () => {
-    const site = createHdrukTheme({ palette: { primary: { main: "#123456" } } });
+    const site = createHdrukTheme({
+      palette: { primary: { main: "#123456" } },
+    });
     const mediaQueries = Object.keys(site.typography.h5).filter(key =>
       key.startsWith("@media")
     );
@@ -371,11 +378,13 @@ describe("button styling contract", () => {
   it("draws buttons and icon buttons the same focus ring, at the thick stroke", () => {
     const ring = {
       outline: `${tokens.stroke.thick}px solid ${tokens.status.keyboardFocus}`,
-      outlineOffset: 0,
+      outlineOffset: tokens.stroke.medium,
     };
 
     expect(slot("MuiButton", "root")["&:focus-visible"]).toEqual(ring);
-    expect(slot("MuiIconButton", "root")["&:focus-visible"]).toMatchObject(ring);
+    expect(slot("MuiIconButton", "root")["&:focus-visible"]).toMatchObject(
+      ring
+    );
   });
 
   it("draws outlined borders solid, at full strength", () => {
@@ -459,12 +468,12 @@ describe("button styling contract", () => {
   });
 
   it("fades the disabled link to grey text with no filled pill", () => {
-    expect(variant({ color: "link", variant: "text" })["&.Mui-disabled"]).toEqual(
-      {
-        backgroundColor: "transparent",
-        color: tokens.text.disabled,
-      }
-    );
+    expect(
+      variant({ color: "link", variant: "text" })["&.Mui-disabled"]
+    ).toEqual({
+      backgroundColor: "transparent",
+      color: tokens.text.disabled,
+    });
   });
 
   it("takes the small link's size from the Body/Small step, not a literal", () => {
@@ -573,7 +582,9 @@ describe("radius contract", () => {
     expect(slot("MuiFilledInput", "root").borderRadius).toBe(
       theme.shape.borderRadius
     );
-    expect(slot("MuiAlert", "root").borderRadius).toBe(theme.shape.borderRadius);
+    expect(slot("MuiAlert", "root").borderRadius).toBe(
+      theme.shape.borderRadius
+    );
     expect(slot("MuiSnackbarContent", "root").borderRadius).toBe(
       theme.shape.borderRadius
     );
@@ -589,6 +600,36 @@ describe("radius contract", () => {
   });
 });
 
+describe("date picker days", () => {
+  const day = (ownerState: Record<string, boolean>) => {
+    const root = theme.components?.MuiPickersDay?.styleOverrides?.root as (
+      props: unknown
+    ) => Record<string, unknown>;
+    return root({
+      theme,
+      ownerState: {
+        disableMargin: false,
+        isDayOutsideMonth: false,
+        isDayCurrent: false,
+        disableHighlightToday: false,
+        ...ownerState,
+      },
+    });
+  };
+
+  it("rings today in the brand colour unless it is selected", () => {
+    expect(day({ isDayCurrent: true })["&:not(.Mui-selected)"]).toEqual({
+      border: `${tokens.stroke.thin}px solid ${theme.palette.primary.main}`,
+    });
+  });
+
+  it("greys days outside the month", () => {
+    expect(day({ isDayOutsideMonth: true }).color).toBe(
+      theme.palette.text.disabled
+    );
+  });
+});
+
 describe("component theme keys", () => {
   it("registers exactly the components the apps override against", () => {
     expect(Object.keys(theme.components ?? {}).sort()).toEqual([
@@ -600,6 +641,9 @@ describe("component theme keys", () => {
       "MuiCard",
       "MuiChip",
       "MuiCssBaseline",
+      "MuiDateCalendar",
+      "MuiDayCalendar",
+      "MuiDesktopDatePicker",
       "MuiDialog",
       "MuiDivider",
       "MuiFilledInput",
@@ -611,8 +655,12 @@ describe("component theme keys", () => {
       "MuiListItemIcon",
       "MuiMenu",
       "MuiMenuItem",
+      "MuiMonthCalendar",
       "MuiOutlinedInput",
       "MuiPaper",
+      "MuiPickersArrowSwitcher",
+      "MuiPickersCalendarHeader",
+      "MuiPickersDay",
       "MuiPopover",
       "MuiSelect",
       "MuiSnackbarContent",
@@ -623,6 +671,7 @@ describe("component theme keys", () => {
       "MuiToolbar",
       "MuiTooltip",
       "MuiTypography",
+      "MuiYearCalendar",
     ]);
   });
 

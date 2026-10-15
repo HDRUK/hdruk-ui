@@ -1,7 +1,10 @@
-import type { BannerProps } from "../components/Banner/Banner";
-import type { ButtonProps } from "../components/Button/Button";
-import type { IconButtonProps } from "../components/IconButton/IconButton";
-import type { LoadingProps } from "../components/Loading/Loading";
+import type { BannerProps } from "@/components/Banner";
+import type { ButtonProps } from "@/components/Button";
+import type { DateRangeCalendarProps } from "@/components/DateRangeCalendar";
+import type { DateRangePickerProps } from "@/components/DateRangePicker";
+import type { IconButtonProps } from "@/components/IconButton";
+import type { LoadingProps } from "@/components/Loading";
+import type { PickerComponents } from "@mui/x-date-pickers/themeAugmentation";
 import type {
   PaletteColorOptions,
   ComponentsOverrides,
@@ -78,6 +81,8 @@ declare module "@mui/material/styles" {
     HdrukIconButton: Partial<IconButtonProps>;
     HdrukBanner: Partial<BannerProps>;
     HdrukLoading: Partial<LoadingProps>;
+    HdrukDateRangeCalendar: Partial<DateRangeCalendarProps>;
+    HdrukDateRangePicker: Partial<DateRangePickerProps>;
   }
   interface ComponentNameToClassKey {
     HdrukButton: "root";
@@ -95,8 +100,35 @@ declare module "@mui/material/styles" {
       | "checkboxIcon"
       | "closeButton";
     HdrukLoading: "root" | "progress" | "label";
+    HdrukDateRangeCalendar:
+      | "root"
+      | "months"
+      | "month"
+      | "dayCell"
+      | "day"
+      | "summary"
+      | "summaryRange"
+      | "summaryCount"
+      | "announcement";
+    HdrukDateRangePicker:
+      | "root"
+      | "field"
+      | "fieldItem"
+      | "label"
+      | "hiddenLabel"
+      | "input"
+      | "dateField"
+      | "popover"
+      | "dialog"
+      | "content"
+      | "toolbar"
+      | "toolbarTitle"
+      | "toolbarHeading"
+      | "shortcuts"
+      | "shortcut"
+      | "footer";
   }
-  interface Components<Theme = unknown> {
+  interface Components<Theme = unknown> extends PickerComponents<Theme> {
     HdrukButton?: {
       defaultProps?: ComponentsPropsList["HdrukButton"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukButton"];
@@ -116,6 +148,16 @@ declare module "@mui/material/styles" {
       defaultProps?: ComponentsPropsList["HdrukLoading"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukLoading"];
       variants?: ComponentsVariants<Theme>["HdrukLoading"];
+    };
+    HdrukDateRangeCalendar?: {
+      defaultProps?: ComponentsPropsList["HdrukDateRangeCalendar"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukDateRangeCalendar"];
+      variants?: ComponentsVariants<Theme>["HdrukDateRangeCalendar"];
+    };
+    HdrukDateRangePicker?: {
+      defaultProps?: ComponentsPropsList["HdrukDateRangePicker"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukDateRangePicker"];
+      variants?: ComponentsVariants<Theme>["HdrukDateRangePicker"];
     };
   }
 }
