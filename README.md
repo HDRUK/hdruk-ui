@@ -546,7 +546,9 @@ and no `npm publish` by hand — don't push work in progress to `main`.
 Work lands through a PR into `main`, which is protected: reviewed, with CI
 green. The **PR title** is the thing that matters at merge time — it becomes the
 commit message and decides the version, so it must be a conventional-commit
-title:
+title. The repo's squash-merge setting uses the PR title as the commit message,
+so this holds even for a single-commit PR, whose commit message would otherwise
+win:
 
 - `fix:` or `perf:` → patch
 - `feat:` → minor
