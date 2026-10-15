@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/HDRUK/hdruk-ui/compare/v1.7.0...v1.8.0) (2026-10-15)
+
+
+### Features
+
+* **GAT-9695-forcebuild:** Add readme change ([#49](https://github.com/HDRUK/hdruk-ui/issues/49)) ([74e740a](https://github.com/HDRUK/hdruk-ui/commit/74e740ad69d5b3d3dcfb5f816a9fdbc02916f0fa))
+
 # [1.7.0](https://github.com/HDRUK/hdruk-ui/compare/v1.6.0...v1.7.0) (2026-10-14)
 
 
