@@ -23,6 +23,7 @@ export default defineConfig({
     "@mui/material",
     "@mui/system",
     "@mui/utils",
+    "@mui/x-date-pickers",
     "@emotion/react",
     "@emotion/styled",
   ],

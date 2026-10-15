@@ -58,10 +58,35 @@ export const tokens = {
     warning: "#856505",
   },
   stroke: { thin: 1, medium: 2, thick: 3 },
-  radius: { none: 0, small: 4, medium: 8, large: 12 },
+  radius: { none: 0, small: 4, medium: 8, large: 12, pill: 24 },
   iconSize: { small: 20, medium: 24, large: 40 },
   iconWeight: 300,
+  elevation: {
+    2: "-3px -3px 4px 0 rgba(0, 0, 0, 0.03), 3px 3px 6px 0 rgba(0, 0, 0, 0.09)",
+  },
 } as const;
+
+export const focusRing = (theme: Theme) => ({
+  outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
+  outlineOffset: tokens.stroke.medium,
+});
+
+const calendarCellButton = (theme: Theme) => ({
+  ...theme.typography.h5,
+  fontWeight: theme.typography.fontWeightRegular,
+  color: tokens.text.secondaryBlack,
+  borderRadius: tokens.radius.pill,
+  "&:focus": { backgroundColor: "transparent" },
+  "&:hover": { backgroundColor: theme.palette.status.hovered },
+  "&:focus-visible": focusRing(theme),
+  "&.Mui-disabled": { color: theme.palette.text.disabled },
+  "&.Mui-selected": {
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    "&:focus": { backgroundColor: theme.palette.primary.main },
+    "&:hover": { backgroundColor: theme.palette.primary.dark },
+  },
+});
 
 export const themeOptions: ThemeOptions = {
   palette: {
@@ -201,10 +226,7 @@ export const themeOptions: ThemeOptions = {
           minHeight: theme.spacing(5),
           padding: theme.spacing(1, 1.5),
           lineHeight: "1.5rem",
-          "&:focus-visible": {
-            outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
-            outlineOffset: 0,
-          },
+          "&:focus-visible": focusRing(theme),
           "&.Mui-disabled": {
             backgroundColor: theme.palette.status.disabled,
             borderColor: theme.palette.status.disabled,
@@ -329,8 +351,7 @@ export const themeOptions: ThemeOptions = {
           "& .MuiIcon-root, & .MuiSvgIcon-root": { fontSize: "inherit" },
           "&:hover": { backgroundColor: theme.palette.status.hovered },
           "&:focus-visible": {
-            outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
-            outlineOffset: 0,
+            ...focusRing(theme),
             backgroundColor: theme.palette.background.secondary,
           },
           "&.Mui-disabled": {
@@ -494,6 +515,143 @@ export const themeOptions: ThemeOptions = {
         }),
       },
     },
+
+    /* ----- Date pickers ----- */
+    MuiDateCalendar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          width: theme.spacing(45.5),
+          [theme.breakpoints.down("sm")]: { width: theme.spacing(38.5) },
+          height: "auto",
+          maxHeight: "none",
+          overflow: "visible",
+        }),
+      },
+    },
+    MuiPickersCalendarHeader: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          display: "grid",
+          gridTemplateColumns: "auto 1fr auto",
+          alignItems: "center",
+          marginTop: 0,
+          marginBottom: theme.spacing(1),
+          paddingLeft: 0,
+          paddingRight: 0,
+          "& .MuiPickersArrowSwitcher-root": { display: "contents" },
+          "& .MuiPickersArrowSwitcher-spacer": { display: "none" },
+          "& .MuiPickersArrowSwitcher-previousIconButton": {
+            gridColumn: 1,
+            gridRow: 1,
+          },
+          "& .MuiPickersArrowSwitcher-nextIconButton": {
+            gridColumn: 3,
+            gridRow: 1,
+          },
+        }),
+        labelContainer: ({ theme }) => ({
+          ...theme.typography.h3,
+          color: tokens.text.secondaryBlack,
+          gridColumn: 2,
+          gridRow: 1,
+          justifySelf: "center",
+          marginRight: 0,
+          overflow: "visible",
+        }),
+      },
+    },
+    MuiPickersArrowSwitcher: {
+      styleOverrides: {
+        button: ({ theme }) => ({
+          fontSize: theme.typography.pxToRem(tokens.iconSize.medium),
+          marginLeft: 0,
+          marginRight: 0,
+        }),
+      },
+    },
+    MuiDayCalendar: {
+      styleOverrides: {
+        weekDayLabel: ({ theme }) => ({
+          ...theme.typography.bodySmall,
+          fontWeight: theme.typography.fontWeightMedium,
+          color: tokens.text.secondaryBlack,
+          width: theme.spacing(5),
+          height: theme.spacing(5),
+          margin: theme.spacing(0, 0.75),
+          [theme.breakpoints.down("sm")]: { margin: theme.spacing(0, 0.25) },
+        }),
+        // Each row's margin plus this padding leaves room for a day's focus
+        // ring, which the month container and slide transition would clip.
+        monthContainer: {
+          padding: `${tokens.stroke.thin}px 0`,
+        },
+        weekContainer: ({ theme }) => ({
+          margin: theme.spacing(0.5, 0),
+        }),
+        slideTransition: ({ theme }) => ({
+          minHeight: `calc(${theme.spacing(33.5)} + ${2 * tokens.stroke.thin}px)`,
+        }),
+        loadingContainer: ({ theme }) => ({
+          minHeight: `calc(${theme.spacing(33.5)} + ${2 * tokens.stroke.thin}px)`,
+        }),
+      },
+    },
+    MuiPickersDay: {
+      styleOverrides: {
+        root: ({ theme, ownerState }) => ({
+          ...theme.typography.h5,
+          fontWeight: theme.typography.fontWeightRegular,
+          width: theme.spacing(5),
+          height: theme.spacing(5),
+          color: tokens.text.secondaryBlack,
+          ...(ownerState.disableMargin
+            ? {}
+            : {
+                margin: theme.spacing(0, 0.75),
+                [theme.breakpoints.down("sm")]: {
+                  margin: theme.spacing(0, 0.25),
+                },
+              }),
+          ...(ownerState.isDayOutsideMonth
+            ? { color: theme.palette.text.disabled }
+            : {}),
+          ...(ownerState.isDayCurrent && !ownerState.disableHighlightToday
+            ? {
+                "&:not(.Mui-selected)": {
+                  border: `${tokens.stroke.thin}px solid ${theme.palette.primary.main}`,
+                },
+              }
+            : {}),
+          "&:focus": {
+            backgroundColor: "transparent",
+            "&.Mui-selected": { backgroundColor: theme.palette.primary.main },
+          },
+          "@media (pointer: fine)": {
+            "&:hover": { backgroundColor: theme.palette.status.hovered },
+            "&.Mui-selected:hover": {
+              backgroundColor: theme.palette.primary.dark,
+            },
+          },
+          "&:focus-visible": focusRing(theme),
+        }),
+      },
+    },
+    MuiDesktopDatePicker: {
+      defaultProps: { yearsPerRow: 3 },
+    },
+    MuiMonthCalendar: {
+      styleOverrides: {
+        root: { marginLeft: "auto", marginRight: "auto" },
+        button: ({ theme }) => calendarCellButton(theme),
+      },
+    },
+    MuiYearCalendar: {
+      styleOverrides: {
+        root: { marginLeft: "auto", marginRight: "auto" },
+        button: ({ theme }) => calendarCellButton(theme),
+      },
+    },
+
     MuiSwitch: {
       styleOverrides: {
         switchBase: ({ theme }) => ({

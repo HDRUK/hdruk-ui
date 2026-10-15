@@ -30,10 +30,12 @@ workflow publishes to GitHub Pages on merge to `main`.
 ```bash
 npm i @hdruk/ui
 # peer deps
-npm i @mui/material @emotion/react @emotion/styled
+npm i @mui/material @emotion/react @emotion/styled @mui/x-date-pickers
+# plus a date library for the date pickers, e.g.
+npm i dayjs
 ```
 
-Peer requirements: React `^18 || ^19`, MUI `^7.3`, Emotion `^11.14`.
+Peer requirements: React `^18 || ^19`, MUI `^7.3`, Emotion `^11.14`, MUI X date pickers `^8.6`.
 
 ## Setup
 
@@ -222,6 +224,43 @@ import Link from "next/link";
 | `logoImage` | `ReactNode` | HDRUK logo | Override the footer logo |
 | `linkComponent` | `React.ElementType` | `<a>` | Pass `next/link` for client-side routing |
 | `sx` | MUI `SxProps` | — | Style overrides for the footer root element |
+
+---
+
+### Date pickers
+
+`DateRangePicker` (field + panel) and `DateRangeCalendar` (the months on their own), built on the free MUI X date pickers. They need a date library installed alongside `@mui/x-date-pickers` (see [Install](#install)).
+
+```tsx
+import { DateRangePicker } from "@hdruk/ui";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/en-gb";
+
+<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+  <DateRangePicker
+    value={range}
+    onAccept={setRange}
+    disableFuture
+    shortcuts={[{ label: "Last month", getValue: () => [monthAgo, today] }]}
+  />
+</LocalizationProvider>
+```
+
+The app supplies `LocalizationProvider`: `HdrukUiProvider` doesn't, and the pickers throw without it. Dates go through the adapter, so any MUI X date library works, and the adapter locale sets the date format and the first day of the week.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `value` / `defaultValue` | `[start, end]` | Controlled or initial range; either end may be `null` |
+| `onChange` | `(range) => void` | Fires when the value is committed: on OK, or when a split field holds a valid typed date |
+| `onAccept` | `(range) => void` | Fires on OK |
+| `shortcuts` | MUI X `PickersShortcutsItem[]` | Preset ranges; any whose range breaks the date rules is disabled |
+| `disableFuture`, `disablePast`, `minDate`, `maxDate`, `shouldDisableDate` | MUI X | Date rules, applied to days, shortcuts and typed dates |
+| `label` / `hideLabel` | `string` / `boolean` | Field label; `hideLabel` keeps it for screen readers only |
+| `localeText` | MUI X `PickersInputLocaleText` | Per-picker translations; button and field labels come from MUI X's locale text, so `LocalizationProvider`'s `localeText` applies too |
+| `slots.field` | `SingleInputDateRangeField` (default) \| `MultiInputDateRangeField` | One read-only field, or typed start and end fields |
+
+Below the `md` breakpoint the panel opens as a dialog with one month, full screen below `sm`. Theme the parts through `HdrukDateRangePicker` / `HdrukDateRangeCalendar` `styleOverrides`. The base theme in `./theme` also styles every MUI X date picker an app renders.
 
 ---
 
