@@ -221,8 +221,7 @@ describe("createHdrukTheme", () => {
 
     it("composes a site's object override with a base function slot", () => {
       // MuiChip.root is a function in the base carrying borderRadius and
-      // fontWeight. A site passing a plain object must not wipe them — this is
-      // what left Chips on MUI's 16px pill instead of the 8px token.
+      // fontWeight. A site passing a plain object must not wipe them.
       const root = resolve(
         overridesFor(
           {
@@ -235,8 +234,8 @@ describe("createHdrukTheme", () => {
       );
 
       expect(root.zIndex).toBe(7);
-      expect(root.borderRadius).toBe(theme.shape.borderRadius);
-      expect(root.fontWeight).toBe(600);
+      expect(root.borderRadius).toBe(tokens.radius.pill);
+      expect(root.fontWeight).toBe(theme.typography.fontWeightRegular);
     });
 
     it("keeps a slot only the site declares", () => {
@@ -553,6 +552,16 @@ describe("menu styling contract", () => {
     expect(root).not.toHaveProperty("margin");
   });
 
+  it("shades a selected menu item darker than a hovered one", () => {
+    const root = slot("MuiMenuItem", "root");
+    expect(root["&:hover"]).toEqual({
+      backgroundColor: tokens.status.hovered,
+    });
+    expect(root["&.Mui-selected, &.Mui-selected:is(:hover, :focus)"]).toEqual({
+      backgroundColor: tokens.status.grey,
+    });
+  });
+
   it("leaves nav list items square and full-bleed", () => {
     const root = slot("MuiListItemButton", "root");
     expect(root).not.toHaveProperty("borderRadius");
@@ -574,11 +583,10 @@ describe("radius contract", () => {
     expect(slot("MuiOutlinedInput", "root")).not.toHaveProperty("borderRadius");
   });
 
-  // MUI's own default differs on each of these: Chip is a pill, FilledInput
-  // rounds only its top corners, and the Paper-backed slots lose their radius
-  // wherever an app squares MuiPaper — as gateway-web does.
+  // MUI's own default differs on each of these: FilledInput rounds only its
+  // top corners, and the Paper-backed slots lose their radius wherever an app
+  // squares MuiPaper — as gateway-web does.
   it("restates the radius on the slots that would otherwise lose it", () => {
-    expect(slot("MuiChip", "root").borderRadius).toBe(theme.shape.borderRadius);
     expect(slot("MuiFilledInput", "root").borderRadius).toBe(
       theme.shape.borderRadius
     );
@@ -588,6 +596,10 @@ describe("radius contract", () => {
     expect(slot("MuiSnackbarContent", "root").borderRadius).toBe(
       theme.shape.borderRadius
     );
+  });
+
+  it("rounds chips to the pill token", () => {
+    expect(slot("MuiChip", "root").borderRadius).toBe(tokens.radius.pill);
   });
 
   it("squares the overlay surfaces, which the design states as 0", () => {
@@ -633,6 +645,7 @@ describe("date picker days", () => {
 describe("component theme keys", () => {
   it("registers exactly the components the apps override against", () => {
     expect(Object.keys(theme.components ?? {}).sort()).toEqual([
+      "HdrukChip",
       "HdrukLoading",
       "MuiAlert",
       "MuiAutocomplete",

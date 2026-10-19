@@ -1,5 +1,6 @@
 import type { BannerProps } from "@/components/Banner";
 import type { ButtonProps } from "@/components/Button";
+import type { ChipProps } from "@/components/Chip";
 import type { DateRangeCalendarProps } from "@/components/DateRangeCalendar";
 import type { DateRangePickerProps } from "@/components/DateRangePicker";
 import type { IconButtonProps } from "@/components/IconButton";
@@ -78,6 +79,7 @@ declare module "@mui/material/Typography" {
 declare module "@mui/material/styles" {
   interface ComponentsPropsList {
     HdrukButton: Partial<ButtonProps>;
+    HdrukChip: Partial<ChipProps>;
     HdrukIconButton: Partial<IconButtonProps>;
     HdrukBanner: Partial<BannerProps>;
     HdrukLoading: Partial<LoadingProps>;
@@ -86,6 +88,7 @@ declare module "@mui/material/styles" {
   }
   interface ComponentNameToClassKey {
     HdrukButton: "root";
+    HdrukChip: "root";
     HdrukIconButton: "root";
     HdrukBanner:
       | "root"
@@ -134,6 +137,11 @@ declare module "@mui/material/styles" {
       styleOverrides?: ComponentsOverrides<Theme>["HdrukButton"];
       variants?: ComponentsVariants<Theme>["HdrukButton"];
     };
+    HdrukChip?: {
+      defaultProps?: ComponentsPropsList["HdrukChip"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukChip"];
+      variants?: ComponentsVariants<Theme>["HdrukChip"];
+    };
     HdrukIconButton?: {
       defaultProps?: ComponentsPropsList["HdrukIconButton"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukIconButton"];
@@ -170,6 +178,8 @@ declare module "@mui/material/Button" {
 declare module "@mui/material/Chip" {
   interface ChipPropsColorOverrides {
     link: true;
+    needsAction: true;
+    archived: true;
   }
 }
 declare module "@mui/material/IconButton" {
