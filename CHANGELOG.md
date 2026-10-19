@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/HDRUK/hdruk-ui/compare/v1.8.0...v1.9.0) (2026-10-19)
+
+
+### Features
+
+* **GAT-9376:** Add Chip component ([#50](https://github.com/HDRUK/hdruk-ui/issues/50)) ([8e8d4ea](https://github.com/HDRUK/hdruk-ui/commit/8e8d4ea5970ee6cec3b66aa80c443479bfae0630))
+
 # [1.8.0](https://github.com/HDRUK/hdruk-ui/compare/v1.7.0...v1.8.0) (2026-10-15)
 
 
