@@ -1,5 +1,7 @@
 import {
+  alpha,
   createTheme,
+  Palette,
   PaletteColor,
   SimplePaletteColorOptions,
   Theme,
@@ -70,6 +72,46 @@ export const focusRing = (theme: Theme) => ({
   outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
   outlineOffset: tokens.stroke.medium,
 });
+
+const statusChip = (
+  color: "needsAction" | "archived",
+  swatch: (
+    palette: Palette
+  ) => Pick<PaletteColor, "main" | "dark" | "contrastText">
+) => [
+  {
+    props: { variant: "filled" as const, color },
+    style: ({ theme }: { theme: Theme }) => {
+      const { main, dark, contrastText } = swatch(theme.palette);
+      return {
+        backgroundColor: main,
+        color: contrastText,
+        "&.MuiChip-clickable:hover, &.Mui-focusVisible": {
+          backgroundColor: dark,
+        },
+        "& .MuiChip-deleteIcon": {
+          color: alpha(contrastText, 0.7),
+          "&:hover, &:active": { color: contrastText },
+        },
+      };
+    },
+  },
+  {
+    props: { variant: "outlined" as const, color },
+    style: ({ theme }: { theme: Theme }) => {
+      const { main, dark } = swatch(theme.palette);
+      return {
+        color: main,
+        borderColor: main,
+        "&.MuiChip-clickable:hover": { borderColor: dark },
+        "& .MuiChip-deleteIcon": {
+          color: alpha(main, 0.7),
+          "&:hover, &:active": { color: main },
+        },
+      };
+    },
+  },
+];
 
 const calendarCellButton = (theme: Theme) => ({
   ...theme.typography.h5,
@@ -476,8 +518,11 @@ export const themeOptions: ThemeOptions = {
     MuiMenuItem: {
       styleOverrides: {
         root: ({ theme }) => ({
-          "&.Mui-selected": {
-            backgroundColor: theme.palette.action.selected,
+          "&:hover": {
+            backgroundColor: theme.palette.status.hovered,
+          },
+          "&.Mui-selected, &.Mui-selected:is(:hover, :focus)": {
+            backgroundColor: theme.palette.status.grey,
           },
         }),
       },
@@ -510,10 +555,86 @@ export const themeOptions: ThemeOptions = {
       defaultProps: { size: "small" },
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: theme.shape.borderRadius,
-          fontWeight: 600,
+          height: "auto",
+          minHeight: theme.spacing(3.5),
+          padding: theme.spacing(0.5, 1.5),
+          gap: theme.spacing(0.5),
+          borderRadius: tokens.radius.pill,
+          fontSize: theme.typography.bodySmall.fontSize,
+          fontWeight: theme.typography.fontWeightRegular,
+          lineHeight: "1.25rem",
+          "&.Mui-focusVisible": focusRing(theme),
+          "&.Mui-disabled": {
+            opacity: 1,
+            backgroundColor: theme.palette.status.disabled,
+            borderColor: theme.palette.status.disabled,
+            color: theme.palette.text.disabled,
+          },
         }),
+        outlined: ({ theme }) => ({
+          padding: theme.spacing(0.375, 1.375),
+          backgroundColor: theme.palette.background.paper,
+          "&.MuiChip-clickable:hover": {
+            backgroundColor: theme.palette.background.default,
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: theme.palette.background.paper,
+          },
+        }),
+        label: { padding: 0 },
+        icon: ({ theme }) => ({
+          margin: 0,
+          fontSize: theme.typography.pxToRem(tokens.iconSize.small),
+        }),
+        avatar: { margin: 0 },
+        deleteIcon: { margin: 0 },
       },
+      variants: [
+        {
+          props: { color: "warning" },
+          style: { color: tokens.text.secondaryBlack },
+        },
+        {
+          props: { variant: "outlined", color: "default" },
+          style: ({ theme }) => ({
+            borderColor: tokens.text.secondaryBlack,
+            "&.MuiChip-clickable:hover": {
+              backgroundColor: theme.palette.status.hovered,
+            },
+          }),
+        },
+        ...(["primary", "success", "warning", "error"] as const).map(color => ({
+          props: { variant: "outlined" as const, color },
+          style: ({ theme }: { theme: Theme }) => ({
+            borderColor: theme.palette[color].main,
+            "&.MuiChip-clickable:hover": {
+              borderColor: theme.palette[color].dark,
+            },
+          }),
+        })),
+        ...statusChip("needsAction", ({ status, text }) => ({
+          main: status.needsAction,
+          dark: status.needsActionHover,
+          contrastText: text.primary,
+        })),
+        {
+          props: { variant: "outlined", color: "needsAction" },
+          style: { color: tokens.text.secondaryBlack },
+        },
+        ...statusChip("archived", ({ status, common }) => ({
+          main: status.archived,
+          dark: status.archivedHovered,
+          contrastText: common.white,
+        })),
+      ],
+    },
+    HdrukChip: {
+      variants: [
+        {
+          props: { iconPosition: "end" },
+          style: { "& .MuiChip-icon, & .MuiChip-deleteIcon": { order: 1 } },
+        },
+      ],
     },
 
     /* ----- Date pickers ----- */

@@ -1,5 +1,6 @@
 export * from "./Banner";
 export * from "./Button";
+export * from "./Chip";
 export * from "./DateRangeCalendar";
 export * from "./DateRangePicker";
 export * from "./Icon";
