@@ -774,6 +774,7 @@ export const themeOptions: ThemeOptions = {
     },
 
     MuiSwitch: {
+      defaultProps: { slotProps: { input: { role: "switch" } } },
       styleOverrides: {
         switchBase: ({ theme }) => ({
           "&.Mui-checked + .MuiSwitch-track": {
