@@ -5,12 +5,12 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Paper,
 } from "@mui/material";
 import useForkRef from "@mui/utils/useForkRef";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
 import { Loading } from "../Loading";
+import { SearchBarRoot } from "./SearchBar.styles";
 import type { BoxProps, TextFieldProps } from "@mui/material";
 
 type SearchBarTextFieldProps = Omit<
@@ -168,20 +168,7 @@ export function SearchBar({
 
   return (
     <Box {...boxSx} sx={boxSx?.sx} onClick={stop}>
-      <Paper
-        elevation={elevation}
-        sx={(theme) => ({
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          p: 1,
-          borderRadius: theme.shape.borderRadius,
-          ...(elevation === 0 && {
-            border: `1px solid ${theme.palette.divider}`,
-            backgroundColor: theme.palette.background.paper,
-          }),
-        })}
-      >
+      <SearchBarRoot elevation={elevation}>
         <TextField
           {...restTextFieldProps}
           id={id}
@@ -202,7 +189,7 @@ export function SearchBar({
           }}
         />
         {actions}
-      </Paper>
+      </SearchBarRoot>
       {filters && (
         <Box mt={1} display="flex" alignItems="center" gap={1} flexWrap="wrap">
           {filters}
