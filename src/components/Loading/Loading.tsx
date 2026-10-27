@@ -74,6 +74,7 @@ export const Loading = React.forwardRef<HTMLDivElement, LoadingProps>(
           size={typeof size === "number" ? size : tokens.iconSize[size]}
           color={color}
           {...slotProps?.progress}
+          aria-hidden
         />
         {label ? <LoadingLabel>{label}</LoadingLabel> : null}
       </LoadingRoot>

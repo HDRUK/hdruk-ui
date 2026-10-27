@@ -5,12 +5,12 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  CircularProgress,
   Paper,
 } from "@mui/material";
 import useForkRef from "@mui/utils/useForkRef";
 import { useDebounce } from "../../hooks/useDebounce";
 import { isMacPlatform } from "../../utils/keyboard";
+import { Loading } from "../Loading";
 import type { BoxProps, TextFieldProps } from "@mui/material";
 
 type SearchBarTextFieldProps = Omit<
@@ -127,7 +127,12 @@ export function SearchBar({
   const searchAdornment = (
     <InputAdornment position="end">
       {loading ? (
-        <CircularProgress size={size === "small" ? 16 : 18} />
+        <Loading
+          inline
+          label=""
+          color="primary"
+          size={size === "small" ? 16 : 18}
+        />
       ) : (
         !disableClear &&
         val && (
