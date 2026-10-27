@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/HDRUK/hdruk-ui/compare/v1.9.0...v1.9.1) (2026-10-27)
+
+
+### Bug Fixes
+
+* **GAT-8258:** Accessibility fixes ([#51](https://github.com/HDRUK/hdruk-ui/issues/51)) ([36030ad](https://github.com/HDRUK/hdruk-ui/commit/36030ade64a7a5899f594cf64f0eb9da1a9a8560))
+
 # [1.9.0](https://github.com/HDRUK/hdruk-ui/compare/v1.8.0...v1.9.0) (2026-10-19)
 
 
