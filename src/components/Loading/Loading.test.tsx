@@ -2,7 +2,7 @@ import { render, screen } from "../../../test/renderWithTheme";
 import { tokens } from "../../theme";
 import { Loading } from "./Loading";
 
-const progress = () => screen.getByRole("progressbar");
+const progress = () => screen.getByRole("progressbar", { hidden: true });
 
 describe("Loading", () => {
   it("announces itself with a default label", () => {
@@ -24,6 +24,12 @@ describe("Loading", () => {
 
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
     expect(progress()).toBeInTheDocument();
+  });
+
+  it("hides the spinner from assistive technology, so the status label is the only announcement", () => {
+    render(<Loading slotProps={{ progress: { "aria-hidden": false } }} />);
+
+    expect(progress()).toHaveAttribute("aria-hidden", "true");
   });
 
   it("keeps the label out of the visual flow", () => {

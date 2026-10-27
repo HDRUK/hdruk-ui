@@ -180,7 +180,10 @@ describe("SearchBar clearing", () => {
   it("shows a spinner instead of the clear button while loading", () => {
     render(<SearchBar defaultValue="heart" loading />);
 
-    expect(screen.getByRole("progressbar")).toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { hidden: true })).toHaveAttribute(
+      "aria-hidden",
+      "true"
+    );
     expect(clearButton()).not.toBeInTheDocument();
   });
 });
