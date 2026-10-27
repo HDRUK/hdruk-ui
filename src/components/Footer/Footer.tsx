@@ -78,33 +78,41 @@ export default function Footer({
           lineHeight: theme.typography.body2.lineHeight,
           background:
             footerBackgroundColor ??
-            `linear-gradient(97deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+            `linear-gradient(97deg, ${theme.palette.secondary.main} 4.05%, ${theme.palette.primary.main} 100%)`,
           color: theme.palette.primary.contrastText,
           sx,
         }),
       ]}>
       <Container
         sx={theme => ({
-          py: 6,
+          py: 4,
+          px: { sm: 6 },
           display: "flex",
+          alignItems: "flex-start",
           gap: theme.spacing(8),
           [theme.breakpoints.down("sm")]: {
             flexDirection: "column",
-            gap: 2,
+            gap: 0,
           },
         })}>
-        <Box sx={{ p: 0 }}>
+        <Box
+          sx={theme => ({
+            p: 0,
+            [theme.breakpoints.down("sm")]: { display: "contents" },
+          })}>
           {logoImage}
           {(socialLinks?.length ?? 0) > 0 && (
             <Box
               component="ul"
               sx={theme => ({
+                mt: 4,
+                mb: 1,
                 textDecoration: "none",
                 gap: 3,
                 display: "flex",
                 [theme.breakpoints.down("sm")]: {
-                  flexDirection: "column",
-                  gap: 1,
+                  order: 2,
+                  mt: (linkGroups?.length ?? 0) > 0 ? 0 : 4,
                 },
                 ...RESET_LIST_SX,
               })}>
@@ -126,9 +134,14 @@ export default function Footer({
               ))}
             </Box>
           )}
-          <Box>
+          <Box
+            sx={theme => ({
+              [theme.breakpoints.down("sm")]: { order: 2 },
+            })}>
             {copyrightText ? (
-              <Typography variant="body2">{copyrightText}</Typography>
+              <Typography variant="body2" color="status.grey">
+                {copyrightText}
+              </Typography>
             ) : null}
           </Box>
         </Box>
@@ -136,22 +149,25 @@ export default function Footer({
           <Box
             component="ul"
             sx={theme => ({
+              m: 0,
               display: "flex",
               gap: 5,
               [theme.breakpoints.down("sm")]: {
-                flexDirection: "column",
-                gap: 2,
+                order: 1,
+                flexWrap: "wrap",
+                rowGap: 2,
+                my: 7.5,
               },
               ...RESET_LIST_SX,
             })}>
-            {linkGroups?.map(group => (
-              <li key={group.title}>
+            {linkGroups?.map((group, index) => (
+              <li key={group.title ?? index}>
                 <Box
                   component="ul"
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: 1.5,
+                    gap: 2,
                     ...RESET_LIST_SX,
                   }}>
                   {group.items.map(item => (
