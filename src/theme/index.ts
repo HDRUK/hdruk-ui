@@ -430,19 +430,32 @@ export const themeOptions: ThemeOptions = {
     MuiFormLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
-          fontWeight: 600,
-          color: theme.palette.text.secondary,
+          ...theme.typography.body2,
+          fontWeight: theme.typography.fontWeightRegular,
+          color: tokens.text.secondaryBlack,
+          "&.Mui-focused:not(.Mui-error)": {
+            color: tokens.text.secondaryBlack,
+          },
+        }),
+        asterisk: ({ theme }) => ({
+          color: theme.palette.error.main,
         }),
       },
     },
     MuiInputLabel: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          "&.Mui-focused": {
-            color: theme.palette.primary.main,
-          },
-        }),
-      },
+      defaultProps: { shrink: true },
+      variants: [
+        {
+          props: { variant: "outlined" },
+          style: ({ theme }) => ({
+            position: "relative",
+            transform: "none",
+            maxWidth: "100%",
+            whiteSpace: "normal",
+            marginBottom: theme.spacing(0.5),
+          }),
+        },
+      ],
     },
     MuiOutlinedInput: {
       styleOverrides: {
