@@ -460,7 +460,7 @@ export const themeOptions: ThemeOptions = {
           ...theme.typography.body2,
           fontWeight: theme.typography.fontWeightRegular,
           color: tokens.text.secondaryBlack,
-          "&.Mui-focused:not(.Mui-error)": {
+          "&.Mui-focused, &.Mui-error": {
             color: tokens.text.secondaryBlack,
           },
         }),
@@ -520,6 +520,16 @@ export const themeOptions: ThemeOptions = {
           backgroundColor: theme.palette.background.paper,
           "&:before": { borderBottomWidth: 2 },
         }),
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...theme.typography.bodySmall,
+          lineHeight: 1.3,
+          "&.Mui-error": { color: tokens.text.error },
+        }),
+        contained: { marginLeft: 0, marginRight: 0 },
       },
     },
     MuiTextField: {

@@ -660,6 +660,7 @@ describe("component theme keys", () => {
       "MuiDialog",
       "MuiDivider",
       "MuiFilledInput",
+      "MuiFormHelperText",
       "MuiFormLabel",
       "MuiIcon",
       "MuiIconButton",
