@@ -73,6 +73,33 @@ export const focusRing = (theme: Theme) => ({
   outlineOffset: tokens.stroke.medium,
 });
 
+const outlinedInputRoot = (theme: Theme, notchedOutline: string) => ({
+  fontSize: theme.typography.body2.fontSize,
+  minHeight: theme.spacing(5),
+  backgroundColor: theme.palette.background.paper,
+  "&:hover:not(.Mui-focused, .Mui-disabled)": {
+    backgroundColor: theme.palette.status.hovered,
+  },
+  [`&:hover:not(.Mui-focused, .Mui-disabled, .Mui-error) .${notchedOutline}`]: {
+    borderColor: theme.palette.text.secondary,
+  },
+  "&.Mui-disabled": {
+    backgroundColor: theme.palette.status.disabled,
+  },
+  [`&.Mui-disabled .${notchedOutline}`]: {
+    borderColor: theme.palette.status.faded,
+  },
+  [`&.Mui-focused:not(.Mui-error) .${notchedOutline}`]: {
+    borderWidth: tokens.stroke.medium,
+    borderColor: theme.palette.status.selected,
+  },
+});
+
+const outlinedInputNotch = (theme: Theme) => ({
+  borderColor: theme.palette.status.faded,
+  "& legend": { maxWidth: 0.01 },
+});
+
 const statusChip = (
   color: "needsAction" | "archived",
   swatch: (
@@ -459,29 +486,29 @@ export const themeOptions: ThemeOptions = {
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.secondary.main,
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderWidth: tokens.stroke.medium,
-            borderColor: theme.palette.secondary.main,
-          },
-        }),
+        root: ({ theme }) =>
+          outlinedInputRoot(theme, "MuiOutlinedInput-notchedOutline"),
+        adornedStart: ({ theme }) => ({ paddingLeft: theme.spacing(1.5) }),
+        adornedEnd: ({ theme }) => ({ paddingRight: theme.spacing(1.5) }),
+        notchedOutline: ({ theme }) => outlinedInputNotch(theme),
         input: ({ theme, ownerState }) =>
           ownerState.multiline
             ? { padding: 0 }
             : {
-                padding: theme.spacing(1.5, 1.75),
-                paddingTop: theme.spacing(1.5),
+                padding: theme.spacing(1, 1.5),
+                paddingTop: theme.spacing(1),
               },
+        inputAdornedStart: { paddingLeft: 0 },
+        inputAdornedEnd: { paddingRight: 0 },
       },
       variants: [
         {
           props: { multiline: true },
           style: ({ theme }) => ({
-            padding: theme.spacing(1.5, 1.75),
-            paddingTop: theme.spacing(1.5),
+            alignItems: "flex-start",
+            minHeight: theme.spacing(12.5),
+            padding: theme.spacing(1, 1.5),
+            paddingTop: theme.spacing(1),
           }),
         },
       ],
