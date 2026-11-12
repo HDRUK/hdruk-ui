@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import InputAdornment from "@mui/material/InputAdornment";
 import { usePickerAdapter } from "@mui/x-date-pickers/hooks";
 import { formatRange } from "../DateRangeCalendar/DateRangeCalendar.utils";
+import { Icon } from "../Icon";
 import { IconButton } from "../IconButton";
 import {
   DateRangePickerField,
@@ -50,7 +50,7 @@ function OpenPickerButton({
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={onOpen}>
-        <CalendarMonthOutlinedIcon />
+        <Icon name="calendar_month" />
       </IconButton>
     </InputAdornment>
   );

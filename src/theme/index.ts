@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import {
   alpha,
   createTheme,
@@ -8,7 +9,9 @@ import {
   ThemeOptions,
 } from "@mui/material/styles";
 import { deepmerge } from "@mui/utils";
+import { Icon } from "../components/Icon";
 import "../types/themeAugmentation";
+import type { IconProps } from "../components/Icon";
 
 export const tokens = {
   brand: {
@@ -71,6 +74,46 @@ export const tokens = {
 export const focusRing = (theme: Theme) => ({
   outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
   outlineOffset: tokens.stroke.medium,
+});
+
+export const surface = (theme: Theme) => ({
+  borderRadius: tokens.radius.small,
+  border: 0,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: tokens.elevation[2],
+});
+
+const CalendarIcon = ({
+  ownerState: _ownerState,
+  ...props
+}: Omit<IconProps, "name"> & { ownerState?: unknown }) =>
+  createElement(Icon, { ...props, name: "calendar_month" });
+
+const outlinedInputRoot = (theme: Theme, notchedOutline: string) => ({
+  fontSize: theme.typography.body2.fontSize,
+  minHeight: theme.spacing(5),
+  backgroundColor: theme.palette.background.paper,
+  "&:hover:not(.Mui-focused, .Mui-disabled)": {
+    backgroundColor: theme.palette.status.hovered,
+  },
+  [`&:hover:not(.Mui-focused, .Mui-disabled, .Mui-error) .${notchedOutline}`]: {
+    borderColor: theme.palette.text.secondary,
+  },
+  "&.Mui-disabled": {
+    backgroundColor: theme.palette.status.disabled,
+  },
+  [`&.Mui-disabled .${notchedOutline}`]: {
+    borderColor: theme.palette.status.faded,
+  },
+  [`&.Mui-focused:not(.Mui-error) .${notchedOutline}`]: {
+    borderWidth: tokens.stroke.medium,
+    borderColor: theme.palette.status.selected,
+  },
+});
+
+const outlinedInputNotch = (theme: Theme) => ({
+  borderColor: theme.palette.status.faded,
+  "& legend": { maxWidth: 0.01 },
 });
 
 const statusChip = (
@@ -433,7 +476,7 @@ export const themeOptions: ThemeOptions = {
           ...theme.typography.body2,
           fontWeight: theme.typography.fontWeightRegular,
           color: tokens.text.secondaryBlack,
-          "&.Mui-focused:not(.Mui-error)": {
+          "&.Mui-focused, &.Mui-error": {
             color: tokens.text.secondaryBlack,
           },
         }),
@@ -459,29 +502,29 @@ export const themeOptions: ThemeOptions = {
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.secondary.main,
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderWidth: tokens.stroke.medium,
-            borderColor: theme.palette.secondary.main,
-          },
-        }),
+        root: ({ theme }) =>
+          outlinedInputRoot(theme, "MuiOutlinedInput-notchedOutline"),
+        adornedStart: ({ theme }) => ({ paddingLeft: theme.spacing(1.5) }),
+        adornedEnd: ({ theme }) => ({ paddingRight: theme.spacing(1.5) }),
+        notchedOutline: ({ theme }) => outlinedInputNotch(theme),
         input: ({ theme, ownerState }) =>
           ownerState.multiline
             ? { padding: 0 }
             : {
-                padding: theme.spacing(1.5, 1.75),
-                paddingTop: theme.spacing(1.5),
+                padding: theme.spacing(1, 1.5),
+                paddingTop: theme.spacing(1),
               },
+        inputAdornedStart: { paddingLeft: 0 },
+        inputAdornedEnd: { paddingRight: 0 },
       },
       variants: [
         {
           props: { multiline: true },
           style: ({ theme }) => ({
-            padding: theme.spacing(1.5, 1.75),
-            paddingTop: theme.spacing(1.5),
+            alignItems: "flex-start",
+            minHeight: theme.spacing(12.5),
+            padding: theme.spacing(1, 1.5),
+            paddingTop: theme.spacing(1),
           }),
         },
       ],
@@ -493,6 +536,16 @@ export const themeOptions: ThemeOptions = {
           backgroundColor: theme.palette.background.paper,
           "&:before": { borderBottomWidth: 2 },
         }),
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...theme.typography.bodySmall,
+          lineHeight: 1.3,
+          "&.Mui-error": { color: tokens.text.error },
+        }),
+        contained: { marginLeft: 0, marginRight: 0 },
       },
     },
     MuiTextField: {
@@ -771,7 +824,43 @@ export const themeOptions: ThemeOptions = {
       },
     },
     MuiDesktopDatePicker: {
-      defaultProps: { yearsPerRow: 3 },
+      defaultProps: {
+        yearsPerRow: 3,
+        slots: { openPickerIcon: CalendarIcon },
+      },
+    },
+    MuiMobileDatePicker: {
+      defaultProps: { slots: { openPickerIcon: CalendarIcon } },
+    },
+    MuiPickersTextField: {
+      defaultProps: { InputLabelProps: { shrink: true } },
+    },
+    MuiPickersOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...outlinedInputRoot(theme, "MuiPickersOutlinedInput-notchedOutline"),
+          padding: theme.spacing(0, 1.5),
+        }),
+        notchedOutline: ({ theme }) => outlinedInputNotch(theme),
+        sectionsContainer: ({ theme }) => ({
+          padding: theme.spacing(1, 0),
+          variants: [
+            {
+              props: { inputSize: "small" },
+              style: { paddingTop: theme.spacing(1) },
+            },
+          ],
+        }),
+      },
+    },
+    MuiPickerPopper: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          ...surface(theme),
+          padding: theme.spacing(3),
+          [theme.breakpoints.down("sm")]: { padding: theme.spacing(2) },
+        }),
+      },
     },
     MuiMonthCalendar: {
       styleOverrides: {

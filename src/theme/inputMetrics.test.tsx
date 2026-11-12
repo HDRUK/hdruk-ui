@@ -2,12 +2,12 @@ import TextField from "@mui/material/TextField";
 import { render, screen } from "../../test/renderWithTheme";
 import theme from ".";
 
-const INSET = theme.spacing(1.5, 1.75);
+const INSET = theme.spacing(1, 1.5);
 const SIZES = ["small", "medium"] as const;
 
 describe("outlined input metrics", () => {
-  it("states the inset as 12px/14px", () => {
-    expect(INSET).toBe("12px 14px");
+  it("states the inset as 8px/12px", () => {
+    expect(INSET).toBe("8px 12px");
   });
 
   it.each(SIZES)("insets a single-line %s field on the field itself", size => {
