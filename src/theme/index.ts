@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import {
   alpha,
   createTheme,
@@ -8,7 +9,9 @@ import {
   ThemeOptions,
 } from "@mui/material/styles";
 import { deepmerge } from "@mui/utils";
+import { Icon } from "../components/Icon";
 import "../types/themeAugmentation";
+import type { IconProps } from "../components/Icon";
 
 export const tokens = {
   brand: {
@@ -72,6 +75,19 @@ export const focusRing = (theme: Theme) => ({
   outline: `${tokens.stroke.thick}px solid ${theme.palette.status.keyboardFocus}`,
   outlineOffset: tokens.stroke.medium,
 });
+
+export const surface = (theme: Theme) => ({
+  borderRadius: tokens.radius.small,
+  border: 0,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: tokens.elevation[2],
+});
+
+const CalendarIcon = ({
+  ownerState: _ownerState,
+  ...props
+}: Omit<IconProps, "name"> & { ownerState?: unknown }) =>
+  createElement(Icon, { ...props, name: "calendar_month" });
 
 const outlinedInputRoot = (theme: Theme, notchedOutline: string) => ({
   fontSize: theme.typography.body2.fontSize,
@@ -808,7 +824,43 @@ export const themeOptions: ThemeOptions = {
       },
     },
     MuiDesktopDatePicker: {
-      defaultProps: { yearsPerRow: 3 },
+      defaultProps: {
+        yearsPerRow: 3,
+        slots: { openPickerIcon: CalendarIcon },
+      },
+    },
+    MuiMobileDatePicker: {
+      defaultProps: { slots: { openPickerIcon: CalendarIcon } },
+    },
+    MuiPickersTextField: {
+      defaultProps: { InputLabelProps: { shrink: true } },
+    },
+    MuiPickersOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...outlinedInputRoot(theme, "MuiPickersOutlinedInput-notchedOutline"),
+          padding: theme.spacing(0, 1.5),
+        }),
+        notchedOutline: ({ theme }) => outlinedInputNotch(theme),
+        sectionsContainer: ({ theme }) => ({
+          padding: theme.spacing(1, 0),
+          variants: [
+            {
+              props: { inputSize: "small" },
+              style: { paddingTop: theme.spacing(1) },
+            },
+          ],
+        }),
+      },
+    },
+    MuiPickerPopper: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          ...surface(theme),
+          padding: theme.spacing(3),
+          [theme.breakpoints.down("sm")]: { padding: theme.spacing(2) },
+        }),
+      },
     },
     MuiMonthCalendar: {
       styleOverrides: {

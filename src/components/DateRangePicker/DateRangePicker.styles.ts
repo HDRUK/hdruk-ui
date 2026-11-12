@@ -6,8 +6,7 @@ import MuiPopover from "@mui/material/Popover";
 import { styled } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
 import { DateField } from "@mui/x-date-pickers/DateField";
-import { focusRing, tokens } from "../../theme";
-import type { Theme } from "@mui/material/styles";
+import { focusRing, surface, tokens } from "../../theme";
 
 export const DateRangePickerRoot = styled("div", {
   name: "HdrukDateRangePicker",
@@ -55,13 +54,6 @@ export const DateRangePickerDateField = styled(DateField, {
   name: "HdrukDateRangePicker",
   slot: "DateField",
 })({});
-
-const surface = (theme: Theme) => ({
-  borderRadius: tokens.radius.small,
-  border: 0,
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: tokens.elevation[2],
-});
 
 export const DateRangePickerPopover = styled(MuiPopover, {
   name: "HdrukDateRangePicker",
