@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/HDRUK/hdruk-ui/compare/v1.9.1...v1.10.0) (2026-11-12)
+
+
+### Features
+
+* **GAT-9378:** Add Label component ([#52](https://github.com/HDRUK/hdruk-ui/issues/52)) ([1156f45](https://github.com/HDRUK/hdruk-ui/commit/1156f45f525a08d4736dcc50de1f4646cc135b4b))
+
 ## [1.9.1](https://github.com/HDRUK/hdruk-ui/compare/v1.9.0...v1.9.1) (2026-10-27)
 
 
