@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/HDRUK/hdruk-ui/compare/v1.10.0...v1.11.0) (2026-11-12)
+
+
+### Features
+
+* **GAT-9259:** Add InputField component ([#53](https://github.com/HDRUK/hdruk-ui/issues/53)) ([7e6b1a8](https://github.com/HDRUK/hdruk-ui/commit/7e6b1a8e0fe16b2379fe2c708360908c12aba8a6))
+
 # [1.10.0](https://github.com/HDRUK/hdruk-ui/compare/v1.9.1...v1.10.0) (2026-11-12)
 
 
