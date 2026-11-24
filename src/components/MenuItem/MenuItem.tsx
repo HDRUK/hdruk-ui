@@ -20,6 +20,7 @@ import {
 export interface MenuItemOwnProps extends ListItemButtonOwnProps {
   icon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  orientation?: "vertical" | "horizontal" | "centered";
 }
 
 export type MenuItemTypeMap<
@@ -42,16 +43,21 @@ export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
       endIcon,
       children,
       selected = false,
+      orientation = "vertical",
       ...rest
     } = useThemeProps({
       props: inProps,
       name: "HdrukMenuItem",
     }) as MenuItemProps;
 
-    const ownerState = { selected };
+    const ownerState = { selected, orientation };
 
     return (
-      <MenuItemRoot ref={ref} selected={selected} {...rest}>
+      <MenuItemRoot
+        ref={ref}
+        selected={selected}
+        ownerState={ownerState}
+        {...rest}>
         {icon ? <MenuItemIcon>{icon}</MenuItemIcon> : null}
         <MenuItemLabel ownerState={ownerState}>{children}</MenuItemLabel>
         {endIcon ? <MenuItemEndIcon>{endIcon}</MenuItemEndIcon> : null}

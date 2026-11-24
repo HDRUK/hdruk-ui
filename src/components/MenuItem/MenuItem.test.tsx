@@ -40,6 +40,72 @@ describe("MenuItem", () => {
     );
   });
 
+  it("marks a selected item down its left edge by default", () => {
+    render(<MenuItem selected>Library</MenuItem>);
+
+    expect(
+      getComputedStyle(screen.getByRole("button", { name: "Library" }))
+        .boxShadow
+    ).toMatch(/^inset 3px 0 0 /);
+  });
+
+  it("marks a selected horizontal item along its bottom edge", () => {
+    render(
+      <MenuItem orientation="horizontal" selected>
+        Library
+      </MenuItem>
+    );
+
+    expect(
+      getComputedStyle(screen.getByRole("button", { name: "Library" }))
+        .boxShadow
+    ).toMatch(/^inset 0 -3px 0 /);
+  });
+
+  it("sizes a horizontal item to its content", () => {
+    render(<MenuItem orientation="horizontal">Library</MenuItem>);
+
+    const style = getComputedStyle(
+      screen.getByRole("button", { name: "Library" })
+    );
+
+    expect(style.display).toBe("inline-flex");
+    expect(style.flexGrow).toBe("0");
+  });
+
+  it("centres its content when centered", () => {
+    render(<MenuItem orientation="centered">Library</MenuItem>);
+
+    expect(
+      getComputedStyle(screen.getByRole("button", { name: "Library" }))
+        .justifyContent
+    ).toBe("center");
+    expect(getComputedStyle(screen.getByText("Library")).textAlign).toBe(
+      "center"
+    );
+  });
+
+  it("marks a selected centered item along its bottom edge", () => {
+    render(
+      <MenuItem orientation="centered" selected>
+        Library
+      </MenuItem>
+    );
+
+    expect(
+      getComputedStyle(screen.getByRole("button", { name: "Library" }))
+        .boxShadow
+    ).toMatch(/^inset 0 -3px 0 /);
+  });
+
+  it("keeps orientation off the DOM", () => {
+    render(<MenuItem orientation="centered">Library</MenuItem>);
+
+    expect(
+      screen.getByRole("button", { name: "Library" })
+    ).not.toHaveAttribute("orientation");
+  });
+
   it("takes a disabled item out of the tab order", () => {
     render(<MenuItem disabled>Teams</MenuItem>);
 

@@ -4,12 +4,15 @@ import { focusRing, tokens } from "../../theme";
 
 interface MenuItemOwnerState {
   selected: boolean;
+  orientation: "vertical" | "horizontal" | "centered";
 }
+
+type WithOwnerState = { ownerState: MenuItemOwnerState };
 
 export const MenuItemRoot = styled(MuiListItemButton, {
   name: "HdrukMenuItem",
   slot: "Root",
-})(({ theme }) => ({
+})<WithOwnerState>(({ theme }) => ({
   gap: theme.spacing(1),
   minHeight: theme.spacing(5),
   paddingTop: theme.spacing(1),
@@ -36,6 +39,24 @@ export const MenuItemRoot = styled(MuiListItemButton, {
     opacity: 1,
     color: theme.palette.text.disabled,
   },
+  variants: [
+    {
+      props: ({ ownerState }: WithOwnerState) =>
+        ownerState.orientation !== "vertical",
+      style: {
+        display: "inline-flex",
+        flexGrow: 0,
+        "&.Mui-selected, &.Mui-selected.Mui-focusVisible": {
+          boxShadow: `inset 0 -${tokens.stroke.thick}px 0 ${theme.palette.status.selected}`,
+        },
+      },
+    },
+    {
+      props: ({ ownerState }: WithOwnerState) =>
+        ownerState.orientation === "centered",
+      style: { justifyContent: "center" },
+    },
+  ],
 }));
 
 export const MenuItemIcon = styled("span", {
@@ -54,7 +75,7 @@ export const MenuItemIcon = styled("span", {
 export const MenuItemLabel = styled("span", {
   name: "HdrukMenuItem",
   slot: "Label",
-})<{ ownerState: MenuItemOwnerState }>(({ theme }) => ({
+})<WithOwnerState>(({ theme }) => ({
   ...theme.typography.body1,
   flex: "1 1 auto",
   minWidth: 0,
@@ -64,6 +85,11 @@ export const MenuItemLabel = styled("span", {
       props: ({ ownerState }: { ownerState: MenuItemOwnerState }) =>
         ownerState.selected,
       style: { fontWeight: theme.typography.fontWeightMedium },
+    },
+    {
+      props: ({ ownerState }: WithOwnerState) =>
+        ownerState.orientation === "centered",
+      style: { flex: "0 1 auto", textAlign: "center" },
     },
   ],
 }));

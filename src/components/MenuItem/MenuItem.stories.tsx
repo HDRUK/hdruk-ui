@@ -34,3 +34,19 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+export const Horizontal: Story = {
+  args: {
+    orientation: "horizontal",
+    selected: true,
+    sx: { width: theme => theme.spacing(24) },
+  },
+};
+
+export const Centered: Story = {
+  args: {
+    orientation: "centered",
+    selected: true,
+    sx: { width: theme => theme.spacing(24) },
+  },
+};
