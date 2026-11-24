@@ -5,6 +5,7 @@ import type { DateRangeCalendarProps } from "@/components/DateRangeCalendar";
 import type { DateRangePickerProps } from "@/components/DateRangePicker";
 import type { IconButtonProps } from "@/components/IconButton";
 import type { LoadingProps } from "@/components/Loading";
+import type { MenuItemProps } from "@/components/MenuItem";
 import type {
   PaletteColorOptions,
   ComponentsOverrides,
@@ -83,6 +84,7 @@ declare module "@mui/material/styles" {
     HdrukIconButton: Partial<IconButtonProps>;
     HdrukBanner: Partial<BannerProps>;
     HdrukLoading: Partial<LoadingProps>;
+    HdrukMenuItem: Partial<MenuItemProps>;
     HdrukDateRangeCalendar: Partial<DateRangeCalendarProps>;
     HdrukDateRangePicker: Partial<DateRangePickerProps>;
   }
@@ -103,6 +105,7 @@ declare module "@mui/material/styles" {
       | "checkboxIcon"
       | "closeButton";
     HdrukLoading: "root" | "progress" | "label";
+    HdrukMenuItem: "root" | "icon" | "label" | "endIcon";
     HdrukDateRangeCalendar:
       | "root"
       | "months"
@@ -156,6 +159,11 @@ declare module "@mui/material/styles" {
       defaultProps?: ComponentsPropsList["HdrukLoading"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukLoading"];
       variants?: ComponentsVariants<Theme>["HdrukLoading"];
+    };
+    HdrukMenuItem?: {
+      defaultProps?: ComponentsPropsList["HdrukMenuItem"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukMenuItem"];
+      variants?: ComponentsVariants<Theme>["HdrukMenuItem"];
     };
     HdrukDateRangeCalendar?: {
       defaultProps?: ComponentsPropsList["HdrukDateRangeCalendar"];
