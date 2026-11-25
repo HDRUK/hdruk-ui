@@ -346,11 +346,13 @@ by hand and these two are left to inherit rather than guess. Set them in your
 
 ### Fonts
 
-By default the provider injects Google Fonts links for Source Sans 3 and
-Material Symbols Rounded. Pass `loadFonts={false}` and load fonts yourself (e.g. with
-`next/font`, which self-hosts and avoids your visitors' browsers calling
-Google) when your app uses different fonts or you want to keep font delivery
-first-party.
+The provider injects no fonts unless asked. `loadFonts` adds a Google Fonts
+link for Source Sans 3; prefer loading it yourself with `next/font`, which
+self-hosts and avoids your visitors' browsers calling Google. `loadIconFont`
+adds a Google Fonts link for Material Symbols Rounded, which `Icon` needs.
+It requests only the single instance the theme renders (24px optical size,
+weight `tokens.iconWeight`, unfilled) with `display=block`, so icons never
+flash as their ligature names while the font loads.
 
 ## Local development
 

@@ -4,6 +4,7 @@ import type { ChipProps } from "@/components/Chip";
 import type { DateRangeCalendarProps } from "@/components/DateRangeCalendar";
 import type { DateRangePickerProps } from "@/components/DateRangePicker";
 import type { IconButtonProps } from "@/components/IconButton";
+import type { LeftNavProps } from "@/components/LeftNav";
 import type { LoadingProps } from "@/components/Loading";
 import type { MenuDropdownProps } from "@/components/MenuDropdown";
 import type { MenuItemProps } from "@/components/MenuItem";
@@ -87,6 +88,7 @@ declare module "@mui/material/styles" {
     HdrukLoading: Partial<LoadingProps>;
     HdrukMenuItem: Partial<MenuItemProps>;
     HdrukMenuDropdown: Partial<MenuDropdownProps>;
+    HdrukLeftNav: Partial<LeftNavProps>;
     HdrukDateRangeCalendar: Partial<DateRangeCalendarProps>;
     HdrukDateRangePicker: Partial<DateRangePickerProps>;
   }
@@ -109,6 +111,8 @@ declare module "@mui/material/styles" {
     HdrukLoading: "root" | "progress" | "label";
     HdrukMenuItem: "root" | "icon" | "label" | "endIcon";
     HdrukMenuDropdown: "root" | "trigger" | "list";
+    HdrukLeftNav:
+      "root" | "header" | "heading" | "toggle" | "mobileToggle" | "list";
     HdrukDateRangeCalendar:
       | "root"
       | "months"
@@ -172,6 +176,11 @@ declare module "@mui/material/styles" {
       defaultProps?: ComponentsPropsList["HdrukMenuDropdown"];
       styleOverrides?: ComponentsOverrides<Theme>["HdrukMenuDropdown"];
       variants?: ComponentsVariants<Theme>["HdrukMenuDropdown"];
+    };
+    HdrukLeftNav?: {
+      defaultProps?: ComponentsPropsList["HdrukLeftNav"];
+      styleOverrides?: ComponentsOverrides<Theme>["HdrukLeftNav"];
+      variants?: ComponentsVariants<Theme>["HdrukLeftNav"];
     };
     HdrukDateRangeCalendar?: {
       defaultProps?: ComponentsPropsList["HdrukDateRangeCalendar"];

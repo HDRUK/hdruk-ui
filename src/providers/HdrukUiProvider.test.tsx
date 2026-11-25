@@ -1,4 +1,5 @@
 import { render as rtlRender, screen } from "@testing-library/react";
+import { tokens } from "../theme";
 import { HdrukUiProvider } from "./HdrukUiProvider";
 
 const fontLinks = () =>
@@ -44,6 +45,19 @@ describe("HdrukUiProvider font loading", () => {
     expect(fontLinks()[0].getAttribute("href")).toContain(
       "Material+Symbols+Rounded"
     );
+  });
+
+  it("requests only the icon font instance the theme renders, blocking until it loads", () => {
+    rtlRender(
+      <HdrukUiProvider loadIconFont>
+        <span>content</span>
+      </HdrukUiProvider>
+    );
+
+    const href = fontLinks()[0].getAttribute("href");
+
+    expect(href).toContain(`opsz,wght,FILL,GRAD@24,${tokens.iconWeight},0,0`);
+    expect(href).toContain("display=block");
   });
 
   it("preconnects only once when both fonts are opted into", () => {

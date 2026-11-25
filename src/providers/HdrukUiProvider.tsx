@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ThemeProvider, CssBaseline, Theme } from "@mui/material";
-import { default as brandTheme } from "../theme";
+import { default as brandTheme, tokens } from "../theme";
 
 export interface UiProviderProps {
   children: React.ReactNode;
@@ -27,7 +27,7 @@ export interface UiProviderProps {
 
 const GOOGLE_FONTS = {
   text: "https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap",
-  icon: "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+  icon: `https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,${tokens.iconWeight},0,0&display=block`,
 };
 
 export function HdrukUiProvider({
