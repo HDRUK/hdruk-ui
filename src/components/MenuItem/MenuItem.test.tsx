@@ -101,9 +101,9 @@ describe("MenuItem", () => {
   it("keeps orientation off the DOM", () => {
     render(<MenuItem orientation="centered">Library</MenuItem>);
 
-    expect(
-      screen.getByRole("button", { name: "Library" })
-    ).not.toHaveAttribute("orientation");
+    expect(screen.getByRole("button", { name: "Library" })).not.toHaveAttribute(
+      "orientation"
+    );
   });
 
   it("takes a disabled item out of the tab order", () => {

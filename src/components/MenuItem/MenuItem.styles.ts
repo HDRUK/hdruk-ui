@@ -5,6 +5,9 @@ import { focusRing, tokens } from "../../theme";
 interface MenuItemOwnerState {
   selected: boolean;
   orientation: "vertical" | "horizontal" | "centered";
+  collapsed: boolean;
+  animating: boolean;
+  duration?: number;
 }
 
 type WithOwnerState = { ownerState: MenuItemOwnerState };
@@ -56,6 +59,11 @@ export const MenuItemRoot = styled(MuiListItemButton, {
         ownerState.orientation === "centered",
       style: { justifyContent: "center" },
     },
+    {
+      props: ({ ownerState }: WithOwnerState) =>
+        ownerState.collapsed && !ownerState.animating,
+      style: { [theme.breakpoints.up("sm")]: { gap: 0 } },
+    },
   ],
 }));
 
@@ -75,11 +83,15 @@ export const MenuItemIcon = styled("span", {
 export const MenuItemLabel = styled("span", {
   name: "HdrukMenuItem",
   slot: "Label",
-})<WithOwnerState>(({ theme }) => ({
+})<WithOwnerState>(({ theme, ownerState }) => ({
   ...theme.typography.body1,
   flex: "1 1 auto",
   minWidth: 0,
   textAlign: "left",
+  transition: theme.transitions.create("opacity", {
+    duration: ownerState.duration,
+  }),
+  "@media (prefers-reduced-motion: reduce)": { transition: "none" },
   variants: [
     {
       props: ({ ownerState }: { ownerState: MenuItemOwnerState }) =>
@@ -91,10 +103,41 @@ export const MenuItemLabel = styled("span", {
         ownerState.orientation === "centered",
       style: { flex: "0 1 auto", textAlign: "center" },
     },
+    {
+      props: ({ ownerState }: WithOwnerState) => ownerState.collapsed,
+      style: { [theme.breakpoints.up("sm")]: { opacity: 0 } },
+    },
+    {
+      props: ({ ownerState }: WithOwnerState) =>
+        ownerState.collapsed && !ownerState.animating,
+      style: {
+        [theme.breakpoints.up("sm")]: {
+          flex: "0 0 0",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        },
+      },
+    },
   ],
 }));
 
 export const MenuItemEndIcon = styled(MenuItemIcon, {
   name: "HdrukMenuItem",
   slot: "EndIcon",
-})({});
+})<WithOwnerState>(({ theme, ownerState }) => ({
+  transition: theme.transitions.create("opacity", {
+    duration: ownerState.duration,
+  }),
+  "@media (prefers-reduced-motion: reduce)": { transition: "none" },
+  variants: [
+    {
+      props: ({ ownerState }: WithOwnerState) => ownerState.collapsed,
+      style: { [theme.breakpoints.up("sm")]: { opacity: 0 } },
+    },
+    {
+      props: ({ ownerState }: WithOwnerState) =>
+        ownerState.collapsed && !ownerState.animating,
+      style: { [theme.breakpoints.up("sm")]: { display: "none" } },
+    },
+  ],
+}));

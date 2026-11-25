@@ -10,6 +10,8 @@ import {
   OverrideProps,
 } from "@mui/material/OverridableComponent";
 import { useThemeProps } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
+import { LeftNavContext } from "../LeftNav/LeftNavContext";
 import {
   MenuItemEndIcon,
   MenuItemIcon,
@@ -50,18 +52,32 @@ export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
       name: "HdrukMenuItem",
     }) as MenuItemProps;
 
-    const ownerState = { selected, orientation };
+    const nav = React.useContext(LeftNavContext);
+    const collapsed = Boolean(nav && nav.collapsed);
+    const animating = Boolean(nav && nav.animating);
+    const duration = nav ? nav.duration : undefined;
+    const ownerState = {
+      selected,
+      orientation,
+      collapsed,
+      animating,
+      duration,
+    };
 
     return (
-      <MenuItemRoot
-        ref={ref}
-        selected={selected}
-        ownerState={ownerState}
-        {...rest}>
-        {icon ? <MenuItemIcon>{icon}</MenuItemIcon> : null}
-        <MenuItemLabel ownerState={ownerState}>{children}</MenuItemLabel>
-        {endIcon ? <MenuItemEndIcon>{endIcon}</MenuItemEndIcon> : null}
-      </MenuItemRoot>
+      <Tooltip title={collapsed ? children : ""} placement="right">
+        <MenuItemRoot
+          ref={ref}
+          selected={selected}
+          ownerState={ownerState}
+          {...rest}>
+          {icon ? <MenuItemIcon>{icon}</MenuItemIcon> : null}
+          <MenuItemLabel ownerState={ownerState}>{children}</MenuItemLabel>
+          {endIcon ? (
+            <MenuItemEndIcon ownerState={ownerState}>{endIcon}</MenuItemEndIcon>
+          ) : null}
+        </MenuItemRoot>
+      </Tooltip>
     );
   }
 ) as OverridableComponent<MenuItemTypeMap>;

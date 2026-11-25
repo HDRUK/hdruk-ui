@@ -4,6 +4,7 @@ import * as React from "react";
 import Collapse, { CollapseProps } from "@mui/material/Collapse";
 import { useThemeProps } from "@mui/material/styles";
 import { Icon } from "../Icon";
+import { LeftNavContext } from "../LeftNav/LeftNavContext";
 import {
   MenuDropdownList,
   MenuDropdownRoot,
@@ -50,13 +51,21 @@ export const MenuDropdown = React.forwardRef<HTMLDivElement, MenuDropdownProps>(
       ...rest
     } = useThemeProps({ props: inProps, name: "HdrukMenuDropdown" });
 
+    const nav = React.useContext(LeftNavContext);
+    const collapsed = Boolean(nav && nav.collapsed);
     const [expanded, setExpanded] = React.useState(defaultExpanded);
+    const open = expanded && !collapsed;
 
     const id = React.useId();
     const triggerId = `${id}-trigger`;
     const listId = `${id}-list`;
 
-    const handleClick = () => {
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+      if (nav && collapsed) {
+        nav.expand(event);
+        setExpanded(true);
+        return;
+      }
       setExpanded(previous => !previous);
     };
 
@@ -67,13 +76,15 @@ export const MenuDropdown = React.forwardRef<HTMLDivElement, MenuDropdownProps>(
           component="button"
           id={triggerId}
           icon={icon}
-          endIcon={<Icon name={expanded ? "expand_less" : "expand_more"} />}
-          aria-expanded={expanded}
+          endIcon={
+            <Icon name={open ? "keyboard_arrow_up" : "keyboard_arrow_down"} />
+          }
+          aria-expanded={open}
           aria-controls={listId}
           onClick={handleClick}>
           {label}
         </MenuDropdownTrigger>
-        <Collapse {...slotProps?.transition} in={expanded}>
+        <Collapse {...slotProps?.transition} in={open}>
           <MenuDropdownList
             id={listId}
             role="group"

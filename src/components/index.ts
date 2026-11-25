@@ -5,6 +5,7 @@ export * from "./DateRangeCalendar";
 export * from "./DateRangePicker";
 export * from "./Icon";
 export * from "./IconButton";
+export * from "./LeftNav";
 export * from "./Loading";
 export * from "./MenuDropdown";
 export * from "./MenuItem";
