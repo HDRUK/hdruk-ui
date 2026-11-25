@@ -40,8 +40,8 @@ describe("chip metrics", () => {
   });
 
   it.each([
-    ["needsAction", tokens.status.needsAction, tokens.text.primaryBlack],
-    ["archived", tokens.status.archived, tokens.text.primaryWhite],
+    ["needsAction", tokens.status.needsAction, tokens.text.primaryDefault],
+    ["archived", tokens.status.archived, tokens.text.primaryInverse],
   ] as const)(
     "fills a %s chip from the status palette",
     (color, main, contrastText) => {
@@ -62,7 +62,7 @@ describe("chip metrics", () => {
 
     expect(
       getComputedStyle(screen.getByText("Status").parentElement!).color
-    ).toBe(hexToRgb(tokens.text.secondaryBlack));
+    ).toBe(hexToRgb(tokens.text.secondaryDefault));
   });
 
   it("sets the avatar and delete icon flush, spaced by the root's gap", () => {
@@ -85,6 +85,6 @@ describe("chip metrics", () => {
 
     const chip = getComputedStyle(screen.getByText("Archived").parentElement!);
     expect(chip.opacity).toBe("1");
-    expect(chip.backgroundColor).toBe("rgb(226, 226, 226)");
+    expect(chip.backgroundColor).toBe("rgb(238, 238, 238)");
   });
 });

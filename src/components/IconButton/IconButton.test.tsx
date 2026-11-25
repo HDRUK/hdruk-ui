@@ -84,7 +84,7 @@ describe("IconButton states", () => {
 
     const style = getComputedStyle(screen.getByRole("button"));
 
-    expect(style.color).toBe("rgb(83, 87, 90)");
+    expect(style.color).toBe("rgb(80, 90, 96)");
   });
 
   it("fades icon colour when disabled", () => {

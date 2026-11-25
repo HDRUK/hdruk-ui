@@ -313,6 +313,30 @@ describe("LeftNav theme integration", () => {
     expect(style.borderRadius).toBe("0");
   });
 
+  it("keeps app icon button borders and fills off the toggle", () => {
+    renderNav(
+      {},
+      {
+        themeOptions: {
+          components: {
+            MuiIconButton: {
+              styleOverrides: {
+                root: { border: "1px solid red", backgroundColor: "red" },
+              },
+            },
+          },
+        },
+      }
+    );
+
+    const style = getComputedStyle(
+      screen.getByRole("button", { name: "Collapse navigation" })
+    );
+
+    expect(style.borderTopStyle).not.toBe("solid");
+    expect(style.backgroundColor).not.toBe("rgb(255, 0, 0)");
+  });
+
   it("lets a site restyle the root without losing the base styles", () => {
     renderNav(
       {},

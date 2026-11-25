@@ -13,55 +13,67 @@ import { Icon } from "../components/Icon";
 import "../types/themeAugmentation";
 import type { IconProps } from "../components/Icon";
 
+const brand = {
+  primary: "#475DA7",
+  primaryHovered: "#384B91",
+  accentPrimary: "#C6CEE5",
+  secondary: "#2C8267",
+  secondaryHovered: "#267259",
+  accentSecondary: "#B8E2D8",
+} as const;
+
+const status = {
+  default: "#FFFFFF",
+  neutral: "#E2E2E2",
+  hovered: "#EEEEEE",
+  selected: "#2C8267",
+  information: "#29235C",
+  faded: "#868E96",
+  disabled: "#EEEEEE",
+  keyboardFocus: "#4682B4",
+  success: "#2C8267",
+  successHover: "#267259",
+  error: "#DC3645",
+  errorHover: "#C02531",
+  warning: "#F2D12D",
+  warningHover: "#F0BB24",
+  needsAction: "#FE9A2D",
+  needsActionHover: "#F27F28",
+  archived: "#505A60",
+  archivedHovered: "#3C3C3B",
+  announcement: "#FBE71E",
+} as const;
+
+const text = {
+  primaryDefault: "#262626",
+  secondaryDefault: "#3C3C3B",
+  primaryInverse: "#FFFFFF",
+  secondaryInverse: "#EEEEEE",
+  faded: "#505A60",
+  disabled: "#868E96",
+  error: "#C02531",
+  warning: "#856505",
+  success: status.success,
+  hyperlink: brand.primary,
+  hyperlinkHover: brand.primaryHovered,
+} as const;
+
+const background = {
+  default: "#FFFFFF",
+  primary: "#F6F7F8",
+  secondary: "#E2E2E2",
+  inverse: text.primaryDefault,
+  error: "#FFECF1",
+  warning: "#FCF8E4",
+  success: "#E2F3F0",
+  information: "#E9ECF4",
+} as const;
+
 export const tokens = {
-  brand: {
-    primary: "#475DA7",
-    primaryHovered: "#384B91",
-    accentPrimary: "#C6CEE5",
-    secondary: "#2C8267",
-    secondaryHovered: "#267259",
-    accentSecondary: "#B8E2D8",
-  },
-  status: {
-    default: "#FFFFFF",
-    grey: "#E2E2E2",
-    hovered: "#EEEEEE",
-    selected: "#2C8267",
-    information: "#29235C",
-    faded: "#868E96",
-    disabled: "#E2E2E2",
-    keyboardFocus: "#4682B4",
-    success: "#2C8267",
-    successHover: "#1C553F",
-    error: "#DC3645",
-    errorHover: "#C02531",
-    warning: "#F2D12D",
-    warningHover: "#F0BB24",
-    needsAction: "#FE9A2D",
-    needsActionHover: "#F27F28",
-    archived: "#53575A",
-    archivedHovered: "#3C3C3B",
-    announcement: "#FBE71E",
-  },
-  background: {
-    white: "#FFFFFF",
-    primary: "#F6F7F8",
-    secondary: "#E2E2E2",
-    error: "#FFECF1",
-    warning: "#FDFCE6",
-    success: "#E2F3F0",
-    information: "#E9ECF4",
-  },
-  text: {
-    primaryBlack: "#262626",
-    secondaryBlack: "#3C3C3B",
-    primaryWhite: "#FFFFFF",
-    secondaryWhite: "#EEEEEE",
-    faded: "#53575A",
-    disabled: "#868E96",
-    error: "#C02531",
-    warning: "#856505",
-  },
+  brand,
+  status,
+  background,
+  text,
   stroke: { thin: 1, medium: 2, thick: 3 },
   radius: { none: 0, small: 4, medium: 8, large: 12, pill: 24 },
   iconSize: { small: 20, medium: 24, large: 40 },
@@ -159,7 +171,7 @@ const statusChip = (
 const calendarCellButton = (theme: Theme) => ({
   ...theme.typography.h5,
   fontWeight: theme.typography.fontWeightRegular,
-  color: tokens.text.secondaryBlack,
+  color: theme.palette.text.secondaryDefault,
   borderRadius: tokens.radius.pill,
   "&:focus": { backgroundColor: "transparent" },
   "&:hover": { backgroundColor: theme.palette.status.hovered },
@@ -179,25 +191,25 @@ export const themeOptions: ThemeOptions = {
       main: tokens.brand.primary,
       dark: tokens.brand.primaryHovered,
       light: tokens.brand.accentPrimary,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     },
     secondary: {
       main: tokens.brand.secondary,
       dark: tokens.brand.secondaryHovered,
       light: tokens.brand.accentSecondary,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     },
     success: {
       main: tokens.status.success,
       dark: tokens.status.successHover,
       light: tokens.background.success,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     },
     error: {
       main: tokens.status.error,
       dark: tokens.status.errorHover,
       light: tokens.background.error,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     },
     warning: {
       main: tokens.status.warning,
@@ -208,16 +220,18 @@ export const themeOptions: ThemeOptions = {
     info: {
       main: tokens.status.information,
       light: tokens.background.information,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     },
     text: {
-      primary: tokens.text.primaryBlack,
+      primary: tokens.text.primaryDefault,
       secondary: tokens.text.faded,
       disabled: tokens.text.disabled,
+      secondaryDefault: tokens.text.secondaryDefault,
+      error: tokens.text.error,
     },
     background: {
       default: tokens.background.primary,
-      paper: tokens.background.white,
+      paper: tokens.background.default,
       secondary: tokens.background.secondary,
     },
     divider: tokens.background.secondary,
@@ -225,13 +239,13 @@ export const themeOptions: ThemeOptions = {
       main: tokens.brand.primary,
       dark: tokens.brand.primaryHovered,
       light: tokens.brand.accentPrimary,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     },
 
     brand: tokens.brand,
     status: {
       default: tokens.status.default,
-      grey: tokens.status.grey,
+      grey: tokens.status.neutral,
       hovered: tokens.status.hovered,
       selected: tokens.status.selected,
       faded: tokens.status.faded,
@@ -358,13 +372,13 @@ export const themeOptions: ThemeOptions = {
           props: { variant: "outlined", color: "inherit" },
           style: ({ theme }) => ({
             color: theme.palette.text.primary,
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.status.grey,
             borderWidth: tokens.stroke.thin,
             borderColor: theme.palette.status.faded,
             padding: theme.spacing(0.875, 1.375),
             "&:hover, &.Mui-disabled": { borderWidth: tokens.stroke.thin },
             "&:hover, &:focus-visible": {
-              backgroundColor: theme.palette.status.hovered,
+              backgroundColor: theme.palette.background.default,
             },
           }),
         },
@@ -389,7 +403,7 @@ export const themeOptions: ThemeOptions = {
         {
           props: { variant: "text", color: "inherit" },
           style: ({ theme }) => ({
-            color: tokens.text.secondaryBlack,
+            color: theme.palette.text.secondaryDefault,
             "&:hover": {
               backgroundColor: theme.palette.action.hover,
             },
@@ -475,9 +489,9 @@ export const themeOptions: ThemeOptions = {
         root: ({ theme }) => ({
           ...theme.typography.body2,
           fontWeight: theme.typography.fontWeightRegular,
-          color: tokens.text.secondaryBlack,
+          color: theme.palette.text.secondaryDefault,
           "&.Mui-focused, &.Mui-error": {
-            color: tokens.text.secondaryBlack,
+            color: theme.palette.text.secondaryDefault,
           },
         }),
         asterisk: ({ theme }) => ({
@@ -543,7 +557,7 @@ export const themeOptions: ThemeOptions = {
         root: ({ theme }) => ({
           ...theme.typography.bodySmall,
           lineHeight: 1.3,
-          "&.Mui-error": { color: tokens.text.error },
+          "&.Mui-error": { color: theme.palette.text.error },
         }),
         contained: { marginLeft: 0, marginRight: 0 },
       },
@@ -658,12 +672,14 @@ export const themeOptions: ThemeOptions = {
       variants: [
         {
           props: { color: "warning" },
-          style: { color: tokens.text.secondaryBlack },
+          style: ({ theme }) => ({
+            color: theme.palette.text.secondaryDefault,
+          }),
         },
         {
           props: { variant: "outlined", color: "default" },
           style: ({ theme }) => ({
-            borderColor: tokens.text.secondaryBlack,
+            borderColor: theme.palette.text.secondaryDefault,
             "&.MuiChip-clickable:hover": {
               backgroundColor: theme.palette.status.hovered,
             },
@@ -685,7 +701,9 @@ export const themeOptions: ThemeOptions = {
         })),
         {
           props: { variant: "outlined", color: "needsAction" },
-          style: { color: tokens.text.secondaryBlack },
+          style: ({ theme }) => ({
+            color: theme.palette.text.secondaryDefault,
+          }),
         },
         ...statusChip("archived", ({ status, common }) => ({
           main: status.archived,
@@ -738,7 +756,7 @@ export const themeOptions: ThemeOptions = {
         }),
         labelContainer: ({ theme }) => ({
           ...theme.typography.h3,
-          color: tokens.text.secondaryBlack,
+          color: theme.palette.text.secondaryDefault,
           gridColumn: 2,
           gridRow: 1,
           justifySelf: "center",
@@ -761,7 +779,7 @@ export const themeOptions: ThemeOptions = {
         weekDayLabel: ({ theme }) => ({
           ...theme.typography.bodySmall,
           fontWeight: theme.typography.fontWeightMedium,
-          color: tokens.text.secondaryBlack,
+          color: theme.palette.text.secondaryDefault,
           width: theme.spacing(5),
           height: theme.spacing(5),
           margin: theme.spacing(0, 0.75),
@@ -790,7 +808,7 @@ export const themeOptions: ThemeOptions = {
           fontWeight: theme.typography.fontWeightRegular,
           width: theme.spacing(5),
           height: theme.spacing(5),
-          color: tokens.text.secondaryBlack,
+          color: theme.palette.text.secondaryDefault,
           ...(ownerState.disableMargin
             ? {}
             : {

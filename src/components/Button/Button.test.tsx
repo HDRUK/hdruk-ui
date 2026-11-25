@@ -216,13 +216,13 @@ describe("Button metrics", () => {
     expect(style.paddingLeft).toBe("10px");
   });
 
-  it("gives the tertiary button a white fill, thin grey border and regular label", () => {
+  it("gives the tertiary button a grey fill, thin grey border and regular label", () => {
     render(<Button purpose="tertiary">Go</Button>);
 
     const style = getComputedStyle(screen.getByRole("button"));
 
     expect(style.minHeight).toBe("40px");
-    expect(style.backgroundColor).toBe("rgb(255, 255, 255)");
+    expect(style.backgroundColor).toBe("rgb(226, 226, 226)");
     expect(style.color).toBe("rgb(38, 38, 38)");
     expect(style.fontWeight).toBe("400");
     expect(style.borderWidth).toBe("1px");
@@ -265,18 +265,17 @@ describe("Button label colour", () => {
   it.each([
     ["secondary", "rgb(38, 38, 38)", "rgb(44, 130, 103)"],
     ["tertiary", "rgb(38, 38, 38)", "rgb(134, 142, 150)"],
-  ] as const)("keeps %s's label dark and its border its own colour", (
-    purpose,
-    color,
-    borderColor
-  ) => {
-    render(<Button purpose={purpose}>Go</Button>);
+  ] as const)(
+    "keeps %s's label dark and its border its own colour",
+    (purpose, color, borderColor) => {
+      render(<Button purpose={purpose}>Go</Button>);
 
-    const style = getComputedStyle(screen.getByRole("button"));
+      const style = getComputedStyle(screen.getByRole("button"));
 
-    expect(style.color).toBe(color);
-    expect(style.borderColor).toBe(borderColor);
-  });
+      expect(style.color).toBe(color);
+      expect(style.borderColor).toBe(borderColor);
+    }
+  );
 });
 
 describe("Button loading state", () => {

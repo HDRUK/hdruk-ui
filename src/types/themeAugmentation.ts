@@ -54,6 +54,10 @@ declare module "@mui/material/styles" {
   interface TypeBackground {
     secondary: string;
   }
+  interface TypeText {
+    secondaryDefault: string;
+    error: string;
+  }
 }
 
 declare module "@mui/material/styles" {

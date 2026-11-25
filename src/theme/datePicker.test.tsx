@@ -116,7 +116,7 @@ describe("date picker popup", () => {
 
       const cell = getComputedStyle(screen.getByRole("radio", { name: label }));
       expect(cell.backgroundColor).toBe(hexToRgb(tokens.brand.primary));
-      expect(cell.color).toBe(hexToRgb(tokens.text.primaryWhite));
+      expect(cell.color).toBe(hexToRgb(tokens.text.primaryInverse));
     }
   );
 });
