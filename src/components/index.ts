@@ -6,6 +6,7 @@ export * from "./DateRangePicker";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./Loading";
+export * from "./MenuItem";
 export * from "./SearchBar";
 export * from "./Header";
 export * from "./Footer";
