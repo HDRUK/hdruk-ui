@@ -14,7 +14,6 @@ const cd = {
     neutral: "#D0D3D4",
     information: "#29235C",
     hovered: "#E3E7F2",
-    selected: "#4B7E59",
     keyboardFocus: "#0000FF",
     needsAction: "#F98E2B",
     success: "#4B7E59",
@@ -84,7 +83,7 @@ export const cohortDiscoveryThemeOptions: ThemeOptions = {
     status: {
       grey: cd.status.neutral,
       hovered: cd.status.hovered,
-      selected: cd.status.selected,
+      selected: cd.status.success,
       keyboardFocus: cd.status.keyboardFocus,
       needsAction: cd.status.needsAction,
     },
@@ -104,7 +103,7 @@ export const cohortDiscoveryThemeOptions: ThemeOptions = {
       styleOverrides: {
         root: ({ theme }) => ({
           border: `${tokens.stroke.thin}px solid ${theme.palette.status.faded}`,
-          backgroundColor: theme.palette.status.default,
+          backgroundColor: theme.palette.status.grey,
         }),
       },
     },

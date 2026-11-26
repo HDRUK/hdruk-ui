@@ -102,12 +102,12 @@ describe("safe people registry icon button", () => {
 
     const style = getComputedStyle(screen.getByRole("button"));
 
-    expect(style.backgroundColor).toBe("rgb(255, 255, 255)");
+    expect(style.backgroundColor).toBe("rgb(225, 225, 225)");
     expect(style.borderColor).toBe("rgb(124, 124, 124)");
     expect(style.color).toBe("rgb(91, 91, 91)");
   });
 
-  it("has no hover, because the export gives hovered the default's value", () => {
+  it("lightens to the registry's hovered fill", () => {
     render(
       <IconButton aria-label="Save">
         <Icon name="bookmark" />

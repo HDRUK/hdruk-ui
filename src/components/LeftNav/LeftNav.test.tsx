@@ -313,6 +313,29 @@ describe("LeftNav theme integration", () => {
     expect(style.borderRadius).toBe("0");
   });
 
+  it("sizes the toggle icon from the toggle's font size", () => {
+    renderNav(
+      {},
+      {
+        themeOptions: {
+          components: {
+            HdrukLeftNav: { styleOverrides: { toggle: { fontSize: "2rem" } } },
+          },
+        },
+      }
+    );
+
+    const toggle = screen.getByRole("button", { name: "Collapse navigation" });
+    const cls = [...toggle.classList].find(c => c.startsWith("css-"));
+    const iconRules = Array.from(document.styleSheets)
+      .flatMap(sheet => Array.from(sheet.cssRules ?? []))
+      .map(rule => rule.cssText)
+      .filter(text => text.startsWith(`.${cls} .MuiIcon-root`));
+
+    expect(getComputedStyle(toggle).fontSize).toBe("2rem");
+    expect(iconRules.join(" ")).toContain("font-size: inherit");
+  });
+
   it("keeps app icon button borders and fills off the toggle", () => {
     renderNav(
       {},

@@ -22,28 +22,6 @@ const brand = {
   accentSecondary: "#B8E2D8",
 } as const;
 
-const status = {
-  default: "#FFFFFF",
-  neutral: "#E2E2E2",
-  hovered: "#EEEEEE",
-  selected: "#2C8267",
-  information: "#29235C",
-  faded: "#868E96",
-  disabled: "#EEEEEE",
-  keyboardFocus: "#4682B4",
-  success: "#2C8267",
-  successHover: "#267259",
-  error: "#DC3645",
-  errorHover: "#C02531",
-  warning: "#F2D12D",
-  warningHover: "#F0BB24",
-  needsAction: "#FE9A2D",
-  needsActionHover: "#F27F28",
-  archived: "#505A60",
-  archivedHovered: "#3C3C3B",
-  announcement: "#FBE71E",
-} as const;
-
 const text = {
   primaryDefault: "#262626",
   secondaryDefault: "#3C3C3B",
@@ -53,9 +31,31 @@ const text = {
   disabled: "#868E96",
   error: "#C02531",
   warning: "#856505",
-  success: status.success,
+  success: brand.secondary,
   hyperlink: brand.primary,
   hyperlinkHover: brand.primaryHovered,
+} as const;
+
+const status = {
+  default: "#FFFFFF",
+  neutral: "#E2E2E2",
+  hovered: "#EEEEEE",
+  selected: brand.secondary,
+  information: "#29235C",
+  faded: text.disabled,
+  disabled: "#EEEEEE",
+  keyboardFocus: "#4682B4",
+  success: brand.secondary,
+  successHover: brand.secondaryHovered,
+  error: "#DC3645",
+  errorHover: text.error,
+  warning: "#F2D12D",
+  warningHover: "#F0BB24",
+  needsAction: "#FE9A2D",
+  needsActionHover: "#F27F28",
+  archived: text.faded,
+  archivedHovered: text.secondaryDefault,
+  announcement: "#FBE71E",
 } as const;
 
 const background = {

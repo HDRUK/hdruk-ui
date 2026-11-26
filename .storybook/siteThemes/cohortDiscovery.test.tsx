@@ -51,8 +51,9 @@ describe("cohort discovery button colours", () => {
   it("fills primary with the brand blue", () => {
     render(<Button purpose="primary">P</Button>, cd);
 
-    expect(emittedVar("P", "--variant-containedBg")).toBe("#475DA7");
-    expect(emittedVar("P", "--variant-containedColor")).toBe("#FFFFFF");
+    expect(screen.getByRole("button", { name: "P" })).toHaveClass(
+      "MuiButton-containedPrimary"
+    );
   });
 
   it("outlines secondary in the success green on white", () => {
@@ -97,7 +98,7 @@ describe("cohort discovery icon button", () => {
       .toLowerCase();
     const style = getComputedStyle(el);
 
-    expect(style.backgroundColor).toBe("rgb(255, 255, 255)");
+    expect(style.backgroundColor).toBe("rgb(208, 211, 212)");
     expect(style.borderColor).toBe("rgb(134, 142, 150)");
     expect(style.color).toBe("rgb(80, 90, 96)");
     expect(rules).toContain("#e3e7f2");

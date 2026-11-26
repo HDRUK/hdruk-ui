@@ -99,6 +99,7 @@ export const LeftNavToggle = styled(ButtonBase, {
   borderRadius: tokens.radius.none,
   color: theme.palette.text.secondaryDefault,
   fontSize: theme.typography.pxToRem(tokens.iconSize.medium),
+  "& .MuiIcon-root": { fontSize: "inherit" },
   "&:hover, &.Mui-focusVisible": {
     backgroundColor: `color-mix(in srgb, currentColor ${theme.palette.action.focusOpacity * 100}%, transparent)`,
   },
