@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/HDRUK/hdruk-ui/compare/v1.12.0...v1.13.0) (2026-11-26)
+
+
+### Features
+
+* **GAT-9930:** update variables to match v1 figma ([#64](https://github.com/HDRUK/hdruk-ui/issues/64)) ([8bf8f6c](https://github.com/HDRUK/hdruk-ui/commit/8bf8f6c74b5f07f5f03b2a7c16fa7d98d9b1a9d7))
+
 # [1.12.0](https://github.com/HDRUK/hdruk-ui/compare/v1.11.0...v1.12.0) (2026-11-26)
 
 
