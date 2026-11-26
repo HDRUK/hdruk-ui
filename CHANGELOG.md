@@ -1,3 +1,12 @@
+# [1.12.0](https://github.com/HDRUK/hdruk-ui/compare/v1.11.0...v1.12.0) (2026-11-26)
+
+
+### Features
+
+* **GAT-9377:** Add MenuDropdown component ([#61](https://github.com/HDRUK/hdruk-ui/issues/61)) ([76b7114](https://github.com/HDRUK/hdruk-ui/commit/76b7114f65aa1ed6f0ed5cc72c776700e79ccc6a))
+* **GAT-9380:** Add MenuItem component ([#60](https://github.com/HDRUK/hdruk-ui/issues/60)) ([89fcbf4](https://github.com/HDRUK/hdruk-ui/commit/89fcbf45803e74b2540459e1c3e722ca9d45b199))
+* **GAT-9928:** add LeftNav component ([#63](https://github.com/HDRUK/hdruk-ui/issues/63)) ([492fb41](https://github.com/HDRUK/hdruk-ui/commit/492fb41195f5af05b599e25f4fb1b774e7e5da97))
+
 # [1.11.0](https://github.com/HDRUK/hdruk-ui/compare/v1.10.0...v1.11.0) (2026-11-12)
 
 
