@@ -1,8 +1,8 @@
 import type * as React from "react";
+import ButtonBase from "@mui/material/ButtonBase";
 import { styled } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
-import { tokens } from "../../theme";
-import { IconButton } from "../IconButton";
+import { focusRing, tokens } from "../../theme";
 import { MenuItem } from "../MenuItem";
 
 interface LeftNavOwnerState {
@@ -71,7 +71,7 @@ export const LeftNavHeading = styled("span", {
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-  color: tokens.text.secondaryBlack,
+  color: theme.palette.text.secondaryDefault,
   transition: theme.transitions.create("opacity", {
     duration: ownerState.duration,
   }),
@@ -89,14 +89,21 @@ export const LeftNavHeading = styled("span", {
   ],
 }));
 
-export const LeftNavToggle = styled(IconButton, {
+export const LeftNavToggle = styled(ButtonBase, {
   name: "HdrukLeftNav",
   slot: "Toggle",
 })(({ theme }) => ({
   alignSelf: "stretch",
+  flexShrink: 0,
   padding: theme.spacing(1, 1.5),
   borderRadius: tokens.radius.none,
-  color: tokens.text.secondaryBlack,
+  color: theme.palette.text.secondaryDefault,
+  fontSize: theme.typography.pxToRem(tokens.iconSize.medium),
+  "& .MuiIcon-root": { fontSize: "inherit" },
+  "&:hover, &.Mui-focusVisible": {
+    backgroundColor: `color-mix(in srgb, currentColor ${theme.palette.action.focusOpacity * 100}%, transparent)`,
+  },
+  "&.Mui-focusVisible": focusRing(theme),
 }));
 
 export const LeftNavMobileToggle = styled(MenuItem, {

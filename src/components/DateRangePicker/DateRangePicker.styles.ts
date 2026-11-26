@@ -143,7 +143,7 @@ export const DateRangePickerShortcut = styled(MuiChip, {
     {
       props: { variant: "outlined" },
       style: {
-        color: tokens.text.secondaryBlack,
+        color: theme.palette.text.secondaryDefault,
         borderColor: "currentColor",
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(0.375, 1.375),

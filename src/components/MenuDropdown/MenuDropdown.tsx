@@ -3,6 +3,7 @@
 import * as React from "react";
 import Collapse, { CollapseProps } from "@mui/material/Collapse";
 import { useThemeProps } from "@mui/material/styles";
+import { useControlled } from "@mui/material/utils";
 import { Icon } from "../Icon";
 import { LeftNavContext } from "../LeftNav/LeftNavContext";
 import {
@@ -20,6 +21,8 @@ export interface MenuDropdownProps extends Omit<
   label: React.ReactNode;
   icon?: React.ReactNode;
   defaultExpanded?: boolean;
+  expanded?: boolean;
+  onChange?: (event: React.SyntheticEvent, expanded: boolean) => void;
   slotProps?: {
     trigger?: Partial<
       Omit<
@@ -46,6 +49,8 @@ export const MenuDropdown = React.forwardRef<HTMLDivElement, MenuDropdownProps>(
       label,
       icon,
       defaultExpanded = false,
+      expanded: expandedProp,
+      onChange,
       children,
       slotProps,
       ...rest
@@ -53,7 +58,12 @@ export const MenuDropdown = React.forwardRef<HTMLDivElement, MenuDropdownProps>(
 
     const nav = React.useContext(LeftNavContext);
     const collapsed = Boolean(nav && nav.collapsed);
-    const [expanded, setExpanded] = React.useState(defaultExpanded);
+    const [expanded, setExpanded] = useControlled({
+      controlled: expandedProp,
+      default: defaultExpanded,
+      name: "MenuDropdown",
+      state: "expanded",
+    });
     const open = expanded && !collapsed;
 
     const id = React.useId();
@@ -61,12 +71,14 @@ export const MenuDropdown = React.forwardRef<HTMLDivElement, MenuDropdownProps>(
     const listId = `${id}-list`;
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+      const next = collapsed ? true : !expanded;
       if (nav && collapsed) {
         nav.expand(event);
-        setExpanded(true);
-        return;
       }
-      setExpanded(previous => !previous);
+      setExpanded(next);
+      if (onChange) {
+        onChange(event, next);
+      }
     };
 
     return (

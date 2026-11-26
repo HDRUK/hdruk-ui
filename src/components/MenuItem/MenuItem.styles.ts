@@ -22,7 +22,8 @@ export const MenuItemRoot = styled(MuiListItemButton, {
   paddingBottom: theme.spacing(1),
   paddingLeft: theme.spacing(1.5),
   paddingRight: theme.spacing(1.5),
-  color: tokens.text.secondaryBlack,
+  borderRadius: tokens.radius.none,
+  color: theme.palette.text.secondaryDefault,
   backgroundColor: "transparent",
   "&:hover": {
     backgroundColor: theme.palette.status.hovered,

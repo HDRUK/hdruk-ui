@@ -137,7 +137,6 @@ export const LeftNav = React.forwardRef<HTMLElement, LeftNavProps>(
             <LeftNavHeading ownerState={ownerState}>{heading}</LeftNavHeading>
           ) : null}
           <LeftNavToggle
-            color="inherit"
             aria-label={expanded ? collapseText : expandText}
             aria-expanded={expanded}
             aria-controls={listId}

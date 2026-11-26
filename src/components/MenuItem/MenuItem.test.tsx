@@ -148,6 +148,33 @@ describe("MenuItem theme integration", () => {
     );
   });
 
+  it("takes its text colour from the palette's secondaryDefault text", () => {
+    render(<MenuItem>Teams</MenuItem>, {
+      themeOptions: {
+        palette: { text: { secondaryDefault: "#FF0000" } },
+      },
+    });
+
+    expect(
+      getComputedStyle(screen.getByRole("button", { name: "Teams" })).color
+    ).toBe("rgb(255, 0, 0)");
+  });
+
+  it("keeps app list item rounding off the row", () => {
+    render(<MenuItem selected>Teams</MenuItem>, {
+      themeOptions: {
+        components: {
+          MuiListItemButton: { styleOverrides: { root: { borderRadius: 8 } } },
+        },
+      },
+    });
+
+    expect(
+      getComputedStyle(screen.getByRole("button", { name: "Teams" }))
+        .borderRadius
+    ).toBe("0");
+  });
+
   it("keeps app Typography margins out of the label", () => {
     render(<MenuItem>Teams</MenuItem>, {
       themeOptions: {

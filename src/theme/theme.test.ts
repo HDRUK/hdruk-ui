@@ -9,13 +9,13 @@ describe("palette contract", () => {
       main: tokens.brand.primary,
       dark: tokens.brand.primaryHovered,
       light: tokens.brand.accentPrimary,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     });
     expect(theme.palette.secondary).toMatchObject({
       main: tokens.brand.secondary,
       dark: tokens.brand.secondaryHovered,
       light: tokens.brand.accentSecondary,
-      contrastText: tokens.text.primaryWhite,
+      contrastText: tokens.text.primaryInverse,
     });
   });
 
@@ -27,11 +27,11 @@ describe("palette contract", () => {
   });
 
   it("maps text, background and divider onto MUI's slots", () => {
-    expect(theme.palette.text.primary).toBe(tokens.text.primaryBlack);
+    expect(theme.palette.text.primary).toBe(tokens.text.primaryDefault);
     expect(theme.palette.text.secondary).toBe(tokens.text.faded);
     expect(theme.palette.text.disabled).toBe(tokens.text.disabled);
     expect(theme.palette.background.default).toBe(tokens.background.primary);
-    expect(theme.palette.background.paper).toBe(tokens.background.white);
+    expect(theme.palette.background.paper).toBe(tokens.background.default);
     expect(theme.palette.divider).toBe(tokens.background.secondary);
     expect(theme.palette.link.main).toBe(tokens.brand.primary);
   });
@@ -521,12 +521,12 @@ describe("button styling contract", () => {
 
     expect(tertiary).toMatchObject({
       color: theme.palette.text.primary,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: tokens.status.neutral,
       borderWidth: tokens.stroke.thin,
       borderColor: tokens.status.faded,
     });
     expect(tertiary["&:hover, &:focus-visible"]).toMatchObject({
-      backgroundColor: tokens.status.hovered,
+      backgroundColor: tokens.background.primary,
     });
   });
 
@@ -558,7 +558,7 @@ describe("menu styling contract", () => {
       backgroundColor: tokens.status.hovered,
     });
     expect(root["&.Mui-selected, &.Mui-selected:is(:hover, :focus)"]).toEqual({
-      backgroundColor: tokens.status.grey,
+      backgroundColor: tokens.status.neutral,
     });
   });
 
@@ -709,7 +709,7 @@ describe("Tooltip", () => {
   it("paints the tooltip and its arrow in the information status colour", () => {
     expect(slot("MuiTooltip", "tooltip")).toMatchObject({
       backgroundColor: tokens.status.information,
-      color: tokens.text.primaryWhite,
+      color: tokens.text.primaryInverse,
       fontSize: theme.typography.bodySmall.fontSize,
     });
     expect(slot("MuiTooltip", "arrow")).toMatchObject({

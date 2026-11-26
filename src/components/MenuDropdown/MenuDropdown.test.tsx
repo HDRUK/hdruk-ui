@@ -75,6 +75,38 @@ describe("MenuDropdown", () => {
     expect(trigger()).toHaveAttribute("aria-expanded", "true");
   });
 
+  it("follows a controlled expanded prop and reports clicks", async () => {
+    const user = userEvent.setup();
+    const onChange = jest.fn();
+    const { rerender } = renderDropdown({ expanded: false, onChange });
+
+    await user.click(trigger());
+
+    expect(onChange).toHaveBeenCalledWith(expect.anything(), true);
+    expect(trigger()).toHaveAttribute("aria-expanded", "false");
+
+    rerender(
+      <MenuDropdown label="Integrations" expanded onChange={onChange}>
+        <MenuItem component="a" href="/widgets">
+          Widgets
+        </MenuItem>
+      </MenuDropdown>
+    );
+
+    expect(trigger()).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("reports the uncontrolled toggle too", async () => {
+    const user = userEvent.setup();
+    const onChange = jest.fn();
+    renderDropdown({ onChange });
+
+    await user.click(trigger());
+
+    expect(onChange).toHaveBeenCalledWith(expect.anything(), true);
+    expect(trigger()).toHaveAttribute("aria-expanded", "true");
+  });
+
   it("keeps its own toggle when slotProps are passed", async () => {
     const user = userEvent.setup();
     const onClick = jest.fn();

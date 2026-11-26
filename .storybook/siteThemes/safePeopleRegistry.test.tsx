@@ -1,6 +1,7 @@
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
 import { IconButton } from "@/components/IconButton";
+import { MenuItem } from "@/components/MenuItem";
 import { render, screen } from "../../test/renderWithTheme";
 import { safePeopleRegistryThemeOptions } from "./safePeopleRegistry";
 
@@ -101,12 +102,12 @@ describe("safe people registry icon button", () => {
 
     const style = getComputedStyle(screen.getByRole("button"));
 
-    expect(style.backgroundColor).toBe("rgb(241, 241, 241)");
+    expect(style.backgroundColor).toBe("rgb(225, 225, 225)");
     expect(style.borderColor).toBe("rgb(124, 124, 124)");
     expect(style.color).toBe("rgb(91, 91, 91)");
   });
 
-  it("has no hover, because the export gives hovered the default's value", () => {
+  it("lightens to the registry's hovered fill", () => {
     render(
       <IconButton aria-label="Save">
         <Icon name="bookmark" />
@@ -123,5 +124,13 @@ describe("safe people registry icon button", () => {
       .join(" ");
 
     expect(hover).toContain("#F1F1F1");
+  });
+});
+
+describe("safe people registry menu items", () => {
+  it("uses the registry's text colour, not the base's", () => {
+    render(<MenuItem>Projects</MenuItem>, spr);
+
+    expect(styleOf("Projects").color).toBe("rgb(44, 44, 44)");
   });
 });
